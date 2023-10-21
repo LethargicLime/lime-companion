@@ -55,7 +55,7 @@ export const CharacterInventory = () => {
             fontWeight: "700",
             //textAlign: "center"
         }}>
-            Select a character
+            Select a character :)
         </div>;
     }
     
