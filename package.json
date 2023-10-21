@@ -1,7 +1,7 @@
 {
   "name": "lime-companion",
   "version": "0.1.0",
-  "homepage": "https://jack-sherick.github.io/lime-companion",
+  "homepage": "https://LethargicLime.github.io/lime-companion",
   "private": true,
   "scripts": {
     "dev": "next dev",
