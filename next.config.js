@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  basePath: "/nextjs-github-pages",
+  output: "export",
+  basePath: "/lime-companion",
   images: {
     unoptimized: true
   }
