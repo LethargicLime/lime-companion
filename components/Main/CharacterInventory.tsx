@@ -34,6 +34,7 @@ export const CharacterInventory = () => {
         if (verbose && verbose["Response"]) {
             if (verbose["Response"]["characterEquipment"]["data"][chosenCharacter] && verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]) {
                 updateItemHashes(verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]);
+                // setInventory(verbose["Response"]);
                 setIsLoading(false);
             }
         }

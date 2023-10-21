@@ -10,8 +10,29 @@ const base = {
     "oAuthId": 45568
 }
 
-export async function Fetch() {
+export async function retrieveAuth() {
+    fetch("https://www.bungie.net/Platform/App/OAuth/Token.", {
+        method: "POST",
+        headers: {
+            "x-api-key": base["key"],
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": `Basic 45568`
+        }, body: new URLSearchParams({
+            "client_id": "45568",
+            "grant_type": "authorization_code",
+            "code": ``
+        }).toString()
+    }).then(function(response) {
+        console.log(response)
 
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data);
+    })
+}
+
+export async function Fetch() {
     const options = {
         "method": "GET",
         "x-api-key": base["key"],
@@ -64,7 +85,7 @@ export async function GetItem(id: string) {
         "headers": {
             "x-api-key": base["key"]
         },
-        "authorization": "grant_type=authorization_code&code=45568"
+        "Authorization": "grant_type=authorization_code&code=45568"
     }
 
     const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}/`, options)
