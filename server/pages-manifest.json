@@ -2,8 +2,8 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/hello": "pages/api/hello.js",
-  "/": "pages/index.html",
-  "/api/home": "pages/api/home.js",
-  "/404": "pages/404.html"
+  "/": "pages/index.js",
+  "/auth": "pages/auth.js",
+  "/test/lore": "pages/test/lore.js",
+  "/api/home": "pages/api/home.js"
 }
