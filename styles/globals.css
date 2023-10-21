@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sidebar {
+    background-color: #21201e;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.navbar {
+    background-color: #21201e;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 50px;
+}
+
+.navbar > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar > button {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pushed {
+    transform: translateX(330px);
+}
+
+.sidebar-closed {
+    transform: translateX(-100%);
+}
+
+.gear-icon {
+    width: 75px;
+    height: 75px;
+    border: 2px solid #21201e;
+}
+
+.hover {
+
+}
+
+.hover-icon-rotate {
+
+}
