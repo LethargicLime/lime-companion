@@ -43,8 +43,10 @@ export const SidebarImageButton: FC<Props> = ({ text, race, light, image,  onCli
         <div style={{ 
           color: "#f0dc2e",
           fontSize: "19px",
+          fontWeight: "700",
+          marginRight: "4px"
         }}>
-          ✦{light}
+          ✧  {light}
         </div>
     </button>
   );

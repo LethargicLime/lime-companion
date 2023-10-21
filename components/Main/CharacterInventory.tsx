@@ -29,8 +29,8 @@ export const CharacterInventory = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        if (verbose[chosenCharacter] && verbose[chosenCharacter]["items"]) {
-            updateItemHashes(verbose[chosenCharacter]["items"]);
+        if (verbose["Response"]["characterEquipment"]["data"][chosenCharacter] && verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]) {
+            updateItemHashes(verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]);
             setIsLoading(false);
         }
 
@@ -55,10 +55,10 @@ export const CharacterInventory = () => {
             fontWeight: "700",
             //textAlign: "center"
         }}>
-            Select a character :)
+            Select a character
         </div>;
     }
-    
+
     return (
         <div className="" style={{ 
             paddingLeft: "45px",
@@ -70,19 +70,25 @@ export const CharacterInventory = () => {
             {items.length > 0 ? 
             <div>
                 <div>
-                    Kinetic: {items[0]["displayProperties"]["name"]}
+                    <img className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
+                    </img>
                 </div>
-                <img className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
-                </img>
                 <div>
-                    Energy: {items[1]["displayProperties"]["name"]}
+                    
                 </div>
                 <img className="gear-icon" src={`https://bungie.net${items[1]["displayProperties"]["icon"]}`}>
                 </img>
-                <div>
-                    Heavy: {items[2]["displayProperties"]["name"]}
-                </div>
                 <img className="gear-icon" src={`https://bungie.net${items[2]["displayProperties"]["icon"]}`}>
+                </img>
+                <img className="gear-icon" src={`https://bungie.net${items[3]["displayProperties"]["icon"]}`}>
+                </img>
+                <img className="gear-icon" src={`https://bungie.net${items[4]["displayProperties"]["icon"]}`}>
+                </img>
+                <img className="gear-icon" src={`https://bungie.net${items[5]["displayProperties"]["icon"]}`}>
+                </img>
+                <img className="gear-icon" src={`https://bungie.net${items[6]["displayProperties"]["icon"]}`}>
+                </img>
+                <img className="gear-icon" src={`https://bungie.net${items[7]["displayProperties"]["icon"]}`}>
                 </img>
             </div>
             : ""}

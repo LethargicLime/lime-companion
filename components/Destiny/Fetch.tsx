@@ -4,7 +4,7 @@ import {
 
 const base = {
     "url": "https://www.bungie.net/Platform",
-    "key": "ace1abe8389b458fa91b621887738eb2",
+    "key": `ace1abe8389b458fa91b621887738eb2`,
     "oAuth": "https://www.bungie.net/en/OAuth/Authorize",
     "refresh": "https://www.bungie.net/Platform/App/OAuth/token/",
     "oAuthId": 45568
@@ -50,12 +50,12 @@ export async function GetVerboseInformation() {
         "authorization": "grant_type=authorization_code&code=45568"
     }
 
-    const response = await fetch(base["url"] + "/Destiny2/3/Profile/4611686018484567966/?components=205", options)
+    const response = await fetch(base["url"] + "/Destiny2/3/Profile/4611686018484567966/?components=205,201", options)
     const data = await response.json();
 
     console.log(data);
 
-    return data["Response"]["characterEquipment"]["data"];
+    return data;
 }
 
 export async function GetItem(id: string) {
