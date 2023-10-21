@@ -17,6 +17,7 @@ export const CharacterInventory = () => {
 
     const [itemHashes, updateItemHashes] = useState<any[]>([]);
     const [items, setItem] = useState<any>([]);
+    const [ inventory, setInventory ] = useState<any>([]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [opacity, setOpacity] = useState(1);
@@ -65,16 +66,26 @@ export const CharacterInventory = () => {
             paddingTop: "30px",
             fontWeight: "700",
             opacity: opacity,
-            transition: 'opacity 0.25s ease-out'
+            transition: 'opacity 0.25s ease-out',
         }}>
             {items.length > 0 ? 
             <div>
-                <div>
-                    <img className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
-                    </img>
-                </div>
-                <div>
-                    
+                <div style={{ display: "flex" }}>
+                    <div>
+                        <img className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
+                        </img>
+                    </div>
+                    <div style={{ 
+                        display: "grid",
+                        gridTemplateColumns: "repeat(3, 60px)",
+                        gridGap: '2px', 
+                        marginLeft: '14px',
+                    }}>
+                        {Array(9).fill(0).map((_, i) => (
+                            <img key={i} className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
+                            </img>
+                        ))}
+                    </div>
                 </div>
                 <img className="gear-icon" src={`https://bungie.net${items[1]["displayProperties"]["icon"]}`}>
                 </img>
