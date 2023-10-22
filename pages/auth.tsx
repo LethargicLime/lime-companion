@@ -1,7 +1,7 @@
 import { retrieveAuth } from "@/components/Destiny/Fetch";
 
 export default function page() {
-    retrieveAuth()
+    // retrieveAuth()
     
     return (
         <div>Redirecting...</div>

@@ -2,7 +2,7 @@ import CharactersContext from '../Providers/CharactersProvider'
 import ChosenCharacterContext from '../Providers/ChosenCharacterProvider';
 import { GetItem } from '../Destiny/Fetch';
 import VerboseContext from '../Providers/VerboseCharactersProvider';
-
+import Image from 'next/image';
 
 import {
     useState,
@@ -74,37 +74,48 @@ export const CharacterInventory = () => {
         }}>
             {items.length > 0 ? 
             <div>
-                <div style={{ display: "flex" }}>
-                    <div>
-                        <img className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
-                        </img>
+                {Array(3).fill(0).map((_, i) => (
+                    <div style={{ display: "flex", marginBottom: "20px" }} key={i}>
+                        <div style={{ display: "inline-block"}}>
+                            <div>
+                                <Image
+                                    src={`https://bungie.net${items[i]["displayProperties"]["icon"]}`}
+                                    width={60}
+                                    height={60}
+                                    alt="Kinetic"
+                                    className="gear-icon"
+                                />
+                            </div>
+                            <div style={{ 
+                                height: "14px",
+                                fontSize: "7px",
+                                fontWeight: "500",
+                                backgroundColor: "grey",
+                                color: "white", 
+                                display: "flex", 
+                                alignItems: "center", 
+                                justifyContent: "center" 
+                            }}>{items[i]["displayProperties"]["name"]}</div>
+                        </div>
+                        <div style={{ 
+                            display: "grid",
+                            gridTemplateColumns: "repeat(3, 60px)",
+                            gridGap: '1px', 
+                            marginLeft: '14px',
+                        }}>
+                            {Array(9).fill(0).map((_, j) => (
+                                <Image
+                                    key={j}
+                                    src={`https://bungie.net${items[i]["displayProperties"]["icon"]}`}
+                                    width={60}
+                                    height={60}
+                                    alt="Kinetic"
+                                    className="gear-icon"
+                                />
+                            ))}
+                        </div>
                     </div>
-                    <div style={{ 
-                        display: "grid",
-                        gridTemplateColumns: "repeat(3, 60px)",
-                        gridGap: '2px', 
-                        marginLeft: '14px',
-                    }}>
-                        {Array(9).fill(0).map((_, i) => (
-                            <img key={i} className="gear-icon" src={`https://bungie.net${items[0]["displayProperties"]["icon"]}`}>
-                            </img>
-                        ))}
-                    </div>
-                </div>
-                <img className="gear-icon" src={`https://bungie.net${items[1]["displayProperties"]["icon"]}`}>
-                </img>
-                <img className="gear-icon" src={`https://bungie.net${items[2]["displayProperties"]["icon"]}`}>
-                </img>
-                <img className="gear-icon" src={`https://bungie.net${items[3]["displayProperties"]["icon"]}`}>
-                </img>
-                <img className="gear-icon" src={`https://bungie.net${items[4]["displayProperties"]["icon"]}`}>
-                </img>
-                <img className="gear-icon" src={`https://bungie.net${items[5]["displayProperties"]["icon"]}`}>
-                </img>
-                <img className="gear-icon" src={`https://bungie.net${items[6]["displayProperties"]["icon"]}`}>
-                </img>
-                <img className="gear-icon" src={`https://bungie.net${items[7]["displayProperties"]["icon"]}`}>
-                </img>
+                ))}
             </div>
             : ""}
             
