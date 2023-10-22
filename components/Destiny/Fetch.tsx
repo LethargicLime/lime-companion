@@ -18,7 +18,7 @@ export async function retrieveAuth() {
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": `Basic ace1abe8389b458fa91b621887738eb2`,
             "Access-Control-Allow-Origin": "*",
-            "Origin Header": "*"
+            //"Origin Header": "*"
         }, body: new URLSearchParams({
             "client_id": "45568",
             "grant_type": "grant_type=authorization_code&code=45568",
