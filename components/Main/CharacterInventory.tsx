@@ -80,8 +80,8 @@ export const CharacterInventory = () => {
                             <div>
                                 <Image
                                     src={`https://bungie.net${items[i]["displayProperties"]["icon"]}`}
-                                    width={60}
-                                    height={60}
+                                    width={70}
+                                    height={70}
                                     alt="Kinetic"
                                     className="gear-icon"
                                 />
@@ -107,8 +107,8 @@ export const CharacterInventory = () => {
                                 <Image
                                     key={j}
                                     src={`https://bungie.net${items[i]["displayProperties"]["icon"]}`}
-                                    width={60}
-                                    height={60}
+                                    width={55}
+                                    height={55}
                                     alt="Kinetic"
                                     className="gear-icon"
                                 />
