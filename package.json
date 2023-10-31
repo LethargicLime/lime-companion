@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://LethargicLime.github.io/lime-companion",
   "private": true,
+  "proxy": "https://www.bungie.net",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,6 +14,8 @@
   "dependencies": {
     "@tabler/core": "^1.0.0-beta20",
     "@tabler/icons-react": "^2.39.0",
+    "http-proxy-middleware": "^2.0.6",
+    "https-localhost": "^4.7.1",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",

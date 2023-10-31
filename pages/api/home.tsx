@@ -1,63 +1,55 @@
-import { LhsSidebar } from '@/components/LHS/Sidebar';
-import Page from '@/components/Main/Page';
-import Navbar from '@/components/Navbar/Navbar';
-import SidebarContext, { SidebarContextProps } from '@/components/Providers/SidebarProvider';
-import CharactersContext, { CharactersProviderProps } from '@/components/Providers/CharactersProvider';
-import { GetCharacterInfo, GetVerboseInformation } from '@/components/Destiny/Fetch';
-import ChosenCharacterContext, { ChosenCharacterProps } from '@/components/Providers/ChosenCharacterProvider';
-import VerboseContext from '@/components/Providers/VerboseCharactersProvider';
+import { authorize, getToken } from "@/components/Destiny/Fetch";
 
-import { 
-    useState,
-    useEffect
-} from 'react';
+export default function page() {
 
-export const HomePage = () => {
-    const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-    const [characters, updateCharacters] = useState([]);
-    const [chosenCharacter, updateChosenCharacter] = useState<string>("");
-    const [verbose, updateVerbose] = useState([]);
-
-    const sidebarValue: SidebarContextProps = {
-        sidebarOpen,
-        toggleSidebar: () => setSidebarOpen(!sidebarOpen)
-    };
-
-    useEffect(() => {
-        const fetchCharacters = async () => {
-            const charactersData = await GetCharacterInfo();
-            updateCharacters(charactersData);
-        };
-
-        fetchCharacters();
-    }, []);
-
-    useEffect(() => {
-        const fetchVerbose = async () => {
-            const verboseData = await GetVerboseInformation();
-            updateVerbose(verboseData);
+    const handleAuthorize = () => {
+        if (typeof window !== "undefined") {
+            authorize();
         }
-
-        fetchVerbose();
-    }, []);
+    }
 
     return (
-        <div>
-            <SidebarContext.Provider value={sidebarValue}>
-                <CharactersContext.Provider value={{ characters, updateCharacters }}>
-                    <ChosenCharacterContext.Provider value={{ chosenCharacter, setChosenCharacter: updateChosenCharacter}}>
-                        <VerboseContext.Provider value={{ verbose, updateVerbose }}>
-                            <LhsSidebar />
-                            <div>
-                                <Navbar />
-                                <Page />
-                            </div>
-                        </VerboseContext.Provider>
-                    </ChosenCharacterContext.Provider>
-                </CharactersContext.Provider>
-            </SidebarContext.Provider>
+        <div className={""} style={{
+            backgroundColor: "#adaca6",
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        }}>
+            <div style={{
+                backgroundColor: "#808080", // Darker shade of grey
+                padding: "20px",
+                borderRadius: "5px",
+                alignContent: "center",
+                alignItems: "center",
+                textAlign: "center"
+            }}>
+                <div style={{
+                    fontWeight: "bold",
+                    fontSize: "22px"
+                }}>
+                    Lime Companion
+                </div>
+                <div>
+                    <br />
+                    The Bungie API requires authorization for transacts outside of basic <br />
+                    information; because of this, I require that you authorize your <br />
+                    account. No account information is collected or stored, but login is <br />
+                    required to allow me to collect your account's information with OAuth <br />
+                    access.
+                    <br />
+                    <br />
+                </div>
+
+                <button style={{
+                    fontWeight: "bold",
+                    backgroundColor: "darkgrey",
+                    paddingLeft: "15px",
+                    paddingRight: "15px",
+                    padding: "5px",
+                    borderRadius: "5px"
+                }} onClick={handleAuthorize}>Authorize</button>
+            </div>
         </div>
     )
 }
-
-export default HomePage;

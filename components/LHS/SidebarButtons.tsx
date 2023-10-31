@@ -3,7 +3,7 @@ import { IconCaretRight } from '@tabler/icons-react';
 
 interface Props {
   text: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   onClick?: () => void;
   className?: string;
 }
