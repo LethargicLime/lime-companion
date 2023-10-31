@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { IconBrandSteam } from "@tabler/icons-react";
 
-export const Login = () => {
+export const SignOut = () => {
 
     const handleLoginButton = () => {
         
@@ -13,7 +13,7 @@ export const Login = () => {
     return (
         <div className="relative flex flex-col items center">
             <SidebarButton 
-                text="Login"
+                text="Sign Out"
                 icon={<div><IconBrandSteam /></div>}
                 onClick={handleLoginButton}
             ></SidebarButton>
@@ -21,4 +21,4 @@ export const Login = () => {
     )
 }
 
-export default Login;
+export default SignOut;

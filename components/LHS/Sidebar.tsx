@@ -1,6 +1,6 @@
 import { OpenSidebarButton, CloseSidebarButton } from './OpenCloseButton';
 import SettingsMenu from './SettingsButton';
-import Login from './Login';
+import SignOut from './SignOut';
 import ReloadManifest from './ReloadManifest';
 import ReloadCharacters from './ReloadCharacters';
 import { GetCharacterInfo, GetVerboseInformation } from '../Destiny/Fetch';
@@ -75,7 +75,7 @@ export const LhsSidebar = () => {
 
     return (
         <div className={`fixed top-0 left-0 z-40 flex h-full w-[330px] flex-none flex-col space-y-2 p-2 duration-1000 sidebar ${sidebarOpen ? "" : "sidebar-closed"}`}>
-            <Login />
+            <SignOut />
             
             <div className="flex-grow flex-grow-1 overflow-auto">
                 {Object.keys(characters).map((key: any, i: any) => (

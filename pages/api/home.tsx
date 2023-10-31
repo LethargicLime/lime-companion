@@ -35,7 +35,7 @@ export default function page() {
                     The Bungie API requires authorization for transacts outside of basic <br />
                     information; because of this, I require that you authorize your <br />
                     account. No account information is collected or stored, but login is <br />
-                    required to allow me to collect your account's information with OAuth <br />
+                    required to allow me to collect your character&apos;s information with OAuth <br />
                     access.
                     <br />
                     <br />
