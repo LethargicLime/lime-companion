@@ -1,4 +1,4 @@
-import { authorize, getToken } from "@/components/Destiny/Fetch";
+import { authorize } from "@/components/Destiny/Fetch";
 
 export default function page() {
 
@@ -17,7 +17,7 @@ export default function page() {
             alignItems: "center",
         }}>
             <div style={{
-                backgroundColor: "#808080", // Darker shade of grey
+                backgroundColor: "#808080",
                 padding: "20px",
                 borderRadius: "5px",
                 alignContent: "center",

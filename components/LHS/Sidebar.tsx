@@ -3,7 +3,7 @@ import SettingsMenu from './SettingsButton';
 import SignOut from './SignOut';
 import ReloadManifest from './ReloadManifest';
 import ReloadCharacters from './ReloadCharacters';
-import { GetCharacterInfo, GetVerboseInformation } from '../Destiny/Fetch';
+import { GetCharacterInfo, GetVerboseInformation, GetToken } from '../Destiny/Fetch';
 import { SidebarImageButton } from './SidebarImageButton';
 import SidebarContext, { SidebarContextProps } from '../Providers/SidebarProvider';
 import CharactersContext from '../Providers/CharactersProvider';
@@ -15,6 +15,7 @@ import {
     useEffect,
     useContext
 } from 'react';
+import TokenContext from '../Providers/TokenProvider';
 
 
 export const LhsSidebar = () => {
@@ -22,21 +23,22 @@ export const LhsSidebar = () => {
     const { sidebarOpen, toggleSidebar } = useContext(SidebarContext);
     const { chosenCharacter, setChosenCharacter } = useContext(ChosenCharacterContext);
     const { verbose, updateVerbose } = useContext(VerboseContext);
+    const { token, membershipId } = useContext(TokenContext);
     const [dataFetched, setDataFetched] = useState(false);
 
     const characterInfo = () => {
-        GetCharacterInfo().then((characters) => {
+        GetCharacterInfo(membershipId).then((characters) => {
             updateCharacters(characters)
         });
-        GetVerboseInformation().then((verbose) => {
+        GetVerboseInformation(membershipId).then((verbose) => {
             updateVerbose(verbose);
         });
     }
 
     useEffect(() => {
         const fetchCharacterInfo = async () => {
-            const characters = await GetCharacterInfo();
-            const verbose = await GetVerboseInformation();
+            const characters = await GetCharacterInfo(membershipId);
+            const verbose = await GetVerboseInformation(membershipId);
 
             updateCharacters(characters);
             updateVerbose(verbose);
@@ -46,7 +48,7 @@ export const LhsSidebar = () => {
         if (!dataFetched) {
             fetchCharacterInfo();
         }
-    }, [verbose, characters, dataFetched]);
+    }, [membershipId, verbose, characters, dataFetched]);
 
     const getEmblem = (key: string) => {
         return "http://bungie.net" + characters[key as keyof Object]["emblemBackgroundPath" as keyof Object];

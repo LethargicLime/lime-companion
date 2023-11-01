@@ -30,7 +30,7 @@ export const CharacterInventory = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        console.log(verbose)
+        // console.log(verbose)
         if (verbose && verbose["Response"]) {
             if (verbose["Response"]["characterEquipment"]["data"][chosenCharacter] && verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]) {
                 updateItemHashes(verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]);
