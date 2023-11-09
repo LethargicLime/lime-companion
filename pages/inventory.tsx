@@ -38,6 +38,10 @@ export const HomePage = () => {
             }
         }
 
+        const preload = async () => {
+            
+        }
+
         getAuthToken();
     }, []);
 
