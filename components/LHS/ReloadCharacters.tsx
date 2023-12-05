@@ -6,8 +6,6 @@ import { IconReload } from "@tabler/icons-react";
 
 import { Fetch, GetCharacterInfo } from "../Destiny/Fetch";
 
-export var CharacterInfo = {};
-
 export const ReloadCharacters = () => {
 
     return (

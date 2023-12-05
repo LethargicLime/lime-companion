@@ -15,15 +15,11 @@ import {
 export const CharacterInventory = () => {
     const { chosenCharacter } = useContext(ChosenCharacterContext);
     const { characters, updateCharacters } = useContext(CharactersContext);
-    const { verbose } = useContext(VerboseContext);
+    const { verbose, inventory, equipped } = useContext(VerboseContext);
     const { token, membershipId } = useContext(TokenContext);
 
     const [ itemHashes, updateItemHashes ] = useState<any[]>([]);
     const [ items, setItem ] = useState<any>([]);
-    const [ inventory, setInventory ] = useState<any>([]);
-
-    const [ KineticInv, setKineticInv ] = useState<any[]>([]);
-    const [ EnergyInv, setEnergyInv ] = useState<any[]>([]);
 
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
@@ -42,52 +38,81 @@ export const CharacterInventory = () => {
         if (verbose && verbose["Response"]) {
             if (verbose["Response"]["characterEquipment"]["data"][chosenCharacter] && verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]) {
                 updateItemHashes(verbose["Response"]["characterEquipment"]["data"][chosenCharacter]["items"]);
-
-                setInventory(verbose["Response"]["characterInventories"]["data"][chosenCharacter]["items"]);
                 
                 setIsLoading(false);
             }
         }
 
-        const fetchInventoryInfo = async () => {
-            var kInvTemp = [];
-            console.log(inventory)
-            for (var i in inventory) {                
-                if (typeof inventory[i]["itemInstanceId"] !== "undefined") {
-                    const k = await ItemInstance(membershipId, inventory[i]["itemInstanceId"]);
-    
-                    // console.log(k);
+    }, [verbose, chosenCharacter, characters]);
 
-                    if (k["damageType"] == 1) {
-                        kInvTemp.push(k);
+    const [ CurrentLoadout, setCurrentLoadout ] = useState<any[]>([]);
+    const [ CurrentInventory, setCurrentInventory ] = useState<any[][]>([]);
+
+    // handle inventory
+    useEffect(() => {
+        const fetchInventoryInfo = async () => {
+            let tempLoadout = [...CurrentLoadout];
+            let tempInv = [...CurrentInventory];
+
+            for (let i in equipped) {
+                if (equipped[i]["character"] === chosenCharacter) {
+                    if (equipped[i]["bucketHash"] === 1498876634) {
+                        tempLoadout[0] = equipped[i];
+                    }
+                    if (equipped[i]["bucketHash"] === 2465295065) {
+                        tempLoadout[1] = equipped[i];
+                    }
+                    if (equipped[i]["bucketHash"] === 953998645) {
+                        tempLoadout[2] = equipped[i];
                     }
                 }
-                
             }
-            setKineticInv(kInvTemp);
+
+            setCurrentLoadout(tempLoadout);
+
+            let kInvTemp = [];
+            let sInvTemp = [];
+            let hInvTemp = [];
+
+            for (let i in inventory) {                
+                // console.log(inventory[i]);
+
+                if (inventory[i]["character"] === chosenCharacter) {
+                    if (inventory[i]["bucketHash"] === 1498876634) {                        
+                        kInvTemp.push(inventory[i]);
+                    }
+                    if (inventory[i]["bucketHash"] === 2465295065) {                        
+                        sInvTemp.push(inventory[i]);
+                    }
+                    if (inventory[i]["bucketHash"] === 953998645) {
+                        hInvTemp.push(inventory[i]);
+                    }
+                }
+            }
+
+            tempInv[0] = kInvTemp;
+            tempInv[1] = sInvTemp;
+            tempInv[2] = hInvTemp;
+            // console.log(tempInv);
+
+            setCurrentInventory(tempInv);
         }
         
         fetchInventoryInfo();
 
-    }, [verbose, chosenCharacter, characters]);
-
-    // handle inventory
-    useEffect(() => {
-        
-
-    }, [inventory, chosenCharacter])
+    }, [chosenCharacter]);
 
     // get item info when items change
     useEffect(() => {
         const fetchItems = async () => {
             if (itemHashes.length > 0) {
                 const promises = itemHashes.map(itemHash => GetItem(itemHash["itemHash"]));
-                var fetchedItems = await Promise.all(promises);
+                let fetchedItems = await Promise.all(promises);
 
                 const promiseInstance = itemHashes.map(instanceId => ItemInstance(membershipId, instanceId["itemInstanceId"]));
                 const itemInstances = await Promise.all(promiseInstance);
                 
-                for (var i in fetchedItems) {
+                for (let i in fetchedItems) {
                     Object.assign(fetchedItems[i], itemInstances[i])
                 }
 
@@ -117,31 +142,30 @@ export const CharacterInventory = () => {
             opacity: opacity,
             transition: 'opacity 0.25s ease-out',
         }}>
-            {items.length > 0 ? 
+            {CurrentLoadout.length > 0 && CurrentInventory.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "20px" }} key={i}>
+                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block"}}>
-                            <div style={{
+                            <div className={CurrentLoadout[i]["state"] >= 4 ? "masterwork-icon" : "gear-icon"} style={{
                                 position: "relative"
                             }}>
-                                <Image
-                                    src={`https://bungie.net${items[i]["displayProperties"]["icon"]}`}
-                                    width={70}
-                                    height={70}
-                                    alt="Kinetic"
-                                    className="gear-icon"
-                                />
                                 <Image 
-                                    src={`https://bungie.net${items[i]["iconWatermark"]}`}
+                                    src={`https://bungie.net${CurrentLoadout[i]["iconWatermark"]}`}
                                     width={70}
                                     height={70}
                                     className="watermark"
                                     alt="Watermark"
                                     style={{ position: 'absolute', top: 0, left: 0 }}
                                 />
+                                <Image
+                                    src={`https://bungie.net${CurrentLoadout[i]["displayProperties"]["icon"]}`}
+                                    width={70}
+                                    height={70}
+                                    alt="Kinetic"
+                                />
                             </div>
-                            <div style={{ 
+                            <div className={CurrentLoadout[i]["damageType"] == 1 ? "Kinetic" : "Kinetic" } style={{
                                 height: "14px",
                                 fontSize: "10px",
                                 fontWeight: "700",
@@ -151,23 +175,50 @@ export const CharacterInventory = () => {
                                 alignItems: "center",
                                 opacity: "",
                                 justifyContent: "center",
-                            }}>{items[i]["primaryStat"]["value"]}</div>
+                            }}>
+                                {CurrentLoadout[i]["primaryStat"]["value"]}
+                            </div>
                         </div>
+
                         <div style={{ 
                             display: "grid",
                             gridTemplateColumns: "repeat(3, 60px)",
-                            gridGap: '1px', 
-                            marginLeft: '14px',
+                            gridGap: "5px", 
+                            marginLeft: "14px",
                         }}>
-                            {Array(KineticInv.length).fill(0).map((_, j) => (
-                                <Image
-                                    key={j}
-                                    src={`https://bungie.net${items[i]["displayProperties"]["icon"]}`}
-                                    width={55}
-                                    height={55}
-                                    alt="Kinetic"
-                                    className="gear-icon"
-                                />
+                            {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
+                                <div key={j} style={{ display: "inline-block" }}>
+                                    <div className={CurrentInventory[i][j]["state"] >= 4 ? "masterwork-icon" : "gear-icon"} style={{
+                                        position: "relative"
+                                    }}>
+                                        <Image 
+                                            src={`https://bungie.net${CurrentInventory[i][j]["iconWatermark"]}`}
+                                            width={70}
+                                            height={70}
+                                            className="watermark"
+                                            alt="Watermark"
+                                            style={{ position: 'absolute', top: 0, left: 0 }}
+                                        />
+                                        <Image
+                                            src={`https://bungie.net${CurrentInventory[i][j]["displayProperties"]["icon"]}`}
+                                            width={70}
+                                            height={70}
+                                            alt="Kinetic"
+                                            style={{}}
+                                        />
+                                    </div>
+                                    <div style={{ 
+                                        height: "14px",
+                                        fontSize: "10px",
+                                        fontWeight: "700",
+                                        backgroundColor: "#3d3d3d",
+                                        color: "white", 
+                                        display: "flex", 
+                                        alignItems: "center",
+                                        opacity: "",
+                                        justifyContent: "center",
+                                    }}>{CurrentInventory[i][j]["primaryStat"]["value"]}</div>
+                                </div>
                             ))}
                         </div>
                     </div>

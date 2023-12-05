@@ -14,7 +14,7 @@ export const Page = () => {
     return (
         <>
             <div className={""} style={{
-                backgroundColor: "#adaca6",
+                backgroundColor: "#363636",
                 height: "calc(100vh - 50px)"
             }}>
                 <div className={`transistion-all duration-1000 ${sidebarOpen ? "pushed" : ""}`} style={{

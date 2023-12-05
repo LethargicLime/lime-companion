@@ -1,10 +1,11 @@
-var base = {
+let base = {
     "url": "https://www.bungie.net/Platform",
     "key": `ace1abe8389b458fa91b621887738eb2`,
     "oAuth": "https://www.bungie.net/en/OAuth/Authorize",
     "refresh": "https://www.bungie.net/Platform/App/OAuth/token/",
     "oAuthClientId": 45568,
-    "token": "CIfQBRKGAgAgPeYJVqQxHB978jR7vgyHfKo6QdM0q2bOBFxl2CFZxKHgAAAAnYnxEpJtT6SVm+8HxbQNqs6pzz3uekA7dVr/iFdhecSfHNrLNxHCOrD5mU9C9FzObVjHq4rboSUphHLJiNdiKx4oMJSRcHcGMsBo8ggO8BQsL2X/v1auuoJxNgjkqbZLyCBXLbYyo9ueRm8+3QI87yzibhh2XdS+m0QHH19sdAuHBA1pMkABms8qLV2J/VV1D2DzSSPwsUlwlwETzfUzsBw1HXO7qPNtYJtq/ZphwAmkpeuJbzpzYu/AHLHpzjRYxomTtte3Ywhxwn2DNBO1ncrQMRwpqPM/dVOUPiZy34M="
+    "token": ""
+
 }
 
 export async function authorize() {
@@ -39,12 +40,14 @@ export async function GetToken() {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-    });
+    })
 
     if (response.ok) {
         const r = await response.json();
 
         base["token"] = await r["access_token"];
+
+        console.log(base["token"]);
 
         return r;
     } else {
@@ -62,8 +65,6 @@ export async function Fetch() {
     const data = await manifest.json();
 
     console.log(data);
-
-
 }
 
 export async function GetCharacterInfo(id: string) {
@@ -84,6 +85,8 @@ export async function GetCharacterInfo(id: string) {
 }
 
 export async function GetVerboseInformation(id: string) {
+    console.log("test " + base["token"])
+
     const options = {
         "method": "GET",
         "headers": {

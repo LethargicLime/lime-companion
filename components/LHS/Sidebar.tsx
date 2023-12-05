@@ -3,7 +3,7 @@ import SettingsMenu from './SettingsButton';
 import SignOut from './SignOut';
 import ReloadManifest from './ReloadManifest';
 import ReloadCharacters from './ReloadCharacters';
-import { GetCharacterInfo, GetVerboseInformation, GetToken } from '../Destiny/Fetch';
+import { GetCharacterInfo, GetVerboseInformation, GetToken, ItemInstance, GetItem } from '../Destiny/Fetch';
 import { SidebarImageButton } from './SidebarImageButton';
 import SidebarContext, { SidebarContextProps } from '../Providers/SidebarProvider';
 import CharactersContext from '../Providers/CharactersProvider';
@@ -22,26 +22,102 @@ export const LhsSidebar = () => {
     const { characters, updateCharacters } = useContext(CharactersContext);
     const { sidebarOpen, toggleSidebar } = useContext(SidebarContext);
     const { chosenCharacter, setChosenCharacter } = useContext(ChosenCharacterContext);
-    const { verbose, updateVerbose } = useContext(VerboseContext);
+    const { verbose, inventory, equipped, updateVerbose, updateInventory, updateEquipped } = useContext(VerboseContext);
     const { token, membershipId } = useContext(TokenContext);
     const [dataFetched, setDataFetched] = useState(false);
 
     const characterInfo = () => {
         GetCharacterInfo(membershipId).then((characters) => {
-            updateCharacters(characters)
-        });
-        GetVerboseInformation(membershipId).then((verbose) => {
-            updateVerbose(verbose);
+            updateCharacters(characters);
         });
     }
 
+    const invPromises = [];
+    const promises = [];
+
     useEffect(() => {
         const fetchCharacterInfo = async () => {
+
             const characters = await GetCharacterInfo(membershipId);
-            const verbose = await GetVerboseInformation(membershipId);
+            const verboseData = await GetVerboseInformation(membershipId);
+
+            for (let i in verboseData["Response"]["characterInventories"]["data"]) {
+                for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
+
+                    if (typeof verboseData["Response"]["characterInventories"]["data"][i]["items"][j]["itemInstanceId"] !== "undefined") {
+                        const promise = ItemInstance(membershipId, verboseData["Response"]["characterInventories"]["data"][i]["items"][j]["itemInstanceId"]).then(k => {
+                            k["character"] = i;
+
+                            for (let l in verboseData["Response"]["characterInventories"]["data"][i]["items"][j]) {
+                                // console.log(verboseData["Response"]["characterInventories"]["data"][i]["items"][j]);
+                                k[l] = verboseData["Response"]["characterInventories"]["data"][i]["items"][j][l];
+                            }
+
+                            invPromises.push(k);
+                        });
+
+                        promises.push(promise);
+                    }
+                }
+            }
+
+            await Promise.all(promises);
+
+            for (let i in invPromises) {
+                GetItem(invPromises[i]["itemHash"]).then(j => {
+                    // console.log(j);
+                    for (let k in j) {
+                        invPromises[i][k] = j[k];
+                    }
+                });
+            }
+
+            updateInventory(invPromises);
+
+            const equipTemp = [];
+            const promiseEquip = [];
+
+            for (let i in verboseData["Response"]["characterEquipment"]["data"]) {
+                for (let j in verboseData["Response"]["characterEquipment"]["data"][i]["items"]) {
+                    if (typeof verboseData["Response"]["characterEquipment"]["data"][i]["items"][j]["itemInstanceId"] !== "undefined") {
+                        // console.log(verboseData["Response"]["characterEquipment"]["data"][i]["items"][j])
+
+                        ((j) => {
+                            const promise = ItemInstance(membershipId, verboseData["Response"]["characterEquipment"]["data"][i]["items"][j]["itemInstanceId"]).then(k => {
+                                k["character"] = i;
+                                
+                                for (let l in verboseData["Response"]["characterEquipment"]["data"][i]["items"][j]) {
+                                    k[l] = verboseData["Response"]["characterEquipment"]["data"][i]["items"][j][l];
+                                }
+            
+                                equipTemp.push(k);
+                            });
+            
+                            promiseEquip.push(promise);
+                        })(j);
+                    }
+                }
+            }
+
+            await Promise.all(promiseEquip);
+
+            // console.log(equipTemp);
+
+            for (let i in equipTemp) {
+                GetItem(equipTemp[i]["itemHash"]).then(j => {
+                    // console.log(equipTemp[i]);
+                    // console.log(j);
+                    for (let k in j) {
+                        equipTemp[i][k] = j[k];
+                    }
+                });
+            }
+            
+
+            updateEquipped(equipTemp);
 
             updateCharacters(characters);
-            updateVerbose(verbose);
+            updateVerbose(verboseData);
             setDataFetched(true);
         };
 
@@ -51,7 +127,7 @@ export const LhsSidebar = () => {
     }, [membershipId, verbose, characters, dataFetched]);
 
     const getEmblem = (key: string) => {
-        return "http://bungie.net" + characters[key as keyof Object]["emblemBackgroundPath" as keyof Object];
+        return "https://bungie.net" + characters[key as keyof Object]["emblemBackgroundPath" as keyof Object];
     }
 
     const getClass = (key: string) => {
@@ -97,7 +173,7 @@ export const LhsSidebar = () => {
             }}>
                 <ReloadCharacters />
             </div>
-            <ReloadManifest />
+            {/* <ReloadManifest /> */}
             <SettingsMenu />
 
             <CloseSidebarButton onClick={() => toggleSidebar(!sidebarOpen)} />

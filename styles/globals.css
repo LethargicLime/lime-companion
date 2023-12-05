@@ -2,6 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes -x-y {
+    0% { transform: translate(0); }
+    40% { transform: translate(-250px, 250px); }
+    50% { transform: translate(-250px, 250px); }
+    60% { transform: translate(-250px, 250px); }
+    95% { transform: translate(0); }
+}
+
+@keyframes -xy {
+    0% { transform: translate(0); }
+    40% { transform: translate(-250px, -250px); }
+    50% { transform: translate(-250px, -250px); }
+    60% { transform: translate(-250px, -250px); }
+    95% { transform: translateX(0); }
+}
+
+@keyframes xy {
+    0% { transform: translate(0); }
+    40% { transform: translate(250px, -250px); }
+    50% { transform: translate(250px, -250px); }
+    60% { transform: translate(250px, -250px); }
+    95% { transform: translateX(0); }
+}
+
+
+@keyframes x-y {
+    0% { transform: translate(0); }
+    40% { transform: translate(250px, 250px); }
+    50% { transform: translate(250px, 250px); }
+    60% { transform: translate(250px, 250px); }
+    95% { transform: translateX(0); }
+}
+
+@keyframes rotate {
+    100% { transform: rotateX(360deg); }
+}
+
+.-x-y {
+    animation: -x-y 3s infinite;
+}
+
+.-xy {
+    animation: -xy 3s infinite;
+}
+
+.xy {
+    animation: xy 3s infinite;
+}
+
+.x-y {
+    animation: x-y 3s infinite;
+}
+
+.spin {
+    /* transform-box: fill-box;
+    transform-origin: center center;
+    animation: rotate 3s infinite; */
+}
+  
+
 .sidebar {
     background-color: #21201e;
     position: absolute;
@@ -38,7 +98,20 @@
 }
 
 .gear-icon {
-    border: 2px solid #3d3d3d;
+    border: 1px solid #B7B7B7;
+}
+
+.masterwork-icon {
+    border: 1px solid gold;
+}
+
+.watermark {
+    padding: 0px;
+}
+
+.Kinetic {
+    background-image: "https://bungie.net/common/destiny2_content/icons/DestinyDamageTypeDefinition_3385a924fd3ccb92c343ade19f19a370.png";
+    background-size: 100%;
 }
 
 .hover {
@@ -47,4 +120,71 @@
 
 .hover-icon-rotate {
 
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: .8; }
+}
+
+.top-left {
+    opacity: 0;
+    animation: fadeIn 2.5s forwards;
+
+    left: 0;
+    top: 0;
+    position: absolute;
+    filter: blur(0px);
+    transform: scale(1);
+    object-fit: cover;
+    width: 25%;
+    height: 50%;
+    box-shadow: 16px 15px 5px -5px rgba(0, 0, 0, 0.5);
+}
+
+.bottom-left {
+    opacity: 0;
+    animation: fadeIn 2.5s forwards;
+
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    filter: blur(0px);
+    transform: scale(1);
+    object-fit: cover;
+    width: 25%;
+    height: 50%;
+    box-shadow: 16px 4px 5px -5px rgba(0, 0, 0, 0.5);
+}
+
+.top-right {
+    opacity: 0;
+    animation: fadeIn 2.5s forwards;
+
+    left: 0;
+    margin-left: 480px;
+    top: 0;
+    position: absolute;
+    filter: blur(0px);
+    transform: scale(1);
+    object-fit: cover;
+    width: 25%;
+    height: 50%;
+    box-shadow: 16px 15px 5px -5px rgba(0, 0, 0, 0.5);
+}
+
+.bottom-right {
+    opacity: 0;
+    animation: fadeIn 2.5s forwards;
+
+    left: 0;
+    margin-left: 480px;
+    bottom: 0;
+    position: absolute;
+    filter: blur(0px);
+    transform: scale(1);
+    object-fit: cover;
+    width: 25%;
+    height: 50%;
+    box-shadow: 16px 4px 5px -5px rgba(0, 0, 0, 0.5);
 }
