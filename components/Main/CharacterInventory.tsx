@@ -12,17 +12,50 @@ import {
     useContext
 } from 'react';
 
+import { Popup } from './Popup';
+
+import CraftedIcon from "@/public/PatternIcon.jpg";
+
 export const CharacterInventory = () => {
     const { chosenCharacter } = useContext(ChosenCharacterContext);
     const { characters, updateCharacters } = useContext(CharactersContext);
     const { verbose, inventory, equipped } = useContext(VerboseContext);
     const { token, membershipId } = useContext(TokenContext);
 
+    const [ hash, setHash ] = useState<any>([]);
+    const [ prevHash, setPrevHash ] = useState<any>([]);
+    const [ revealed, setRevealed ] = useState<boolean>(false);
+    const [ coords, setCoords ] = useState<any>([0, 0]);
+
     const [ itemHashes, updateItemHashes ] = useState<any[]>([]);
     const [ items, setItem ] = useState<any>([]);
 
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
+
+    const handleIconClick = (info: any) => {
+
+        console.log(info)
+
+        const handleMouse = (e) => {
+            if (revealed !== false) {
+                console.log(revealed)
+                setCoords([e.clientX, e.clientY])
+            }
+        }
+
+        window.addEventListener("mousedown", handleMouse);
+
+        if (info === prevHash) {
+            setRevealed(!revealed);
+        } else {
+            setRevealed(true);
+        }
+
+        console.log(coords);
+        setPrevHash(info);
+    }
+
 
     // animation for character change
     useEffect(() => {
@@ -127,6 +160,7 @@ export const CharacterInventory = () => {
         return <div style={{ 
             paddingLeft: "45px",
             paddingTop: "30px",
+            color: "white",
             fontWeight: "700",
             //textAlign: "center"
         }}>
@@ -134,8 +168,20 @@ export const CharacterInventory = () => {
         </div>;
     }
 
+    // console.log(CurrentLoadout);
+
     return (
-        <div className="" style={{ 
+        <>
+        {revealed ? 
+            <div className={`z-10`} style={{
+                
+            }}>
+                {/* <Popup
+                    left={coords[0]}
+                    top={coords[1]}
+                /> */}
+            </div> : ""}
+        <div className="z-0" style={{ 
             paddingLeft: "45px",
             paddingTop: "30px",
             fontWeight: "700",
@@ -147,7 +193,7 @@ export const CharacterInventory = () => {
                 {Array(3).fill(0).map((_, i) => (
                     <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block"}}>
-                            <div className={CurrentLoadout[i]["state"] >= 4 ? "masterwork-icon" : "gear-icon"} style={{
+                            <div onClick={() => handleIconClick(CurrentLoadout[i])} className={CurrentLoadout[i]["state"] == 4 ? "masterwork-icon" : "gear-icon"} style={{
                                 position: "relative"
                             }}>
                                 <Image 
@@ -158,14 +204,34 @@ export const CharacterInventory = () => {
                                     alt="Watermark"
                                     style={{ position: 'absolute', top: 0, left: 0 }}
                                 />
+                                {CurrentLoadout[i]["overrideStyle"] ? 
+                                <Image
+                                    src={`https://bungie.net${CurrentLoadout[i]["overrideStyle"]["displayProperties"]["icon"]}`}
+                                    width={70}
+                                    height={70}
+                                    alt="Primary"
+                                /> : 
                                 <Image
                                     src={`https://bungie.net${CurrentLoadout[i]["displayProperties"]["icon"]}`}
                                     width={70}
                                     height={70}
-                                    alt="Kinetic"
-                                />
+                                    alt="Primary"
+                                />}
+                                {CurrentLoadout[i]["state"] == 8 ? 
+                                <div className="" style={{
+                                    marginTop: "-17px", 
+                                    marginLeft: "3px",
+                                    position: "absolute",
+                                }}>
+                                    <Image 
+                                        src={CraftedIcon}
+                                        width={14}
+                                        height={14}
+                                        alt="Crafted Icon"
+                                    />
+                                </div> : ""}
                             </div>
-                            <div className={CurrentLoadout[i]["damageType"] == 1 ? "Kinetic" : "Kinetic" } style={{
+                            <div className="" style={{
                                 height: "14px",
                                 fontSize: "10px",
                                 fontWeight: "700",
@@ -176,7 +242,13 @@ export const CharacterInventory = () => {
                                 opacity: "",
                                 justifyContent: "center",
                             }}>
-                                {CurrentLoadout[i]["primaryStat"]["value"]}
+                                <Image 
+                                    src={`https://bungie.net${CurrentLoadout[i]["damageInformation"]["displayProperties"]["icon"]}`}
+                                    width={11}
+                                    height={11}
+                                    alt="Damage Type"
+                                />
+                                <span className="pl-1">{CurrentLoadout[i]["primaryStat"]["value"]}</span>
                             </div>
                         </div>
 
@@ -188,7 +260,7 @@ export const CharacterInventory = () => {
                         }}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
-                                    <div className={CurrentInventory[i][j]["state"] >= 4 ? "masterwork-icon" : "gear-icon"} style={{
+                                    <div className={CurrentInventory[i][j]["state"] == 4 ? "masterwork-icon" : "gear-icon"} style={{
                                         position: "relative"
                                     }}>
                                         <Image 
@@ -199,13 +271,32 @@ export const CharacterInventory = () => {
                                             alt="Watermark"
                                             style={{ position: 'absolute', top: 0, left: 0 }}
                                         />
+                                        {CurrentInventory[i][j]["overrideStyle"] ? 
+                                        <Image
+                                            src={`https://bungie.net${CurrentInventory[i][j]["overrideStyle"]["displayProperties"]["icon"]}`}
+                                            width={70}
+                                            height={70}
+                                            alt="Primary"
+                                        /> : 
                                         <Image
                                             src={`https://bungie.net${CurrentInventory[i][j]["displayProperties"]["icon"]}`}
                                             width={70}
                                             height={70}
-                                            alt="Kinetic"
-                                            style={{}}
-                                        />
+                                            alt="Primary"
+                                        />}
+                                        {CurrentInventory[i][j]["state"] == 8 ? 
+                                        <div className="" style={{
+                                            marginTop: "-17px", 
+                                            marginLeft: "3px",
+                                            position: "absolute",
+                                        }}>
+                                            <Image 
+                                                src={CraftedIcon}
+                                                width={14}
+                                                height={14}
+                                                alt="Crafted Icon"
+                                            />
+                                        </div> : ""}
                                     </div>
                                     <div style={{ 
                                         height: "14px",
@@ -217,7 +308,15 @@ export const CharacterInventory = () => {
                                         alignItems: "center",
                                         opacity: "",
                                         justifyContent: "center",
-                                    }}>{CurrentInventory[i][j]["primaryStat"]["value"]}</div>
+                                    }}>
+                                        <Image 
+                                            src={`https://bungie.net${CurrentInventory[i][j]["damageInformation"]["displayProperties"]["icon"]}`}
+                                            width={11}
+                                            height={11}
+                                            alt="Damage Type"
+                                        />
+                                        <span className="pl-1">{CurrentInventory[i][j]["primaryStat"]["value"]}</span>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -227,5 +326,6 @@ export const CharacterInventory = () => {
             : ""}
             
         </div>
+        </>
     )
 }

@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   output: "export",
   basePath: "/lime-companion",
+  reactStrictMode: false,
   images: {
     unoptimized: true
   }

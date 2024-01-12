@@ -42,6 +42,7 @@ export const HomePage = () => {
                     updateToken(authToken["refresh_token"].toString());
                     SpecificMemberId(authToken["membership_id"].toString()).then(membershipId => {
                         updateMemberId(membershipId);
+
                         setHasToken(true);
                     });
                 }
@@ -71,13 +72,15 @@ export const HomePage = () => {
             const verboseData = await GetVerboseInformation(membershipId);
             updateVerbose(verboseData);
 
-            console.log(verboseData);
+            // console.log(verboseData);
             
             for (let i in verboseData["Response"]["characterInventories"]["data"]) {
                 for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
 
                     if (typeof verboseData["Response"]["characterInventories"]["data"][i]["items"][j]["itemInstanceId"] !== "undefined") {
                         const promise = ItemInstance(membershipId, verboseData["Response"]["characterInventories"]["data"][i]["items"][j]["itemInstanceId"]).then(k => {
+                            // console.log(k);
+
                             k["character"] = i;
 
                             for (let l in verboseData["Response"]["characterInventories"]["data"][i]["items"][j]) {

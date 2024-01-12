@@ -1,6 +1,6 @@
-import { FC } from 'react';
-import { IconCaretRight } from '@tabler/icons-react';
-import { url } from 'inspector';
+import { FC } from "react";
+import { IconCaretRight } from "@tabler/icons-react";
+import { url } from "inspector";
 
 interface Props {
   text: string;

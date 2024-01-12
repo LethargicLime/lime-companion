@@ -85,7 +85,6 @@ export async function GetCharacterInfo(id: string) {
 }
 
 export async function GetVerboseInformation(id: string) {
-    console.log("test " + base["token"])
 
     const options = {
         "method": "GET",
@@ -130,23 +129,53 @@ export async function SpecificMemberId(id: string) {
     
     const data = await response.json();
 
-    return await data["Response"]["profiles"][0]["membershipId"];
+    // console.log(data);
+
+    return data["Response"]["profiles"][0]["membershipId"];
 }
 
-export async function ItemInstance(id: string, item: string) {
-    // console.log(base["token"])
+export async function GetDamageType(hash: string) {
 
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300`, {
+    const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyDamageTypeDefinition/${hash}/`, {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
             authorization: `Bearer ${base["token"]}`
         }
-    })
+    });
+
+    const data = await response.json();
+
+    return data["Response"];
+}
+
+export async function ItemInstance(id: string, item: string) {
+
+    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,307`, {
+        method: "GET",
+        headers: {
+            "x-api-key": base["key"],
+            authorization: `Bearer ${base["token"]}`
+        }
+    });
 
     const data = await response.json();
 
     // console.log(data);
+
+    for (let i in data["Response"]["item"]["data"]) {
+        data["Response"]["instance"]["data"][i] = data["Response"]["item"]["data"][i]
+    }
+
+    if (data["Response"]["instance"]["data"]["damageType"] && data["Response"]["instance"]["data"]["damageType"] !== 0) {
+        data["Response"]["instance"]["data"]["damageInformation"] = await GetDamageType(data["Response"]["instance"]["data"]["damageTypeHash"]);
+    }
+
+    if (data["Response"]["instance"]["data"]["overrideStyleItemHash"]) {
+        const promise = GetItem(data["Response"]["instance"]["data"]["overrideStyleItemHash"]);
+
+        data["Response"]["instance"]["data"]["overrideStyle"] = await promise;
+    }
 
     return data["Response"]["instance"]["data"];
 }

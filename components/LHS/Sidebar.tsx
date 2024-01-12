@@ -41,6 +41,8 @@ export const LhsSidebar = () => {
             const characters = await GetCharacterInfo(membershipId);
             const verboseData = await GetVerboseInformation(membershipId);
 
+            // console.log(verboseData);
+
             for (let i in verboseData["Response"]["characterInventories"]["data"]) {
                 for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
 
