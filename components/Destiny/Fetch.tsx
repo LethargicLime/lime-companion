@@ -149,6 +149,21 @@ export async function GetDamageType(hash: string) {
     return data["Response"];
 }
 
+export async function HasIntrinsicUpgrade(hash: string) {
+
+    const response = await fetch(base["url"] + `${hash}`, {
+        method: "GET",
+        headers: {
+            "x-api-key": base["key"],
+            authorization: `Bearer ${base["token"]}`
+        }
+    })
+
+    const data = await response.json();
+
+    console.log(data);
+}
+
 export async function ItemInstance(id: string, item: string) {
 
     const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,307`, {

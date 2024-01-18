@@ -1,6 +1,6 @@
 import CharactersContext from '../Providers/CharactersProvider'
 import ChosenCharacterContext from '../Providers/ChosenCharacterProvider';
-import { GetItem, ItemInstance } from '../Destiny/Fetch';
+import { GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destiny/Fetch';
 import VerboseContext from '../Providers/VerboseCharactersProvider';
 import TokenContext from '../Providers/TokenProvider';
 
@@ -35,7 +35,11 @@ export const CharacterInventory = () => {
 
     const handleIconClick = (info: any) => {
 
-        console.log(info)
+        console.log(info);
+
+        if (info["sockets"] && info["sockets"]["intrinsicSockets"]) {
+            // HasIntrinsicUpgrade(info["sockets"]["intrinsicSockets"][0]["plugItemHash"])
+        }
 
         const handleMouse = (e) => {
             if (revealed !== false) {
@@ -217,7 +221,7 @@ export const CharacterInventory = () => {
                                     height={70}
                                     alt="Primary"
                                 />}
-                                {CurrentLoadout[i]["state"] == 8 ? 
+                                {CurrentLoadout[i]["state"] == 8 || CurrentLoadout[i]["state"] == 9 ? 
                                 <div className="" style={{
                                     marginTop: "-17px", 
                                     marginLeft: "3px",
@@ -225,8 +229,8 @@ export const CharacterInventory = () => {
                                 }}>
                                     <Image 
                                         src={CraftedIcon}
-                                        width={14}
-                                        height={14}
+                                        width={13}
+                                        height={13}
                                         alt="Crafted Icon"
                                     />
                                 </div> : ""}
@@ -292,8 +296,8 @@ export const CharacterInventory = () => {
                                         }}>
                                             <Image 
                                                 src={CraftedIcon}
-                                                width={14}
-                                                height={14}
+                                                width={12}
+                                                height={12}
                                                 alt="Crafted Icon"
                                             />
                                         </div> : ""}
