@@ -197,7 +197,8 @@ export const CharacterInventory = () => {
                 {Array(3).fill(0).map((_, i) => (
                     <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block"}}>
-                            <div onClick={() => handleIconClick(CurrentLoadout[i])} className={CurrentLoadout[i]["state"] == 4 ? "masterwork-icon" : "gear-icon"} style={{
+                            <div onClick={() => handleIconClick(CurrentLoadout[i])} className={CurrentLoadout[i]["state"] == 4 
+                            || CurrentLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                                 position: "relative"
                             }}>
                                 <Image 
@@ -264,7 +265,8 @@ export const CharacterInventory = () => {
                         }}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
-                                    <div className={CurrentInventory[i][j]["state"] == 4 ? "masterwork-icon" : "gear-icon"} style={{
+                                    <div className={CurrentInventory[i][j]["state"] == 4 
+                                    || CurrentInventory[i][j]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                                         position: "relative"
                                     }}>
                                         <Image 

@@ -166,7 +166,7 @@ export async function HasIntrinsicUpgrade(hash: string) {
 
 export async function ItemInstance(id: string, item: string) {
 
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,307`, {
+    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,305,307`, {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
@@ -184,6 +184,20 @@ export async function ItemInstance(id: string, item: string) {
 
     if (data["Response"]["instance"]["data"]["damageType"] && data["Response"]["instance"]["data"]["damageType"] !== 0) {
         data["Response"]["instance"]["data"]["damageInformation"] = await GetDamageType(data["Response"]["instance"]["data"]["damageTypeHash"]);
+    }
+
+    if (data["Response"]["sockets"] && data["Response"]["sockets"]["data"]) {
+        data["Response"]["instance"]["data"]["socketInfo"] = new Object;
+        
+        for (let i in data["Response"]["sockets"]["data"]["sockets"]) {
+            // console.log(data["Response"]["sockets"]["data"]["sockets"][i])
+            
+            if (data["Response"]["sockets"]["data"]["sockets"][i]["plugHash"]) {
+                const promise = GetItem(data["Response"]["sockets"]["data"]["sockets"][i]["plugHash"]);
+            
+                data["Response"]["instance"]["data"]["socketInfo"][i] = await promise;
+            }
+        }
     }
 
     if (data["Response"]["instance"]["data"]["overrideStyleItemHash"]) {
