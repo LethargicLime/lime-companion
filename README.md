@@ -101,7 +101,7 @@ I try and provide information to a component on a need-to-know basis to keep com
 
 > Sometimes the inventory doesn't display, just what you have equipped. I can't figure this one out, been working on it for a couple days.
 
-> Stuff needs to stay in the cache, or on the backened we need to store the manifest. One of the two so that way the loading time isn't horrendous. Both might not be a bad idea.
+> Information should stay on the cache and a backened should have the manifest so that way the loading time isn't horrendous. DIM (as far as I know) has it set so that all of your information is stored in your browsers cache. When you move something around, rather than calling the API it just moves it on it's backend data structure. That's why when you refresh the API it duplicates some information. Currently to figure out if a crafted item should have the masterwork appearence I call the API ~16 times, retrieving each perk and then seeing if the first one is an Enhanced Intrinsic. Naturally for this use case alone I only need to do it once, but if wanted to display perk information, there's no way around that except having the manifest on the backend instead of using the API.
 
 **USING THE API**
 
@@ -113,7 +113,7 @@ They also provide a couple resources, an explorer and a big ass documentation.
 
 [https://bungie-net.github.io/]
 
-If you've made it this far into the doc and what to try and learn a bit about how I've gotten as far as I am know, go in Python and make some calls, or use the API explorer and try and get some information.
+If you've made it this far into the doc and want to try and learn a bit about how I've gotten as far as I am know, go in Python and make some calls, or use the API explorer and try and get some information.
 
 And that's it. Light stuff. I know this is a massive wall of text, I don't expect you to read this through, just if you get stuck to refer to things in here (or ask me). I plan on going over everything in here in the first couple days of RCOS, but if you need a refresher, it's all here. Also this needs to get updated as we make progress, particularly on what the site actually does.
 
