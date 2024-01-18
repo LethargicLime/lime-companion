@@ -61,7 +61,7 @@ Then on your browser of choice
 
 [https://localhost:3001/lime-companion]
 
-You'll be greeted by my bland landing page, click the Authorize button, you'll be prompted to login in you're Bungie account, and transferred to the main page.
+You'll be greeted by my bland landing page, click the Authorize button, you'll be prompted to log in to yourBungie account, and transferred to the main page.
 
 **ROUTING, FILE STRUCTURE, DESIGN PHILOSOPHY**
 
