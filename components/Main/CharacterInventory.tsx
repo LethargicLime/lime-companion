@@ -15,6 +15,7 @@ import {
 import { Popup } from './Popup';
 
 import CraftedIcon from "@/public/PatternIcon.jpg";
+import { ItemInfo } from './ItemInfo';
 
 export const CharacterInventory = () => {
     const { chosenCharacter } = useContext(ChosenCharacterContext);
@@ -28,7 +29,7 @@ export const CharacterInventory = () => {
     const [ coords, setCoords ] = useState<any>([0, 0]);
 
     const [ itemHashes, updateItemHashes ] = useState<any[]>([]);
-    const [ items, setItem ] = useState<any>([]);
+    const [ items, setNewItem ] = useState<any>([]);
 
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
@@ -36,30 +37,8 @@ export const CharacterInventory = () => {
     const handleIconClick = (info: any) => {
 
         console.log(info);
-
-        if (info["sockets"] && info["sockets"]["intrinsicSockets"]) {
-            // HasIntrinsicUpgrade(info["sockets"]["intrinsicSockets"][0]["plugItemHash"])
-        }
-
-        const handleMouse = (e) => {
-            if (revealed !== false) {
-                console.log(revealed)
-                setCoords([e.clientX, e.clientY])
-            }
-        }
-
-        window.addEventListener("mousedown", handleMouse);
-
-        if (info === prevHash) {
-            setRevealed(!revealed);
-        } else {
-            setRevealed(true);
-        }
-
-        console.log(coords);
-        setPrevHash(info);
+        console.log(JSON.parse(localStorage.getItem("masterInfo")));
     }
-
 
     // animation for character change
     useEffect(() => {
@@ -153,7 +132,7 @@ export const CharacterInventory = () => {
                     Object.assign(fetchedItems[i], itemInstances[i])
                 }
 
-                setItem(fetchedItems);
+                setNewItem(fetchedItems);
             }
         };
     
@@ -290,7 +269,7 @@ export const CharacterInventory = () => {
                                             height={70}
                                             alt="Primary"
                                         />}
-                                        {CurrentInventory[i][j]["state"] == 8 ? 
+                                        {CurrentInventory[i][j]["state"] == 8 || CurrentInventory[i][j]["state"] == 9 ? 
                                         <div className="" style={{
                                             marginTop: "-17px", 
                                             marginLeft: "3px",

@@ -13,6 +13,7 @@ import {
     useEffect
 } from 'react';
 import { LoadingScreen } from '@/components/Main/LoadingScreen';
+import { ItemInfo } from '@/components/Main/ItemInfo';
 
 export const HomePage = () => {
     const [ sidebarOpen, setSidebarOpen ] = useState<boolean>(true);
@@ -149,6 +150,8 @@ export const HomePage = () => {
             }
 
             updateEquipped(equipTemp);
+
+            localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
 
             setInvLoading(false);
         }

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import SidebarContext from '../Providers/SidebarProvider';
 import LoadoutContext, { LoadoutsContextProps } from '../Providers/LoadoutsProvider';
 import ChosenCharacterContext from '../Providers/ChosenCharacterProvider';
@@ -8,9 +8,16 @@ export const Navbar = () => {
     const { sidebarOpen } = useContext(SidebarContext);
     const { characters } = useContext(CharactersContext);
     const { chosenCharacter } = useContext(ChosenCharacterContext);
-    // const { loadouts } = useContext(LoadoutContext);
+
+    const [ optionSelect, chooseOption ] = useState<any>("none");
 
     const [loadoutsOpen, setLoadoutsOpen] = useState(false);
+
+    useEffect(() => {
+        if (chosenCharacter) {
+            
+        }
+    }, [])
 
     return (
         <div className={`top-0 z-20 navbar`}>
@@ -29,6 +36,16 @@ export const Navbar = () => {
                         {characters[chosenCharacter]["classType"] === 2 && "Warlock"}
                     </div>
                 }
+
+                <div className="ml-44">
+                    {optionSelect == "none" ? <div>
+                        
+                    </div> : 
+                    <div>
+                        {optionSelect}
+                    </div>
+                    }
+                </div>
 
                 {/* <div onClick={() => setLoadoutsOpen(!loadoutsOpen)}
                 style={{ 
