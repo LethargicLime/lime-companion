@@ -17,11 +17,11 @@ export const Page = () => {
 
     return (
         <>
-            <div className={"flex"} style={{
+            <div className={"flex z-0 relative"} style={{
                 backgroundColor: "#363636",
                 height: "calc(100vh - 50px)"
             }}>
-                <div className={`flex flex-row transistion-all duration-1000 ${sidebarOpen ? "pushed" : ""}`} style={{
+                <div className={`z-0 flex flex-row transistion-all duration-1000 ${sidebarOpen ? "pushed" : ""}`} style={{
                     maxWidth: "100vh"
                 }}>
                     <SelectedContext.Provider value={{ item, setItem }}>

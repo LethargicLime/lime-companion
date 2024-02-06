@@ -18,7 +18,7 @@ import CraftedIcon from "@/public/PatternIcon.jpg";
 import { ItemInfo } from './ItemInfo';
 
 export const CharacterInventory = () => {
-    const { chosenCharacter } = useContext(ChosenCharacterContext);
+    const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
     const { characters, updateCharacters } = useContext(CharactersContext);
     const { verbose, inventory, equipped } = useContext(VerboseContext);
     const { token, membershipId } = useContext(TokenContext);
@@ -118,6 +118,10 @@ export const CharacterInventory = () => {
 
     }, [chosenCharacter]);
 
+    useEffect(() => {
+        console.log("test");
+    }, [secondaryCharacter])
+
     // get item info when items change
     useEffect(() => {
         const fetchItems = async () => {
@@ -145,13 +149,10 @@ export const CharacterInventory = () => {
             paddingTop: "30px",
             color: "white",
             fontWeight: "700",
-            //textAlign: "center"
         }}>
             Select a character
         </div>;
     }
-
-    // console.log(CurrentLoadout);
 
     return (
         <>
@@ -164,9 +165,8 @@ export const CharacterInventory = () => {
                     top={coords[1]}
                 /> */}
             </div> : ""}
-        <div className="z-0" style={{ 
+        <div className="z-0 pt-[30px]" style={{ 
             paddingLeft: "45px",
-            paddingTop: "30px",
             fontWeight: "700",
             opacity: opacity,
             transition: 'opacity 0.25s ease-out',
@@ -309,7 +309,13 @@ export const CharacterInventory = () => {
                 ))}
             </div>
             : ""}
-            
+        </div>
+        <div className="z-0 ml-[80px] pt-[30px]" style={{
+            fontWeight: "700",
+            opacity: opacity,
+            transition: 'opacity 0.25s ease-out',
+        }}>
+            {characters[secondaryCharacter]["classType"]}
         </div>
         </>
     )

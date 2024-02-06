@@ -7,32 +7,32 @@ import CharactersContext from '../Providers/CharactersProvider';
 export const Navbar = () => {
     const { sidebarOpen } = useContext(SidebarContext);
     const { characters } = useContext(CharactersContext);
-    const { chosenCharacter } = useContext(ChosenCharacterContext);
+    const { chosenCharacter, secondaryCharacter, setSecondaryCharacter } = useContext(ChosenCharacterContext);
 
-    const [ optionSelect, chooseOption ] = useState<any>("none");
-    const [ options, setOptions ] = useState<any>([]);
+    const [ firstOption, setFirstOption ] = useState<string>("none");
+    const [ secondOption, setSecondOption ] = useState<string>("");
     const [ showAccordian, setShowAccordian ] = useState<boolean>(false);
 
     const [ loadoutsOpen, setLoadoutsOpen ] = useState(false);
 
     useEffect(() => {
         const Default = () => {
-            if (chosenCharacter && optionSelect == "none") {
+            if (chosenCharacter && firstOption == "none") {
                 for (let i in characters) {
                     if (characters[i]["characterId"] != chosenCharacter) {
 
                         if (characters[i]["classType"] == 0) {
-                            chooseOption("Titan");
+                            setFirstOption("Titan");
 
                             return "Titan";
 
                         } else if (characters[i]["classType"] == 1) {
-                            chooseOption("Hunter");
+                            setFirstOption("Hunter");
 
                             return "Hunter";
 
                         } else {
-                            chooseOption("Warlock");
+                            setFirstOption("Warlock");
 
                             return "Warlock";
                         }
@@ -41,39 +41,73 @@ export const Navbar = () => {
             }
         }
 
-        if (optionSelect == "none") {
+        if (firstOption == "none" && chosenCharacter) {
             let ignore = Default();
 
-            let arr = [];
+            console.log(chosenCharacter)
 
             for (let i in characters) {
                 if (characters[i]["classType"] == 0) {
-                    if (ignore != "Titan") {
-                        arr.push("Titan");
+                    if (ignore != "Titan" && characters[chosenCharacter]["classType"] != 0) {
+                        setSecondOption("Titan");
                     }
                 } else if (characters[i]["classType"] == 1) {
-                    if (ignore != "Hunter") {
-                        arr.push("Hunter");
+                    if (ignore != "Hunter" && characters[chosenCharacter]["classType"] != 1) {
+                        setSecondOption("Hunter");
                     }
                 } else {
-                    if (ignore != "Warlock") {
-                        console.log(optionSelect);
-                        arr.push("Warlock");
+                    if (ignore != "Warlock" && characters[chosenCharacter]["classType"] != 2) {
+                        setSecondOption("Warlock");
                     }
                 }
             }
-
-            setOptions(arr);
+        } else if (chosenCharacter) {
+            if (characters[chosenCharacter]["classType"] == 0) {
+                setFirstOption("Hunter");
+                setSecondOption("Warlock");
+            }
+            if (characters[chosenCharacter]["classType"] == 1) {
+                setFirstOption("Titan");
+                setSecondOption("Warlock");
+            }
+            if (characters[chosenCharacter]["classType"] == 2) {
+                setFirstOption("Titan");
+                setSecondOption("Hunter");
+            }
         }
 
-    }, [chosenCharacter])
+    }, [chosenCharacter]);
+
+    useEffect(() => {
+        for (let i in characters) {
+            console.log()
+            if (firstOption == "Warlock" && characters[i]["classType"] == 0) {
+                setSecondaryCharacter(i);
+            }
+            if (firstOption == "Hunter" && characters[i]["classType"] == 1) {
+                setSecondaryCharacter(i);
+            }
+            if (firstOption == "Warlock" && characters[i]["classType"] == 2) {
+                setSecondaryCharacter(i);
+            }
+        }
+
+    }, [firstOption])
 
     const handleAccordianClick = () => {
         setShowAccordian(!showAccordian);
     }
 
+    const handleOptionClick = () => {
+        console.log("test")
+
+        let t = firstOption;
+        setFirstOption(secondOption);
+        setSecondOption(t);        
+    }
+
     return (
-        <div className={`top-0 z-20 navbar`}>
+        <div className={`top-0 relative z-20 navbar`}>
             <div className={`transition-all duration-1000 ${sidebarOpen ? "pushed": ""}`} style={{ 
             color: "white",
             fontSize: "17px",
@@ -90,23 +124,22 @@ export const Navbar = () => {
                     </div>
                 }
 
-                <div className="ml-44">
-                    {optionSelect == "none" ? <div>
+                <div className="z-1 ml-44">
+                    {firstOption == "none" ? <div>
                         
                     </div> : 
-                    <div className="text-center" onClick={handleAccordianClick} style={{
+                    <div className="z-10 fixed text-center" onClick={handleAccordianClick} style={{
                         width: "140px"
                     }}>
-                        {optionSelect}
+                        {firstOption}
                         {showAccordian === true && 
 
-                        <div className="pt-2 accordian" style={{ 
-                            height: "95px",
+                        <div className="z-10 pt-2 accordian" style={{ 
+                            height: "50px",
                             width: "140px",
                             backgroundColor: "rgb(33, 32, 30)"
                         }}>
-                            <p className="mt-2 text-center">{options[0]}</p>
-                            <p className="mt-4 text-center">{options[1]}</p>
+                            <p className="z-1 mt-2 text-center" onClick={handleOptionClick}>{secondOption}</p>
                         </div>}
                     </div>
                     }
