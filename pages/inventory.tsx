@@ -20,6 +20,7 @@ export const HomePage = () => {
     const [ characters, updateCharacters ] = useState([]);
     const [ chosenCharacter, updateChosenCharacter ] = useState<string>("");
     const [ secondaryCharacter, updateSecondaryCharater ] = useState<string>("");
+    const [ thirdOption, updateThirdOption ] = useState<string>("");
     
     const [ verbose, updateVerbose ] = useState({});
     const [ inventory, updateInventory ] = useState([]);
@@ -179,7 +180,8 @@ export const HomePage = () => {
             <TokenContext.Provider value={{ token, setToken: updateToken, membershipId, setMemberId: updateMemberId }}>
                 <SidebarContext.Provider value={sidebarValue}>
                     <CharactersContext.Provider value={{ characters, updateCharacters }}>
-                        <ChosenCharacterContext.Provider value={{ chosenCharacter, secondaryCharacter, setChosenCharacter: updateChosenCharacter, setSecondaryCharacter: updateSecondaryCharater }}>
+                        <ChosenCharacterContext.Provider value={{ chosenCharacter, secondaryCharacter, thirdOption, 
+                            setChosenCharacter: updateChosenCharacter, setSecondaryCharacter: updateSecondaryCharater, setThirdOption: updateThirdOption }}>
                             <VerboseContext.Provider value={{ verbose, inventory, equipped, updateVerbose, updateInventory, updateEquipped }}>
                                 {invLoading ? 
                                     <div>

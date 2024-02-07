@@ -1,6 +1,6 @@
 let base = {
     "url": "https://www.bungie.net/Platform",
-    "key": `ace1abe8389b458fa91b621887738eb2`,
+    "key": process.env.NEXT_PUBLIC_API_KEY,
     "oAuth": "https://www.bungie.net/en/OAuth/Authorize",
     "refresh": "https://www.bungie.net/Platform/App/OAuth/token/",
     "oAuthClientId": 45568,
@@ -21,6 +21,8 @@ export async function authorize() {
 }
 
 export async function GetToken() {
+    console.log(base["key"]);
+
     const urlInfo = new URLSearchParams(location.search);
 
     const code = urlInfo.get("code");

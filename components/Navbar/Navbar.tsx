@@ -7,13 +7,14 @@ import CharactersContext from '../Providers/CharactersProvider';
 export const Navbar = () => {
     const { sidebarOpen } = useContext(SidebarContext);
     const { characters } = useContext(CharactersContext);
-    const { chosenCharacter, secondaryCharacter, setSecondaryCharacter } = useContext(ChosenCharacterContext);
+    const { chosenCharacter, secondaryCharacter, thirdOption, setSecondaryCharacter, setThirdOption } = useContext(ChosenCharacterContext);
 
     const [ firstOption, setFirstOption ] = useState<string>("none");
     const [ secondOption, setSecondOption ] = useState<string>("");
     const [ showAccordian, setShowAccordian ] = useState<boolean>(false);
 
-    const [ loadoutsOpen, setLoadoutsOpen ] = useState(false);
+    const [ third, setThird ] = useState<string>("Verbose Item Info");
+    const [ thirdOptions, setThirdOptions ] = useState<string[]>(["Loadouts", "Lore"]);
 
     useEffect(() => {
         const Default = () => {
@@ -82,7 +83,6 @@ export const Navbar = () => {
         for (let i in characters) {
             console.log()
             if (firstOption == "Titan" && characters[i]["classType"] == 0) {
-                console.log("testing")
                 setSecondaryCharacter(i);
             }
             if (firstOption == "Hunter" && characters[i]["classType"] == 1) {
@@ -93,7 +93,7 @@ export const Navbar = () => {
             }
         }
 
-    }, [firstOption])
+    }, [firstOption]);
 
     const handleAccordianClick = () => {
         setShowAccordian(!showAccordian);
@@ -103,6 +103,10 @@ export const Navbar = () => {
         let t = firstOption;
         setFirstOption(secondOption);
         setSecondOption(t);        
+    }
+
+    const handleThirdClick = () => {
+
     }
 
     return (
@@ -143,8 +147,8 @@ export const Navbar = () => {
                     </div>
                     }
                 </div>               
-                <div className="font-light pl-[425px]">
-                    Verbose Item Info
+                <div className="font-light pl-[425px]" onClick={handleThirdClick}>
+                    {third}
                 </div> 
             </div>
         </div>
