@@ -3,7 +3,6 @@ let base = {
     "key": process.env.NEXT_PUBLIC_API_KEY,
     "oAuth": "https://www.bungie.net/en/OAuth/Authorize",
     "refresh": "https://www.bungie.net/Platform/App/OAuth/token/",
-    "oAuthClientId": 45568,
     "token": ""
 
 }
@@ -11,7 +10,7 @@ let base = {
 export async function authorize() {
 
     const queryParams = new URLSearchParams({
-        client_id: "45568",
+        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
         response_type: 'code',
     })
 
@@ -32,7 +31,7 @@ export async function GetToken() {
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        client_id: '45568',
+        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
         client_secret: 'qC6Cr6FAUr1-Ljjt.-czzDEObFwbpEB3MJ4M2CAjdUI'
     })
 
