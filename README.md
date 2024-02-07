@@ -93,13 +93,11 @@ I try and provide information to a component on a need-to-know basis to keep com
 
 **ISSUES**
 
-> My API key is exposed. That's, I mean, like that's a big problem if this actually gets finished and launched. The .env file normally hides this information to users, so properly configuring that has to happen, but I haven't taken the time to do that yet since outside of myself, I've only shared the URL with people who I trust not to steal my Bungie account. This includes you :D.
-
-> There should be two API keys, one for the live domain, and one for local testing. After authentication, you're rerouted to a redirect URL you provide the API, and because I have one key that url is [https://localhost:3001/lime-companion/inventory]. Interestingly enough, you can use the live version of the site ([https://lethargiclime.github.io/lime-companion/]) if you have you're local server running since the landing page will redirect you to you're localhost. At some point there should be two keys, one for live and one for local.
+> My API key is exposed. This isn't a particular issue, but I also expose my secret key. In theory, this also technically doesn't really matter, but I shouldn't do that. :D
 
 > The loading screen doesn't properly wait for all the API calls to finish. If you load into the site and immediately select a character you might get an error. I haven't ever had to work with asynchronous stuff so I genuinely don't know what to do.
 
-> Sometimes the inventory doesn't display, just what you have equipped. I can't figure this one out, been working on it for a couple days.
+> Sometimes the inventory doesn't display, just what you have equipped. I can't figure this one out.
 
 > Information should stay on the cache and a backened should have the manifest so that way the loading time isn't horrendous. DIM (as far as I know) has it set so that all of your information is stored in your browsers cache. When you move something around, rather than calling the API it just moves it on it's backend data structure. That's why when you refresh the API it duplicates some information. Currently to figure out if a crafted item should have the masterwork appearence I call the API ~16 times, retrieving each perk and then seeing if the first one is an Enhanced Intrinsic. Naturally for this use case alone I only need to do it once, but if wanted to display perk information, there's no way around that except having the manifest on the backend instead of using the API.
 

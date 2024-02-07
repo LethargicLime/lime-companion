@@ -37,7 +37,7 @@ export const CharacterInventory = () => {
     const handleIconClick = (info: any) => {
 
         console.log(info);
-        console.log(JSON.parse(localStorage.getItem("masterInfo")));
+        // console.log(JSON.parse(localStorage.getItem("masterInfo")));
     }
 
     // animation for character change

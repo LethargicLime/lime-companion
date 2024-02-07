@@ -20,8 +20,6 @@ export async function authorize() {
 }
 
 export async function GetToken() {
-    console.log(base["key"]);
-
     const urlInfo = new URLSearchParams(location.search);
 
     const code = urlInfo.get("code");
@@ -32,7 +30,7 @@ export async function GetToken() {
         grant_type: 'authorization_code',
         code,
         client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-        client_secret: 'qC6Cr6FAUr1-Ljjt.-czzDEObFwbpEB3MJ4M2CAjdUI'
+        client_secret: process.env.NEXT_PUBLIC_API_SECRET
     })
 
     const response = await fetch('https://www.bungie.net/platform/app/oauth/token/', {

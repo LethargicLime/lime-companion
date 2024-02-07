@@ -153,7 +153,7 @@ export const HomePage = () => {
 
             updateEquipped(equipTemp);
 
-            localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
+            // localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
 
             setInvLoading(false);
         }
