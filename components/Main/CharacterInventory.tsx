@@ -63,6 +63,8 @@ export const CharacterInventory = () => {
 
     const [ CurrentLoadout, setCurrentLoadout ] = useState<any[]>([]);
     const [ CurrentInventory, setCurrentInventory ] = useState<any[][]>([]);
+    const [ SecondLoadout, setSecondLoadout ] = useState<any[]>([]);
+    const [ SecondInventory, setSecondInventory ] = useState<any[]>([]);
 
     // handle inventory
     useEffect(() => {
@@ -119,7 +121,56 @@ export const CharacterInventory = () => {
     }, [chosenCharacter]);
 
     useEffect(() => {
-        console.log("test");
+        const fetchInventoryInfo = async () => {
+            let tempLoadout = [...SecondLoadout];
+            let tempInv = [...SecondInventory];
+
+            for (let i in equipped) {
+                if (equipped[i]["character"] === secondaryCharacter) {
+                    if (equipped[i]["bucketHash"] === 1498876634) {
+                        tempLoadout[0] = equipped[i];
+                    }
+                    if (equipped[i]["bucketHash"] === 2465295065) {
+                        tempLoadout[1] = equipped[i];
+                    }
+                    if (equipped[i]["bucketHash"] === 953998645) {
+                        tempLoadout[2] = equipped[i];
+                    }
+                }
+            }
+
+            setSecondLoadout(tempLoadout);
+
+            let kInvTemp = [];
+            let sInvTemp = [];
+            let hInvTemp = [];
+
+            for (let i in inventory) {                
+
+                if (inventory[i]["character"] === secondaryCharacter) {
+                    if (inventory[i]["bucketHash"] === 1498876634) {                        
+                        kInvTemp.push(inventory[i]);
+                    }
+                    if (inventory[i]["bucketHash"] === 2465295065) {                        
+                        sInvTemp.push(inventory[i]);
+                    }
+                    if (inventory[i]["bucketHash"] === 953998645) {
+                        hInvTemp.push(inventory[i]);
+                    }
+                }
+            }
+
+            tempInv[0] = kInvTemp;
+            tempInv[1] = sInvTemp;
+            tempInv[2] = hInvTemp;
+            // console.log(tempInv);
+
+            setSecondInventory(tempInv);
+        }
+
+        if (secondaryCharacter) {
+            fetchInventoryInfo()
+        }
     }, [secondaryCharacter])
 
     // get item info when items change
@@ -315,7 +366,142 @@ export const CharacterInventory = () => {
             opacity: opacity,
             transition: 'opacity 0.25s ease-out',
         }}>
-            {characters[secondaryCharacter]["classType"]}
+            {secondaryCharacter && SecondLoadout && SecondLoadout.length > 0 ? 
+            <div>
+                {Array(3).fill(0).map((_, i) => (
+                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                        <div style={{ display: "inline-block"}}>
+                            <div onClick={() => handleIconClick(SecondLoadout[i])} className={SecondLoadout[i]["state"] == 4 
+                            || SecondLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
+                                position: "relative"
+                            }}>
+                                <Image 
+                                    src={`https://bungie.net${SecondLoadout[i]["iconWatermark"]}`}
+                                    width={70}
+                                    height={70}
+                                    className="watermark"
+                                    alt="Watermark"
+                                    style={{ position: 'absolute', top: 0, left: 0 }}
+                                />
+                                {SecondLoadout[i]["overrideStyle"] ? 
+                                <Image
+                                    src={`https://bungie.net${SecondLoadout[i]["overrideStyle"]["displayProperties"]["icon"]}`}
+                                    width={70}
+                                    height={70}
+                                    alt="Primary"
+                                /> : 
+                                <Image
+                                    src={`https://bungie.net${SecondLoadout[i]["displayProperties"]["icon"]}`}
+                                    width={70}
+                                    height={70}
+                                    alt="Primary"
+                                />}
+                                {SecondLoadout[i]["state"] == 8 || SecondLoadout[i]["state"] == 9 ? 
+                                <div className="" style={{
+                                    marginTop: "-17px", 
+                                    marginLeft: "3px",
+                                    position: "absolute",
+                                }}>
+                                    <Image 
+                                        src={CraftedIcon}
+                                        width={13}
+                                        height={13}
+                                        alt="Crafted Icon"
+                                    />
+                                </div> : ""}
+                            </div>
+                            <div className="" style={{
+                                height: "14px",
+                                fontSize: "10px",
+                                fontWeight: "700",
+                                backgroundColor: "#3d3d3d",
+                                color: "white", 
+                                display: "flex", 
+                                alignItems: "center",
+                                opacity: "",
+                                justifyContent: "center",
+                            }}>
+                                <Image 
+                                    src={`https://bungie.net${SecondLoadout[i]["damageInformation"]["displayProperties"]["icon"]}`}
+                                    width={11}
+                                    height={11}
+                                    alt="Damage Type"
+                                />
+                                <span className="pl-1">{SecondLoadout[i]["primaryStat"]["value"]}</span>
+                            </div>
+                        </div>
+                        <div style={{ 
+                            display: "grid",
+                            gridTemplateColumns: "repeat(3, 60px)",
+                            gridGap: "5px", 
+                            marginLeft: "14px",
+                        }}>
+                            {Array(SecondInventory[i].length).fill(0).map((_, j) => (
+                                <div key={j} style={{ display: "inline-block" }}>
+                                    <div className={SecondInventory[i][j]["state"] == 4 
+                                    || SecondInventory[i][j]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
+                                        position: "relative"
+                                    }}>
+                                        <Image 
+                                            src={`https://bungie.net${SecondInventory[i][j]["iconWatermark"]}`}
+                                            width={70}
+                                            height={70}
+                                            className="watermark"
+                                            alt="Watermark"
+                                            style={{ position: 'absolute', top: 0, left: 0 }}
+                                        />
+                                        {SecondInventory[i][j]["overrideStyle"] ? 
+                                        <Image
+                                            src={`https://bungie.net${SecondInventory[i][j]["overrideStyle"]["displayProperties"]["icon"]}`}
+                                            width={70}
+                                            height={70}
+                                            alt="Primary"
+                                        /> : 
+                                        <Image
+                                            src={`https://bungie.net${SecondInventory[i][j]["displayProperties"]["icon"]}`}
+                                            width={70}
+                                            height={70}
+                                            alt="Primary"
+                                        />}
+                                        {SecondInventory[i][j]["state"] == 8 || SecondInventory[i][j]["state"] == 9 ? 
+                                        <div className="" style={{
+                                            marginTop: "-17px", 
+                                            marginLeft: "3px",
+                                            position: "absolute",
+                                        }}>
+                                            <Image 
+                                                src={CraftedIcon}
+                                                width={12}
+                                                height={12}
+                                                alt="Crafted Icon"
+                                            />
+                                        </div> : ""}
+                                    </div>
+                                    <div style={{ 
+                                        height: "14px",
+                                        fontSize: "10px",
+                                        fontWeight: "700",
+                                        backgroundColor: "#3d3d3d",
+                                        color: "white", 
+                                        display: "flex", 
+                                        alignItems: "center",
+                                        opacity: "",
+                                        justifyContent: "center",
+                                    }}>
+                                        <Image 
+                                            src={`https://bungie.net${SecondInventory[i][j]["damageInformation"]["displayProperties"]["icon"]}`}
+                                            width={11}
+                                            height={11}
+                                            alt="Damage Type"
+                                        />
+                                        <span className="pl-1">{SecondInventory[i][j]["primaryStat"]["value"]}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div> : ""}
         </div>
         </>
     )

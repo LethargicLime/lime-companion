@@ -81,7 +81,8 @@ export const Navbar = () => {
     useEffect(() => {
         for (let i in characters) {
             console.log()
-            if (firstOption == "Warlock" && characters[i]["classType"] == 0) {
+            if (firstOption == "Titan" && characters[i]["classType"] == 0) {
+                console.log("testing")
                 setSecondaryCharacter(i);
             }
             if (firstOption == "Hunter" && characters[i]["classType"] == 1) {
@@ -99,8 +100,6 @@ export const Navbar = () => {
     }
 
     const handleOptionClick = () => {
-        console.log("test")
-
         let t = firstOption;
         setFirstOption(secondOption);
         setSecondOption(t);        
@@ -123,13 +122,13 @@ export const Navbar = () => {
                         {characters[chosenCharacter]["classType"] === 2 && "Warlock"}
                     </div>
                 }
-
-                <div className="z-1 ml-44">
+                <div className="z-1 pl-[185px]">
                     {firstOption == "none" ? <div>
                         
                     </div> : 
-                    <div className="z-10 fixed text-center" onClick={handleAccordianClick} style={{
-                        width: "140px"
+                    <div className="z-10 fixed text-center font-[700]" onClick={handleAccordianClick} style={{
+                        width: "140px",
+                        color: "#49875e",
                     }}>
                         {firstOption}
                         {showAccordian === true && 
@@ -139,11 +138,14 @@ export const Navbar = () => {
                             width: "140px",
                             backgroundColor: "rgb(33, 32, 30)"
                         }}>
-                            <p className="z-1 mt-2 text-center" onClick={handleOptionClick}>{secondOption}</p>
+                            <p className="z-1 mt-2 text-center font-normal text-white" onClick={handleOptionClick}>{secondOption}</p>
                         </div>}
                     </div>
                     }
-                </div>                
+                </div>               
+                <div className="font-light pl-[425px]">
+                    Verbose Item Info
+                </div> 
             </div>
         </div>
     )
