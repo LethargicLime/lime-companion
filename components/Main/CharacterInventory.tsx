@@ -212,7 +212,7 @@ export const CharacterInventory = () => {
                     top={coords[1]}
                 /> */}
             </div> : ""}
-        <div className="z-0 pt-[30px]" style={{ 
+        <div className="flex flex-row z-0 pt-[30px]" style={{ 
             paddingLeft: "45px",
             fontWeight: "700",
             opacity: opacity,
@@ -222,7 +222,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block"}}>
+                        <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])} className={CurrentLoadout[i]["state"] == 4 
                             || CurrentLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                                 position: "relative"
@@ -357,7 +357,7 @@ export const CharacterInventory = () => {
             </div>
             : ""}
         </div>
-        <div className="z-0 ml-[80px] pt-[30px]" style={{
+        <div className="flex flex-row z-0 ml-[80px] pt-[30px]" style={{
             fontWeight: "700",
             opacity: opacity,
             transition: 'opacity 0.25s ease-out',
@@ -366,7 +366,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block"}}>
+                        <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])} className={SecondLoadout[i]["state"] == 4 
                             || SecondLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                                 position: "relative"
