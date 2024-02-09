@@ -6,17 +6,30 @@ export const ItemInfo = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
     const { item } = useContext(SelectedContext);
     
+
+    const graphicForRarity = (hash:string) => {
+        const hashMap = {
+            "2673424576": "exotic",
+            "3520001075": "legendary"
+        }
+
+        return hashMap[hash] || ""
+    }
+
     useEffect(() => {
         
     }, [thirdOption]);
 
     return (
-        <div className="" style={{ paddingTop: "20px" }}>
+        <div className="flex" style={{ paddingTop: "20px" }}>
             {thirdOption === "Verbose Item Info" && item && item["displayProperties"] &&
-                <div className="text-white font-semibold text-lg" style={{
-                    
+                <div className="ml-[151px] font-bold text-white font-semibold text-lg" style={{
+                    width: "300px"
                 }}>
-                    {item["displayProperties"]["name"]}
+                    <div className={`${graphicForRarity(item["summaryItemHash"])}`}>
+                        <p>{item["displayProperties"]["name"]}</p>
+                        <p className="font-light text-[17px]">{item["itemTypeDisplayName"]}</p>
+                    </div>
                 </div>
             }
         </div>

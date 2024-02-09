@@ -26,7 +26,9 @@ export const Page = () => {
                 }}>
                     <SelectedContext.Provider value={{ item, setItem }}>
                         <CharacterInventory />
-                        <ItemInfo />
+                        <div className="">
+                            <ItemInfo />
+                        </div>
                     </SelectedContext.Provider>
                 </div>
             </div>

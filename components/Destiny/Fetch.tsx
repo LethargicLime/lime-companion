@@ -24,8 +24,6 @@ export async function GetToken() {
 
     const code = urlInfo.get("code");
 
-    // console.log(code);
-
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
