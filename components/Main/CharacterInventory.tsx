@@ -16,11 +16,13 @@ import { Popup } from './Popup';
 
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import { ItemInfo } from './ItemInfo';
+import SelectedContext from '../Providers/SelectedProvider';
 
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
     const { characters, updateCharacters } = useContext(CharactersContext);
     const { verbose, inventory, equipped } = useContext(VerboseContext);
+    const { item, setItem } = useContext(SelectedContext);
     const { token, membershipId } = useContext(TokenContext);
 
     const [ hash, setHash ] = useState<any>([]);
@@ -29,15 +31,13 @@ export const CharacterInventory = () => {
     const [ coords, setCoords ] = useState<any>([0, 0]);
 
     const [ itemHashes, updateItemHashes ] = useState<any[]>([]);
-    const [ items, setNewItem ] = useState<any>([]);
 
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
 
     const handleIconClick = (info: any) => {
-
+        setItem(info);
         console.log(info);
-        // console.log(JSON.parse(localStorage.getItem("masterInfo")));
     }
 
     // animation for character change
@@ -93,7 +93,6 @@ export const CharacterInventory = () => {
             let hInvTemp = [];
 
             for (let i in inventory) {                
-                // console.log(inventory[i]);
 
                 if (inventory[i]["character"] === chosenCharacter) {
                     if (inventory[i]["bucketHash"] === 1498876634) {                        
@@ -111,7 +110,6 @@ export const CharacterInventory = () => {
             tempInv[0] = kInvTemp;
             tempInv[1] = sInvTemp;
             tempInv[2] = hInvTemp;
-            // console.log(tempInv);
 
             setCurrentInventory(tempInv);
         }
@@ -186,8 +184,6 @@ export const CharacterInventory = () => {
                 for (let i in fetchedItems) {
                     Object.assign(fetchedItems[i], itemInstances[i])
                 }
-
-                setNewItem(fetchedItems);
             }
         };
     
@@ -237,7 +233,7 @@ export const CharacterInventory = () => {
                                     height={70}
                                     className="watermark"
                                     alt="Watermark"
-                                    style={{ position: 'absolute', top: 0, left: 0 }}
+                                    style={{ position: "absolute", top: 0, left: 0 }}
                                 />
                                 {CurrentLoadout[i]["overrideStyle"] ? 
                                 <Image
@@ -295,7 +291,7 @@ export const CharacterInventory = () => {
                         }}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
-                                    <div className={CurrentInventory[i][j]["state"] == 4 
+                                    <div onClick={() => handleIconClick(CurrentInventory[i][j])} className={CurrentInventory[i][j]["state"] == 4 
                                     || CurrentInventory[i][j]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                                         position: "relative"
                                     }}>
@@ -305,7 +301,7 @@ export const CharacterInventory = () => {
                                             height={70}
                                             className="watermark"
                                             alt="Watermark"
-                                            style={{ position: 'absolute', top: 0, left: 0 }}
+                                            style={{ position: "absolute", top: 0, left: 0 }}
                                         />
                                         {CurrentInventory[i][j]["overrideStyle"] ? 
                                         <Image
@@ -438,7 +434,7 @@ export const CharacterInventory = () => {
                         }}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
-                                    <div className={SecondInventory[i][j]["state"] == 4 
+                                    <div onClick={() => handleIconClick(SecondInventory[i][j])} className={SecondInventory[i][j]["state"] == 4 
                                     || SecondInventory[i][j]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                                         position: "relative"
                                     }}>

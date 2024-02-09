@@ -14,7 +14,12 @@ export const Navbar = () => {
     const [ showAccordian, setShowAccordian ] = useState<boolean>(false);
 
     const [ third, setThird ] = useState<string>("Verbose Item Info");
-    const [ thirdOptions, setThirdOptions ] = useState<string[]>(["Loadouts", "Lore"]);
+    const [ thirdOptions, setThirdOptions ] = useState<string[]>(["Loadouts", "Vault", "Lore"]);
+    const [ showSecondAccordian, setShowSecondAccordian ] = useState<boolean>(false);
+
+    useEffect(() => {
+        setThirdOption(third);
+    }, [third]);
 
     useEffect(() => {
         const Default = () => {
@@ -45,7 +50,7 @@ export const Navbar = () => {
         if (firstOption == "none" && chosenCharacter) {
             let ignore = Default();
 
-            console.log(chosenCharacter)
+            setThird(third);
 
             for (let i in characters) {
                 if (characters[i]["classType"] == 0) {
@@ -106,7 +111,7 @@ export const Navbar = () => {
     }
 
     const handleThirdClick = () => {
-
+        setShowSecondAccordian(!showSecondAccordian);
     }
 
     return (
@@ -147,9 +152,26 @@ export const Navbar = () => {
                     </div>
                     }
                 </div>               
-                <div className="font-light pl-[425px]" onClick={handleThirdClick}>
-                    {third}
-                </div> 
+
+                <div className="z-1 pl-[425px]">
+                    <div className="fixed font-light text-center" onClick={handleThirdClick} style={{
+                        width: "200px"
+                    }}>
+                        {third}
+                        {showSecondAccordian === true && 
+
+                        <div className="z-10 text-center pt-2 accordian" style={{
+                            width: "200px",
+                            height: "120px",
+                            backgroundColor: "rgb(33, 32, 30)"
+                        }}>
+                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white">{thirdOptions[0]}</p>
+                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white">{thirdOptions[1]}</p>
+                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white">{thirdOptions[2]}</p>
+                        </div>
+                        }
+                    </div> 
+                </div>
             </div>
         </div>
     )
