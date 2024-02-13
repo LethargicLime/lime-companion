@@ -1,10 +1,13 @@
+import { PrintExpireTime, RetrieveData, StoreData } from "@/components/Main/Storage";
+
 let base = {
     "url": "https://www.bungie.net/Platform",
     "key": process.env.NEXT_PUBLIC_TEST_KEY,
     "oAuth": "https://www.bungie.net/en/OAuth/Authorize",
     "refresh": "https://www.bungie.net/Platform/App/OAuth/token/",
-    "token": "",
-    "code": ""
+    "token": null,
+    "refreshToken": null,
+    "code": null
 }
 
 export async function TestAuthorize() {
@@ -17,17 +20,21 @@ export async function TestAuthorize() {
     location.href = href;
 }
 
-export async function TestGetCode(){
-    const currentURL = new URLSearchParams(location.search);
-    const param1 = currentURL.get("code");
-    base.code = param1;
-    return param1;
-}
-
-
 export async function TestGetToken() {
+    const token = RetrieveData("access_token");
+    if(token == null){
+        const currentURL = new URLSearchParams(location.search);
+        base.code = currentURL.get("code");
+        if(base.code == null){
+            TestAuthorize();
+            return;
+        }
+    }else{
+        base.token = token;
+        return;
+    }
+    
     const code = base.code;
-
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
@@ -45,8 +52,13 @@ export async function TestGetToken() {
 
     if (response.ok) {
         const r = await response.json();
-
+        console.log(r);
         base.token = r["access_token"];
+        base.refreshToken = r["refresh_token"];
+        StoreData('access_token', base.token, r["expires_in"]);
+        StoreData('refresh_token', base.refreshToken, r["refresh_expires_in"]);
+        PrintExpireTime('access_token');
+        PrintExpireTime('refresh_token');
         return r;
     } else {
         console.log("Failure: " + response);
@@ -61,17 +73,10 @@ export async function TestRemoveLink() {
 
 export default function TestKevin() {
     // @ts-ignore
-    TestGetCode().then(result => {
-        var code:string = null;
-        code = result;
-        if(code == null){
-            TestAuthorize();
-            return;
-        }
-        TestGetToken();
-        TestRemoveLink();
-        // console.log("Code is:" + code);
-    });
+    (async () => {
+        await TestGetToken();
+        await TestRemoveLink();
+    })();
     return (
         <div>
             <h1>Hello There</h1>
