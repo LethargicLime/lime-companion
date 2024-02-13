@@ -36,6 +36,12 @@ export const CharacterInventory = () => {
     const [ opacity, setOpacity ] = useState(1);
 
     const handleIconClick = (info: any) => {
+        if (info == item) {
+            setItem("");
+
+            return;
+        }
+        
         setItem(info);
         console.log(info);
     }

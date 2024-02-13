@@ -194,3 +194,8 @@
     height: 50%;
     box-shadow: 16px 4px 5px -5px rgba(0, 0, 0, 0.5);
 }
+
+.stat-bar {
+    height: 15px;
+    background: white;
+}
