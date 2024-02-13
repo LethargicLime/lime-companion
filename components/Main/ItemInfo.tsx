@@ -39,7 +39,7 @@ export const ItemInfo = () => {
                     <div className="w-[500px] flex flex-col font-normal text-[15px]">
                         <p className="w-[440px] pt-1 pb-1 font-light italic">{item["flavorText"]}</p>
                         
-                        {item["stats"]["stats"]["4043523819"] && // has impact (so most weapons)
+                        {item["stats"]["stats"]["4043523819"] && !item["stats"]["stats"]["2837207746"] && // has impact and is not a sword (so most weapons)
                         <div>
                             {item["stats"]["stats"]["2961396640"] && // bows and (linear) fusion rifles
                             <p className="">Charge Time<span className="ml-1 font-light">{item["stats"]["stats"]["2961396640"]["value"]}</span></p>}
@@ -109,8 +109,33 @@ export const ItemInfo = () => {
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["2523465841"]["value"] * 3 }}></div>
                                 <span style={{ marginLeft: 310 - (item["stats"]["stats"]["2523465841"]["value"] * 3) }}>{item["stats"]["stats"]["2523465841"]["value"]}</span>
                             </div>
+                            <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>
                         </div>}
-                        <div className="flex flex-row">
+
+                        {item["stats"]["stats"]["2837207746"] && 
+                        <div>
+                            <div className="flex flex-row">
+                                <span className="w-[100px]">Impact</span>
+                                <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["4043523819"]["value"] * 3 }}></div>
+                                <span style={{ marginLeft: 310 - (item["stats"]["stats"]["4043523819"]["value"] * 3) }}>{item["stats"]["stats"]["4043523819"]["value"]}</span>
+                            </div>
+                            <div className="flex flex-row">
+                                <span className="w-[100px]">Swing Speed</span>
+                                <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["2837207746"]["value"] * 3 }}></div>
+                                <span style={{ marginLeft: 310 - (item["stats"]["stats"]["2837207746"]["value"] * 3) }}>{item["stats"]["stats"]["2837207746"]["value"]}</span>
+                            </div>
+                            <div className="flex flex-row">
+                                <span className="w-[100px]">Guard Resist</span>
+                                <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["209426660"]["value"] * 3 }}></div>
+                                <span style={{ marginLeft: 310 - (item["stats"]["stats"]["209426660"]["value"] * 3) }}>{item["stats"]["stats"]["209426660"]["value"]}</span>
+                            </div>
+                            <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>
+                        </div>
+                        }
+
+                        {!item["stats"]["stats"]["2837207746"] && // is not a sword
+                        <div>
+                            <div className="flex flex-row">
                                 <span className="w-[100px]">Aim Assist</span>
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["1345609583"]["value"] * 3 }}></div>
                                 <span style={{ marginLeft: 310 - (item["stats"]["stats"]["1345609583"]["value"] * 3) }}>{item["stats"]["stats"]["1345609583"]["value"]}</span>
@@ -125,7 +150,15 @@ export const ItemInfo = () => {
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["3555269338"]["value"] * 3 }}></div>
                                 <span style={{ marginLeft: 310 - (item["stats"]["stats"]["3555269338"]["value"] * 3) }}>{item["stats"]["stats"]["3555269338"]["value"]}</span>
                             </div>
+                            {item["stats"]["stats"]["3871231066"] && // bows don't have a magazine
+                            <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>}
+                        </div>}
                     </div>
+                    {item["plugObjectives"]["objectivesPerPlug"]["4029346515"] && // is crafted
+                    <div className="font-light text-[16px] mt-1">
+                        Weapon Level
+                    </div>
+                    }
                 </div>
             }
         </div>

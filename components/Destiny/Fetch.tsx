@@ -163,7 +163,7 @@ export async function HasIntrinsicUpgrade(hash: string) {
 
 export async function ItemInstance(id: string, item: string) {
 
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,305,307`, {
+    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,305,307,309`, {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
@@ -193,6 +193,18 @@ export async function ItemInstance(id: string, item: string) {
                 const promise = GetItem(data["Response"]["sockets"]["data"]["sockets"][i]["plugHash"]);
             
                 data["Response"]["instance"]["data"]["socketInfo"][i] = await promise;
+            }
+        }
+    }
+
+    if (data["Response"]["plugObjectives"] && data["Response"]["plugObjectives"]["data"]) {
+        data["Response"]["instance"]["data"]["plugObjectives"] = data["Response"]["plugObjectives"]["data"];
+
+        if (data["Response"]["instance"]["data"]["plugObjectives"]["objectivesPerPlug"]) {
+            for (let i in data["Response"]["instance"]["data"]["plugObjectives"]) {
+                if (data["Response"]["instance"]["data"]["plugObjectives"].length === 3) {
+                    console.log("test");
+                }
             }
         }
     }
