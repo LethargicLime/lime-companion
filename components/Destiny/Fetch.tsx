@@ -1,3 +1,5 @@
+import { RemoveParams } from "../Main/Link";
+
 let base = {
     "url": "https://www.bungie.net/Platform",
     "key": process.env.NEXT_PUBLIC_API_KEY,
@@ -45,6 +47,8 @@ export async function GetToken() {
         base["token"] = await r["access_token"];
 
         console.log(base["token"]);
+
+        RemoveParams("code");
 
         return r;
     } else {
