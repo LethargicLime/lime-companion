@@ -6,6 +6,15 @@ export const ItemInfo = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
     const { item } = useContext(SelectedContext);
 
+    const [ recoil, setRecoil ] = useState<any>(0);
+
+    useEffect(() => {
+        if (item && item["stats"] && item["stats"]["stats"]["2715839340"]) {
+            let t: any = Math.sin((item["stats"]["stats"]["2715839340"]["value"] + 5) * Math.PI / 10)
+            setRecoil(t.toFixed(4) * (100 - item["stats"]["stats"]["2715839340"]["value"]));
+        }
+    }, [item])
+
     const graphicForRarity = (hash:string) => {
         const hashMap = {
             "2673424576": "rgb(206, 174, 51)",
@@ -153,12 +162,11 @@ export const ItemInfo = () => {
                             {item["stats"]["stats"]["3871231066"] && // bows don't have a magazine
                             <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>}
                         </div>}
+
+                        <div className="flex flex-row">
+                            <p>Recoil Direction<span className="ml-2 font-light">{item["stats"]["stats"]["2715839340"]["value"]}</span></p>
+                        </div>
                     </div>
-                    {item["plugObjectives"]["objectivesPerPlug"]["4029346515"] && // is crafted
-                    <div className="font-light text-[16px] mt-1">
-                        Weapon Level
-                    </div>
-                    }
                 </div>
             }
         </div>

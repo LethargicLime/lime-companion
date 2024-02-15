@@ -203,7 +203,7 @@ export async function ItemInstance(id: string, item: string) {
         if (data["Response"]["instance"]["data"]["plugObjectives"]["objectivesPerPlug"]) {
             for (let i in data["Response"]["instance"]["data"]["plugObjectives"]) {
                 if (data["Response"]["instance"]["data"]["plugObjectives"].length === 3) {
-                    console.log("test");
+                    console.log("test")
                 }
             }
         }
