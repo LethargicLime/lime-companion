@@ -163,9 +163,16 @@ export const ItemInfo = () => {
                             <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>}
                         </div>}
 
-                        <div className="flex flex-row">
-                            <p>Recoil Direction<span className="ml-2 font-light">{item["stats"]["stats"]["2715839340"]["value"]}</span></p>
+                        <div className="flex flex-row items-center">
+                            <p>Recoil Direction<span className="ml-2 mr-2 font-light">{item["stats"]["stats"]["2715839340"]["value"]}</span></p>
+                            <svg className="pl-6" viewBox="0 0 100 40" style={{ display: "block" }}>
+                                <line x1="10" x2="10" y1="20" y2="25" stroke="white" strokeWidth="1" style={{
+                                    transform: `rotate(${recoil}deg)`,
+                                    transformOrigin: "10px 25px"
+                                }} />
+                            </svg>
                         </div>
+
                     </div>
                 </div>
             }
