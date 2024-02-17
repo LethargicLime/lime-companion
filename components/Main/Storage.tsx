@@ -1,54 +1,64 @@
 export const keyList = {
-    storageRoot: "userInfo",
-    lastUser: "previousUser",
+    storageRoot: "user_info",
+    lastUser: "previous_id",
     token: "access_token",
     refreshToken: "refresh_token",
-    Id: "membership_id",
+    id: "bungie_id",
+    memberships: "memberships"
 }
 
-let user:string = null;
+let bungie_id:string = null;
+let membership_index = 0;
 let userList:JSON = null;
 let storage:JSON = null;
 
-export function InitStorage(membership_id: string){
+export function InitStorage(membership_id: string = null){
     // Init storage if it doesn't exist
     if(!(keyList.storageRoot in localStorage)){
         localStorage.setItem(keyList.storageRoot, JSON.stringify({}));
     }
     // Get user list 
     userList = JSON.parse(localStorage.getItem(keyList.storageRoot));
-    // Use first user as default user if it exists
+    // Use previous user as default user if it exists
     if(membership_id == null){
         membership_id =  localStorage.getItem(keyList.lastUser);
     }
     if(membership_id != null)
     {
-        user = membership_id in userList ? membership_id : null;
-        if(user != null){
-            storage = userList[user];
+        bungie_id = membership_id in userList ? membership_id : null;
+        if(bungie_id != null){
+            storage = userList[bungie_id];
         }
     }
     if(storage == null){
         storage = {} as JSON;
     }
     window.onbeforeunload = function(){
-        if(user != null){
-            userList[user] = storage;
+        if(bungie_id != null){
+            userList[bungie_id] = storage;
         }
         localStorage.setItem(keyList.storageRoot, JSON.stringify(userList));
-        localStorage.setItem(keyList.lastUser, user);
+        localStorage.setItem(keyList.lastUser, bungie_id);
     };
 }
 
+export function GetBungieId():string{
+    return bungie_id;
+}
+
+export function GetMembership(){
+    return storage[keyList.memberships][membership_index];
+}
+
 export function ChangeUser(membership_id: string){
-    user = membership_id;
-    if(user in userList){
-        storage = userList[user];
+    bungie_id = membership_id;
+    if(bungie_id in userList){
+        storage = userList[bungie_id];
     }
 }
 
 export function StoreData(key: string, value: any, expireTimeSecond: number = -1):void{
-    if(user == null) return;
+    if(bungie_id == null) return;
     storage[key] = value;
     if(expireTimeSecond != -1){
         SetValid(key, expireTimeSecond);
@@ -56,32 +66,32 @@ export function StoreData(key: string, value: any, expireTimeSecond: number = -1
 }
 
 export function RetrieveData(key: string):any{
-    if(user == null) return null;
+    if(bungie_id == null) return null;
     var value = key in storage ? storage[key] : null;
     if(value == null || !IsValid(key)) return null;
     return value;
 }
 
 export function IsValid(key: string):boolean{
-    if(user == null) return false;
+    if(bungie_id == null) return false;
     var value = key + "_expire" in storage ? storage[key + "_expire"] : null;
     if(value == null) return true;
     return Date.now() < Number(value);
 }
 
 export function SetValid(key: string, timeSecond: number):void{
-    if(user == null) return;
+    if(bungie_id == null) return;
     storage[key + "_expire"] = (Date.now() + timeSecond * 1000).toString();
 }
 
 export function RemoveData(key: string):void{
-    if(user == null) return;
+    if(bungie_id == null) return;
     delete storage[key];
     delete storage[key + "_expire"];
 }
 
 export function PrintExpireTime(key: string):void{
-    if(user == null) return;
+    if(bungie_id == null) return;
     var value = key + "_expire" in storage ? storage[key + "_expire"] : null;
     if(value == null) return;
     console.log(`${key} expires at ${new Date(Number(value))}`);

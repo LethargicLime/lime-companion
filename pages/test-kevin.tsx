@@ -1,4 +1,4 @@
-import { ChangeUser, InitStorage, PrintExpireTime, RetrieveData, StoreData, keyList } from "@/components/Main/Storage";
+import { ChangeUser, GetBungieId, InitStorage, PrintExpireTime, RetrieveData, StoreData, keyList } from "@/components/Main/Storage";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
@@ -33,7 +33,7 @@ export async function TestGetToken() {
             client_secret: process.env.NEXT_PUBLIC_TEST_API_SECRET
         })
 
-        const response = await fetch('https://www.bungie.net/platform/app/oauth/token/', {
+        const response = await fetch('https://www.bungie.net/Platform/App/OAuth/token/', {
             method: 'POST',
             body,
             headers: {
@@ -43,6 +43,7 @@ export async function TestGetToken() {
 
         if (response.ok) {
             const r = await response.json();
+            console.log(r);
             ChangeUser(r["membership_id"]);
             StoreData(keyList.token, r["access_token"], r["expires_in"]);
             StoreData(keyList.refreshToken, r["refresh_token"], r["refresh_expires_in"]);
@@ -61,12 +62,26 @@ export async function TestRemoveLink() {
     history.pushState({}, '', `${location.pathname}`);
 }
 
+export async function TestFetch() {
+    var result = await fetch(`${base.url}/User/GetMembershipsById/${GetBungieId()}/-1/`,{
+        method: "GET",
+        headers: {
+            "x-api-key": base.key
+        }
+    })
+    if(result.ok){
+        var json = await result.json();
+        console.log(json);
+    }
+}
+
 export default function TestKevin() {
     // @ts-ignore
     (async () => {
         await InitStorage(null);
         await TestGetToken();
         await TestRemoveLink();
+        await TestFetch();
     })();
     return (
         <div>

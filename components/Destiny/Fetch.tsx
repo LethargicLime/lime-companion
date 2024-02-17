@@ -1,12 +1,11 @@
 import { RemoveParams } from "../Main/Link";
+import { ChangeUser, GetBungieId, GetMembership, RetrieveData, StoreData, keyList } from "../Main/Storage";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
     "key": process.env.NEXT_PUBLIC_API_KEY,
     "oAuth": "https://www.bungie.net/en/OAuth/Authorize",
-    "refresh": "https://www.bungie.net/Platform/App/OAuth/token/",
-    "token": ""
-
+    "token": "https://www.bungie.net/Platform/App/OAuth/token/"
 }
 
 export async function authorize() {
@@ -23,36 +22,53 @@ export async function authorize() {
 
 export async function GetToken() {
     const urlInfo = new URLSearchParams(location.search);
-
     const code = urlInfo.get("code");
-
-    const body = new URLSearchParams({
-        grant_type: 'authorization_code',
-        code,
-        client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-        client_secret: process.env.NEXT_PUBLIC_API_SECRET
-    })
-
-    const response = await fetch('https://www.bungie.net/platform/app/oauth/token/', {
-        method: 'POST',
-        body,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+    if(code != null){
+        const body = new URLSearchParams({
+            grant_type: 'authorization_code',
+            code: code,
+            client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+            client_secret: process.env.NEXT_PUBLIC_API_SECRET
+        })
+    
+        const response = await fetch(base["token"], {
+            method: 'POST',
+            body,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+    
+        if (response.ok) {
+            const r = await response.json();
+            ChangeUser(r["membership_id"]);
+            StoreData(keyList.token, r["access_token"], r["expires_in"]);
+            StoreData(keyList.refreshToken, r["refresh_token"], r["refresh_expires_in"]);
+            console.log(RetrieveData(keyList.token));    
+            RemoveParams("code");
+        } else {
+            console.log("Failure: " + response);
         }
-    })
-
-    if (response.ok) {
-        const r = await response.json();
-
-        base["token"] = await r["access_token"];
-
-        console.log(base["token"]);
-
-        RemoveParams("code");
-
-        return r;
-    } else {
-        // console.log("Failure: " + response);
+    }else{
+        if(RetrieveData(keyList.token) != null){
+            return;
+        }else if(RetrieveData(keyList.refreshToken) != null){
+            const body = new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: RetrieveData(keyList.refreshToken),
+                client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
+                client_secret: process.env.NEXT_PUBLIC_API_SECRET
+            })
+            const response = await fetch(base["token"], {
+                method: 'POST',
+                body,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+        }else{
+            location.href = "../lime-companion/";
+        }
     }
 }
 
@@ -73,11 +89,11 @@ export async function GetCharacterInfo(id: string) {
         "method": "GET",
         "headers": {
             "x-api-key": base["key"],
-            authorization: `Bearer ${base["token"]}`
+            authorization: `Bearer ${RetrieveData(keyList.token)}`
         },
     }
 
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/?components=200`, options)
+    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/?components=200`, options)
     const data = await response.json();
 
     // console.log(data);
@@ -91,12 +107,12 @@ export async function GetVerboseInformation(id: string) {
         "method": "GET",
         "headers": {
             "x-api-key": base["key"],
-            authorization: `Bearer ${base["token"]}`
+            authorization: `Bearer ${RetrieveData(keyList.token)}`
         },
         
     }
 
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/?components=205,201`, options);
+    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/?components=205,201`, options);
     const data = await response.json();
 
     // console.log(data);
@@ -121,18 +137,21 @@ export async function GetItem(id: string) {
 }
 
 export async function SpecificMemberId(id: string) {
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/LinkedProfiles/?getAllMemberships=false`, {
+    const response = await fetch(`${base["url"]}/User/GetMembershipsById/${id}/-1/`,{
         method: "GET",
         headers: {
             "x-api-key": base["key"]
         }
-    })
+    });
     
     const data = await response.json();
-
+    const output = []
+    for(var membership in data["Response"]["destinyMemberships"]){
+        output.push({membershipId: data["Response"]["destinyMemberships"][membership]["membershipId"], 
+        membershipType: data["Response"]["destinyMemberships"][membership]["membershipType"]})
+    }
+    StoreData(keyList.memberships, output);
     // console.log(data);
-
-    return data["Response"]["profiles"][0]["membershipId"];
 }
 
 export async function GetDamageType(hash: string) {
@@ -141,7 +160,7 @@ export async function GetDamageType(hash: string) {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
-            authorization: `Bearer ${base["token"]}`
+            authorization: `Bearer ${RetrieveData(keyList.token)}`
         }
     });
 
@@ -156,7 +175,7 @@ export async function HasIntrinsicUpgrade(hash: string) {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
-            authorization: `Bearer ${base["token"]}`
+            authorization: `Bearer ${RetrieveData(keyList.token)}`
         }
     })
 
@@ -167,11 +186,11 @@ export async function HasIntrinsicUpgrade(hash: string) {
 
 export async function ItemInstance(id: string, item: string) {
 
-    const response = await fetch(base["url"] + `/Destiny2/3/Profile/${id}/Item/${item}/?components=300,305,307,309`, {
+    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/Item/${item}/?components=300,305,307,309`, {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
-            authorization: `Bearer ${base["token"]}`
+            authorization: `Bearer ${RetrieveData(keyList.token)}`
         }
     });
 
