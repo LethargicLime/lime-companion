@@ -3,13 +3,12 @@ import { authorize, GetToken } from "@/components/Destiny/Fetch";
 import React, { useEffect } from "react";
 
 import Image from "next/image";
+import GitIcon from "@/public/GitHub-Mark-64px.png";
 
 // @ts-ignore
 const images = require.context("@/public/HomeScreenImages", true);
 const imageObject = images.keys().map(image => images(image));
-
 export default function page() {
-
     const handleAuthorize = () => {
         if (typeof window !== "undefined") {
             authorize();
@@ -28,7 +27,7 @@ export default function page() {
 
     return (
         <>
-            <div className={"flex justify-center items-center bg-[#363636] h-screen"} style={{
+            <div className={"flex flex-col justify-center items-center bg-[#363636] h-screen"} style={{
             }}>
                 {<Image className="top-left" src={imageObject[keys[0]]} alt="blurredBackground" />}
                 {<Image className="bottom-left" src={imageObject[keys[1]]} alt="blurredBackground" />}
@@ -51,6 +50,11 @@ export default function page() {
 
                     <button className="w-60 py-2 rounded-md font-bold bg-gray-500" style={{
                     }} onClick={handleAuthorize}>Authorize</button>
+                </div>
+                <div className={"absolute bottom-0 right-0 bg-[#363636] p-1"}>
+                    <a href="https://github.com/LethargicLime/lime-companion?tab=readme-ov-file">
+                        <Image src={GitIcon} alt="GitHub" width={32} height={32} />
+                    </a>
                 </div>
             </div>
         </>

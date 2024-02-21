@@ -14,6 +14,8 @@ import {
 } from 'react';
 import { LoadingScreen } from '@/components/Main/LoadingScreen';
 import { ItemInfo } from '@/components/Main/ItemInfo';
+import { GetBungieId, GetMembership, InitStorage, RetrieveData, keyList } from '@/components/Main/Storage';
+import { update } from '@react-spring/web';
 
 export const HomePage = () => {
     const [ sidebarOpen, setSidebarOpen ] = useState<boolean>(true);
@@ -37,31 +39,31 @@ export const HomePage = () => {
     };
 
     useEffect(() => {
+        InitStorage();
         const getAuthToken = async () => {
-            GetToken().then(authToken => {
-                if (authToken && authToken["refresh_token"]) {
-                    console.log(authToken);
-            
-                    updateToken(authToken["refresh_token"].toString());
-                    SpecificMemberId(authToken["membership_id"].toString()).then(membershipId => {
-                        updateMemberId(membershipId);
-
-                        setHasToken(true);
-                    });
+            await GetToken();
+            let token = RetrieveData(keyList.token);
+            if(token != null){
+                updateToken(token);
+                if(RetrieveData(keyList.memberships) == null){
+                    await SpecificMemberId(GetBungieId());
                 }
-            });
+                updateMemberId(GetMembership()["membershipId"]);
+                setHasToken(true);
+            }
         }
 
         getAuthToken();
     }, []);
 
     useEffect(() => {
-        const fetchCharacters = async () => {
-            const charactersData = await GetCharacterInfo(membershipId);
-            updateCharacters(charactersData);
-        };
-
-        fetchCharacters();
+        if(hasToken){
+            const fetchCharacters = async () => {
+                const charactersData = await GetCharacterInfo(membershipId);
+                updateCharacters(charactersData);
+            };
+            fetchCharacters();
+        }
     }, [hasToken]);
 
     useEffect(() => {
