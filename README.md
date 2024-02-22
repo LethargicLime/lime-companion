@@ -14,11 +14,9 @@ The frontend stack is made up of NEXTJS, TS, Tailwind CSS, deployed to GH Pages 
 
 I highly recommend Github Desktop since there's a lot of moving parts on this website already, and there's only two subdomains. Long form changes can be hard to track, and making sure you are pulling and pushing exactly what you want can be complicated, particularly since there's a lot of random files that you don't want to be interacting with (as much as we may try, no one will have the same package.json).
 
-I believe I'm the only one who can deploy changes to the server. If not, the yaml file has it set up so that pushes from the git terminal will deploy on the live website. Which, if you are not doing something super final, is not good, so another reason for Github Desktop.
-
 I know this isn't a proper Vercel deployment with a production server and a testing server and a live app and all the checks and balances between, but for now, changes will have to be scrutinized locally, and careful testing must be implemented for each pull request. Needless to say, this is already buggy, but that's why you, the reader, are here. Partially. Maybe.
 
-Forking the repository will not net you Nextjs, you will have to install that in the folder where you have forked the repository. This app uses the page routing, and so you need to install this manually. 
+Forking the repository will not net you Nextjs, you will have to install that in the folder where you have forked the repository. This app uses the page routing (which isn't the default), and so you need to install this manually. 
 
 > npm install next@latest react@latest react-dom@latest
 
