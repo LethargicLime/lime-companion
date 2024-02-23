@@ -8,7 +8,17 @@ let base = {
     "token": "https://www.bungie.net/Platform/App/OAuth/token/"
 }
 
+var perfStart : { [id: string]: number} = {}
+var perfEnd : { [id: string]: number} = {}
+
+export async function logPerf() {
+    for(let key in perfStart){
+        console.log(`${key}:${perfEnd[key] - perfStart[key]}`)
+    }
+}
+
 export async function authorize() {
+    const startTime = performance.now();
 
     const queryParams = new URLSearchParams({
         client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
@@ -18,9 +28,16 @@ export async function authorize() {
     const href = await `https://www.bungie.net/en/OAuth/Authorize?${queryParams.toString()}`;
 
     location.href = href;
+    
+    const endTime = performance.now();
+    perfStart[authorize.name] = perfStart[authorize.name] == null ? 
+        startTime : Math.min(perfStart[authorize.name], startTime);
+    perfEnd[authorize.name] = perfEnd[authorize.name] == null ? 
+        endTime : Math.max(perfStart[authorize.name], endTime);
 }
 
 export async function GetToken() {
+    const startTime = performance.now();
     const urlInfo = new URLSearchParams(location.search);
     const code = urlInfo.get("code");
     if(code != null){
@@ -70,9 +87,17 @@ export async function GetToken() {
             location.href = "../lime-companion/";
         }
     }
+    const endTime = performance.now();
+    
+    perfStart[GetToken.name] = perfStart[GetToken.name] == null ? 
+        startTime : Math.min(perfStart[GetToken.name], startTime);
+    perfEnd[GetToken.name] = perfEnd[GetToken.name] == null ? 
+        endTime : Math.max(perfStart[GetToken.name], endTime);
 }
 
 export async function Fetch() {
+    const startTime = performance.now();
+
     const options = {
         "method": "GET",
         "x-api-key": base["key"],
@@ -82,9 +107,16 @@ export async function Fetch() {
     const data = await manifest.json();
 
     console.log(data);
+
+    const endTime = performance.now();
+    perfStart[Fetch.name] = perfStart[Fetch.name] == null ? 
+        startTime : Math.min(perfStart[Fetch.name], startTime);
+    perfEnd[Fetch.name] = perfEnd[Fetch.name] == null ? 
+        endTime : Math.max(perfStart[Fetch.name], endTime);
 }
 
 export async function GetCharacterInfo(id: string) {
+    const startTime = performance.now();
     const options = {
         "method": "GET",
         "headers": {
@@ -97,11 +129,17 @@ export async function GetCharacterInfo(id: string) {
     const data = await response.json();
 
     // console.log(data);
-
+    const endTime = performance.now();
+    perfStart[GetCharacterInfo.name] = perfStart[GetCharacterInfo.name] == null ? 
+        startTime : Math.min(perfStart[GetCharacterInfo.name], startTime);
+    perfEnd[GetCharacterInfo.name] = perfEnd[GetCharacterInfo.name] == null ? 
+        endTime : Math.max(perfStart[GetCharacterInfo.name], endTime);
+    
     return data["Response"]["characters"]["data"];
 }
 
 export async function GetVerboseInformation(id: string) {
+    const startTime = performance.now();
 
     const options = {
         "method": "GET",
@@ -116,11 +154,17 @@ export async function GetVerboseInformation(id: string) {
     const data = await response.json();
 
     // console.log(data);
-
+    const endTime = performance.now();
+    perfStart[GetVerboseInformation.name] = perfStart[GetVerboseInformation.name] == null ? 
+        startTime : Math.min(perfStart[GetVerboseInformation.name], startTime);
+    perfEnd[GetVerboseInformation.name] = perfEnd[GetVerboseInformation.name] == null ? 
+        endTime : Math.max(perfStart[GetVerboseInformation.name], endTime);
     return data;
 }
 
 export async function GetItem(id: string) {
+    const startTime = performance.now();
+
     const options = {
         method: "GET",
         headers: {
@@ -132,11 +176,17 @@ export async function GetItem(id: string) {
     const item = await response.json();
 
     // console.log(item);
-
+    const endTime = performance.now();
+    perfStart[GetItem.name] = perfStart[GetItem.name] == null ? 
+        startTime : Math.min(perfStart[GetItem.name], startTime);
+    perfEnd[GetItem.name] = perfEnd[GetItem.name] == null ? 
+        endTime : Math.max(perfStart[GetItem.name], endTime);
     return item["Response"];
 }
 
 export async function SpecificMemberId(id: string) {
+    const startTime = performance.now();
+
     const response = await fetch(`${base["url"]}/User/GetMembershipsById/${id}/-1/`,{
         method: "GET",
         headers: {
@@ -152,9 +202,16 @@ export async function SpecificMemberId(id: string) {
     }
     StoreData(keyList.memberships, output);
     // console.log(data);
+
+    const endTime = performance.now();
+    perfStart[SpecificMemberId.name] = perfStart[SpecificMemberId.name] == null ? 
+        startTime : Math.min(perfStart[SpecificMemberId.name], startTime);
+    perfEnd[SpecificMemberId.name] = perfEnd[SpecificMemberId.name] == null ? 
+        endTime : Math.max(perfStart[SpecificMemberId.name], endTime);
 }
 
 export async function GetDamageType(hash: string) {
+    const startTime = performance.now();
 
     const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyDamageTypeDefinition/${hash}/`, {
         method: "GET",
@@ -165,11 +222,17 @@ export async function GetDamageType(hash: string) {
     });
 
     const data = await response.json();
-
+    
+    const endTime = performance.now();
+    perfStart[GetDamageType.name] = perfStart[GetDamageType.name] == null ? 
+        startTime : Math.min(perfStart[GetDamageType.name], startTime);
+    perfEnd[GetDamageType.name] = perfEnd[GetDamageType.name] == null ? 
+        endTime : Math.max(perfStart[GetDamageType.name], endTime);
     return data["Response"];
 }
 
 export async function HasIntrinsicUpgrade(hash: string) {
+    const startTime = performance.now();
 
     const response = await fetch(base["url"] + `${hash}`, {
         method: "GET",
@@ -182,9 +245,16 @@ export async function HasIntrinsicUpgrade(hash: string) {
     const data = await response.json();
 
     console.log(data);
+
+    const endTime = performance.now();
+    perfStart[HasIntrinsicUpgrade.name] = perfStart[HasIntrinsicUpgrade.name] == null ? 
+        startTime : Math.min(perfStart[HasIntrinsicUpgrade.name], startTime);
+    perfEnd[HasIntrinsicUpgrade.name] = perfEnd[HasIntrinsicUpgrade.name] == null ? 
+        endTime : Math.max(perfStart[HasIntrinsicUpgrade.name], endTime);
 }
 
 export async function ItemInstance(id: string, item: string) {
+    const startTime = performance.now();
 
     const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/Item/${item}/?components=300,305,307,309`, {
         method: "GET",
@@ -238,5 +308,10 @@ export async function ItemInstance(id: string, item: string) {
         data["Response"]["instance"]["data"]["overrideStyle"] = await promise;
     }
 
+    const endTime = performance.now();
+    perfStart[ItemInstance.name] = perfStart[ItemInstance.name] == null ? 
+        startTime : Math.min(perfStart[ItemInstance.name], startTime);
+    perfEnd[ItemInstance.name] = perfEnd[ItemInstance.name] == null ? 
+        endTime : Math.max(perfStart[ItemInstance.name], endTime);
     return data["Response"]["instance"]["data"];
 }

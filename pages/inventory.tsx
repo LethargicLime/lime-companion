@@ -3,7 +3,7 @@ import Page from '@/components/Main/Page';
 import Navbar from '@/components/Navbar/Navbar';
 import SidebarContext, { SidebarContextProps } from '@/components/Providers/SidebarProvider';
 import CharactersContext, { CharactersProviderProps } from '@/components/Providers/CharactersProvider';
-import { GetCharacterInfo, SpecificMemberId, GetToken, GetVerboseInformation, ItemInstance, GetItem } from '@/components/Destiny/Fetch';
+import { GetCharacterInfo, SpecificMemberId, GetToken, GetVerboseInformation, ItemInstance, GetItem, logPerf } from '@/components/Destiny/Fetch';
 import ChosenCharacterContext, { ChosenCharacterProps } from '@/components/Providers/ChosenCharacterProvider';
 import VerboseContext from '@/components/Providers/VerboseCharactersProvider';
 import TokenContext from '@/components/Providers/TokenProvider';
@@ -158,8 +158,8 @@ export const HomePage = () => {
             // localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
 
             setInvLoading(false);
+            logPerf();
         }
-
         if (hasToken) {
             preloadInventory();
         }
