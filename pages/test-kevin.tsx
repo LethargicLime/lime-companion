@@ -1,4 +1,5 @@
 import { ChangeUser, GetBungieId, InitStorage, PrintExpireTime, RetrieveData, StoreData, keyList } from "@/components/Main/Storage";
+import { useEffect } from "react";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
@@ -77,12 +78,12 @@ export async function TestFetch() {
 
 export default function TestKevin() {
     // @ts-ignore
-    (async () => {
+    useEffect(async () =>{
         await InitStorage(null);
         await TestGetToken();
         await TestRemoveLink();
         await TestFetch();
-    })();
+    },[]);
     return (
         <div>
             <h1>Hello There</h1>
