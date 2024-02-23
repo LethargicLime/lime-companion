@@ -1,19 +1,24 @@
 import { useContext, useState, useEffect } from "react"
 import ChosenCharacterContext from "../Providers/ChosenCharacterProvider"
 import SelectedContext from "../Providers/SelectedProvider";
+import { start } from "repl";
 
 export const ItemInfo = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
     const { item } = useContext(SelectedContext);
 
     const [ recoil, setRecoil ] = useState<any>(0);
+    const [ startArc, setStartArc ] = useState<any[]>([0, 0]);
+    const [ endArc, setEndArc ] = useState<any[]>([0, 0]);
 
     useEffect(() => {
         if (item && item["stats"] && item["stats"]["stats"]["2715839340"]) {
             let t: any = Math.sin((item["stats"]["stats"]["2715839340"]["value"] + 5) * Math.PI / 10)
             setRecoil(t.toFixed(4) * (100 - item["stats"]["stats"]["2715839340"]["value"]));
+
+            
         }
-    }, [item])
+    }, [item]);
 
     const graphicForRarity = (hash:string) => {
         const hashMap = {
@@ -161,18 +166,20 @@ export const ItemInfo = () => {
                             </div>
                             {item["stats"]["stats"]["3871231066"] && // bows don't have a magazine
                             <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>}
-                        </div>}
 
-                        <div className="flex flex-row items-center">
-                            <p>Recoil Direction<span className="ml-2 mr-2 font-light">{item["stats"]["stats"]["2715839340"]["value"]}</span></p>
-                            <svg className="pl-6" viewBox="0 0 100 40" style={{ display: "block" }}>
-                                <line x1="10" x2="10" y1="20" y2="25" stroke="white" strokeWidth="1" style={{
-                                    transform: `rotate(${recoil}deg)`,
-                                    transformOrigin: "10px 25px"
-                                }} />
-                            </svg>
+                            <div className="flex flex-row items-center">
+                                <p>Recoil Direction<span className="ml-2 mr-2 font-light">{item["stats"]["stats"]["2715839340"]["value"]}</span></p>
+                                <svg className="pl-6" viewBox="0 0 100 40" style={{ display: "block" }}>
+                                    <path d={`M ${startArc[0]} ${startArc[1]} 50 50 0 0 1`} stroke="black" strokeWidth="2" fill="none" />
+                                    <line x1="10" x2="10" y1="20" y2="25" stroke="white" strokeWidth="1" style={{
+                                        transform: `rotate(${recoil}deg)`,
+                                        transformOrigin: "10px 25px"
+                                    }} />
+                                    <line x1="10" x2="10" y1="20" y2="25" stroke="white" strokeWidth="1" />
+                                </svg>
+                            </div>
                         </div>
-
+                        }
                     </div>
                 </div>
             }
