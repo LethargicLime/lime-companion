@@ -1,5 +1,5 @@
 import { RemoveParams } from "../Main/Link";
-import { ChangeUser, GetBungieId, GetMembership, RetrieveData, StoreData, keyList } from "../Main/Storage";
+import { ChangeUser, GetBungieId, GetMembership, RetrieveData, SetValid, StoreData, keyList } from "../Main/Storage";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
@@ -61,7 +61,6 @@ export async function GetToken() {
             ChangeUser(r["membership_id"]);
             StoreData(keyList.token, r["access_token"], r["expires_in"]);
             StoreData(keyList.refreshToken, r["refresh_token"], r["refresh_expires_in"]);
-            console.log(RetrieveData(keyList.token));    
             RemoveParams("code");
         } else {
             console.log("Failure: " + response);
@@ -83,6 +82,14 @@ export async function GetToken() {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
+            console.log(response);
+            if(response.ok){
+                const r = await response.json();
+                StoreData(keyList.token, r["access_token"], r["expires_in"]);
+                StoreData(keyList.refreshToken, r["refresh_token"], r["refresh_expires_in"]);
+            }else{
+                location.href = "../lime-companion/";
+            }
         }else{
             location.href = "../lime-companion/";
         }

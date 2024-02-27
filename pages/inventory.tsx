@@ -50,6 +50,8 @@ export const HomePage = () => {
                 }
                 updateMemberId(GetMembership()["membershipId"]);
                 setHasToken(true);
+            }else{
+                console.log("No token found");
             }
         }
 
