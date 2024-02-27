@@ -1,5 +1,5 @@
 import { RemoveParams } from "../Main/Link";
-import { ChangeUser, GetBungieId, GetMembership, RetrieveData, SetValid, StoreData, keyList } from "../Main/Storage";
+import { ChangeUser, GetBungieId, GetMembership, GetData, SetValid, StoreData, keyList, GetGlobalData, StoreGlobalData } from "../Main/Storage";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
@@ -66,12 +66,12 @@ export async function GetToken() {
             console.log("Failure: " + response);
         }
     }else{
-        if(RetrieveData(keyList.token) != null){
+        if(GetData(keyList.token) != null){
             return;
-        }else if(RetrieveData(keyList.refreshToken) != null){
+        }else if(GetData(keyList.refreshToken) != null){
             const body = new URLSearchParams({
                 grant_type: 'refresh_token',
-                refresh_token: RetrieveData(keyList.refreshToken),
+                refresh_token: GetData(keyList.refreshToken),
                 client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
                 client_secret: process.env.NEXT_PUBLIC_API_SECRET
             })
@@ -128,7 +128,7 @@ export async function GetCharacterInfo(id: string) {
         "method": "GET",
         "headers": {
             "x-api-key": base["key"],
-            authorization: `Bearer ${RetrieveData(keyList.token)}`
+            authorization: `Bearer ${GetData(keyList.token)}`
         },
     }
 
@@ -152,7 +152,7 @@ export async function GetVerboseInformation(id: string) {
         "method": "GET",
         "headers": {
             "x-api-key": base["key"],
-            authorization: `Bearer ${RetrieveData(keyList.token)}`
+            authorization: `Bearer ${GetData(keyList.token)}`
         },
         
     }
@@ -172,23 +172,26 @@ export async function GetVerboseInformation(id: string) {
 export async function GetItem(id: string) {
     const startTime = performance.now();
 
-    const options = {
-        method: "GET",
-        headers: {
-            "x-api-key": base["key"]
-        },
+    var data = GetGlobalData(keyList.item, id);
+    if(data == null){
+        const options = {
+            method: "GET",
+            headers: {
+                "x-api-key": base["key"]
+            },
+        }
+        const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}/`, options)
+        const item = await response.json();
+        data = item["Response"];
+        StoreGlobalData(keyList.item, id, data);
     }
 
-    const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}/`, options)
-    const item = await response.json();
-
-    // console.log(item);
     const endTime = performance.now();
     perfStart[GetItem.name] = perfStart[GetItem.name] == null ? 
         startTime : Math.min(perfStart[GetItem.name], startTime);
     perfEnd[GetItem.name] = perfEnd[GetItem.name] == null ? 
         endTime : Math.max(perfStart[GetItem.name], endTime);
-    return item["Response"];
+    return data;
 }
 
 export async function SpecificMemberId(id: string) {
@@ -220,22 +223,26 @@ export async function SpecificMemberId(id: string) {
 export async function GetDamageType(hash: string) {
     const startTime = performance.now();
 
-    const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyDamageTypeDefinition/${hash}/`, {
-        method: "GET",
-        headers: {
-            "x-api-key": base["key"],
-            authorization: `Bearer ${RetrieveData(keyList.token)}`
-        }
-    });
-
-    const data = await response.json();
+    var data = GetGlobalData(keyList.damageType, hash);
+    if(data == null){
+        const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyDamageTypeDefinition/${hash}/`, {
+            method: "GET",
+            headers: {
+                "x-api-key": base["key"],
+                authorization: `Bearer ${GetData(keyList.token)}`
+            }
+        });
+        const r = await response.json();
+        data = r["Response"];
+        StoreGlobalData(keyList.damageType, hash, data);
+    }
     
     const endTime = performance.now();
     perfStart[GetDamageType.name] = perfStart[GetDamageType.name] == null ? 
         startTime : Math.min(perfStart[GetDamageType.name], startTime);
     perfEnd[GetDamageType.name] = perfEnd[GetDamageType.name] == null ? 
         endTime : Math.max(perfStart[GetDamageType.name], endTime);
-    return data["Response"];
+    return data;
 }
 
 export async function HasIntrinsicUpgrade(hash: string) {
@@ -245,7 +252,7 @@ export async function HasIntrinsicUpgrade(hash: string) {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
-            authorization: `Bearer ${RetrieveData(keyList.token)}`
+            authorization: `Bearer ${GetData(keyList.token)}`
         }
     })
 
@@ -267,7 +274,7 @@ export async function ItemInstance(id: string, item: string) {
         method: "GET",
         headers: {
             "x-api-key": base["key"],
-            authorization: `Bearer ${RetrieveData(keyList.token)}`
+            authorization: `Bearer ${GetData(keyList.token)}`
         }
     });
 
