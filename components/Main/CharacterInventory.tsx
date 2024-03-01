@@ -17,6 +17,7 @@ import { Popup } from './Popup';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import { ItemInfo } from './ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
+import Draggable from 'react-draggable';
 
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
