@@ -3,7 +3,7 @@ import Page from '@/components/Main/Page';
 import Navbar from '@/components/Navbar/Navbar';
 import SidebarContext, { SidebarContextProps } from '@/components/Providers/SidebarProvider';
 import CharactersContext, { CharactersProviderProps } from '@/components/Providers/CharactersProvider';
-import { GetCharacterInfo, SpecificMemberId, GetToken, GetVerboseInformation, ItemInstance, GetItem } from '@/components/Destiny/Fetch';
+import { GetCharacterInfo, SpecificMemberId, GetToken, GetVerboseInformation, ItemInstance, GetItem, logPerf } from '@/components/Destiny/Fetch';
 import ChosenCharacterContext, { ChosenCharacterProps } from '@/components/Providers/ChosenCharacterProvider';
 import VerboseContext from '@/components/Providers/VerboseCharactersProvider';
 import TokenContext from '@/components/Providers/TokenProvider';
@@ -14,7 +14,7 @@ import {
 } from 'react';
 import { LoadingScreen } from '@/components/Main/LoadingScreen';
 import { ItemInfo } from '@/components/Main/ItemInfo';
-import { GetBungieId, GetMembership, InitStorage, RetrieveData, keyList } from '@/components/Main/Storage';
+import { GetBungieId, GetMembership, InitStorage, GetData, keyList } from '@/components/Main/Storage';
 import { update } from '@react-spring/web';
 
 export const HomePage = () => {
@@ -42,14 +42,16 @@ export const HomePage = () => {
         InitStorage();
         const getAuthToken = async () => {
             await GetToken();
-            let token = RetrieveData(keyList.token);
+            let token = GetData(keyList.token);
             if(token != null){
                 updateToken(token);
-                if(RetrieveData(keyList.memberships) == null){
+                if(GetData(keyList.memberships) == null){
                     await SpecificMemberId(GetBungieId());
                 }
                 updateMemberId(GetMembership()["membershipId"]);
                 setHasToken(true);
+            }else{
+                console.log("No token found");
             }
         }
 
@@ -158,8 +160,8 @@ export const HomePage = () => {
             // localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
 
             setInvLoading(false);
+            logPerf();
         }
-
         if (hasToken) {
             preloadInventory();
         }

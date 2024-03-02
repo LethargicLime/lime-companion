@@ -1,24 +1,33 @@
 export const keyList = {
-    storageRoot: "user_info",
+    userRoot: "user_info",
     lastUser: "previous_id",
     token: "access_token",
     refreshToken: "refresh_token",
     id: "bungie_id",
-    memberships: "memberships"
+    memberships: "memberships",
+    database: "database",
+    item: "item",
+    damageType: "damage_type",
 }
 
 let bungie_id:string = null;
 let membership_index = 0;
 let userList:JSON = null;
 let storage:JSON = null;
+let database:JSON = null;
 
 export function InitStorage(membership_id: string = null){
-    // Init storage if it doesn't exist
-    if(!(keyList.storageRoot in localStorage)){
-        localStorage.setItem(keyList.storageRoot, JSON.stringify({}));
+    // Init user storage if it doesn't exist
+    if(!(keyList.userRoot in localStorage)){
+        localStorage.setItem(keyList.userRoot, JSON.stringify({}));
+    }
+    // Init
+    if(!(keyList.database in localStorage)){
+        localStorage.setItem(keyList.database, JSON.stringify({}));
     }
     // Get user list 
-    userList = JSON.parse(localStorage.getItem(keyList.storageRoot));
+    userList = JSON.parse(localStorage.getItem(keyList.userRoot));
+    database = JSON.parse(localStorage.getItem(keyList.database));
     // Use previous user as default user if it exists
     if(membership_id == null){
         membership_id =  localStorage.getItem(keyList.lastUser);
@@ -37,8 +46,9 @@ export function InitStorage(membership_id: string = null){
         if(bungie_id != null){
             userList[bungie_id] = storage;
         }
-        localStorage.setItem(keyList.storageRoot, JSON.stringify(userList));
+        localStorage.setItem(keyList.userRoot, JSON.stringify(userList));
         localStorage.setItem(keyList.lastUser, bungie_id);
+        localStorage.setItem(keyList.database, JSON.stringify(database));
     };
 }
 
@@ -65,7 +75,7 @@ export function StoreData(key: string, value: any, expireTimeSecond: number = -1
     }
 }
 
-export function RetrieveData(key: string):any{
+export function GetData(key: string):any{
     if(bungie_id == null) return null;
     var value = key in storage ? storage[key] : null;
     if(value == null || !IsValid(key)) return null;
@@ -88,6 +98,20 @@ export function RemoveData(key: string):void{
     if(bungie_id == null) return;
     delete storage[key];
     delete storage[key + "_expire"];
+}
+
+export function GetGlobalData(root: string, key: string):any{
+    return database[root] != null ? database[root][key] : null;
+}
+
+export function StoreGlobalData(root: string, key: string, value: any):void{
+    if(database[root] == null) database[root] = {} as JSON;
+    database[root][key] = value;
+}
+
+export function RemoveGlobalData(root: string, key: string):void{
+    if(database[root] == null) return;
+    delete database[root][key];
 }
 
 export function PrintExpireTime(key: string):void{

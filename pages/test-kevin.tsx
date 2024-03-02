@@ -1,4 +1,4 @@
-import { ChangeUser, GetBungieId, InitStorage, PrintExpireTime, RetrieveData, StoreData, keyList } from "@/components/Main/Storage";
+import { ChangeUser, GetBungieId, InitStorage, PrintExpireTime, GetData, StoreData, keyList } from "@/components/Main/Storage";
 import { useEffect } from "react";
 
 let base = {
@@ -19,7 +19,7 @@ export async function TestAuthorize() {
 }
 
 export async function TestGetToken() {
-    const token = RetrieveData("access_token");
+    const token = GetData("access_token");
     if(token == null){
         const currentURL = new URLSearchParams(location.search);
         let code = currentURL.get("code");
@@ -88,7 +88,7 @@ export default function TestKevin() {
         <div>
             <h1>Hello There</h1>
             <button onClick={() =>{
-                console.log(RetrieveData(keyList.token));
+                console.log(GetData(keyList.token));
             }}>Print Token</button>
         </div>
     )
