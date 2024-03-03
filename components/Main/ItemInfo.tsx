@@ -8,6 +8,8 @@ export const ItemInfo = () => {
     const { item } = useContext(SelectedContext);
 
     const [ recoil, setRecoil ] = useState<any>(0);
+    const [ direction, setDirection ] = useState<any>(0);
+    const [ linePoints, setLinePoints ] = useState<any>([0, 0]);
     const [ points, setPoints ] = useState<any>([0, 0, 0, 0]);
 
     useEffect(() => {
@@ -15,22 +17,14 @@ export const ItemInfo = () => {
             let t: any = Math.sin((item["stats"]["stats"]["2715839340"]["value"] + 5) * Math.PI / 10)
             setRecoil(t.toFixed(4) * (100 - item["stats"]["stats"]["2715839340"]["value"]));
 
-            let direction = recoil * (Math.PI / 180);
-            let x = Math.sin(direction);
-            let y = Math.cos(direction);
+            setDirection(recoil * (Math.PI / 180));
+            setLinePoints([Math.sin(direction), Math.cos(direction)]);
 
-            const spread =
-            // Higher value means less spread
-            ((100 - item["stats"]["stats"]["2715839340"]) / 100) *
-            // scaled by the spread factor (halved since we expand to either side)
-            (180 / 2) *
-            // in radians
-            (Math.PI / 180) *
-            // flipped for negative
-            Math.sign(direction);
+            let spread: any = ((100 - item["stats"]["stats"]["2715839340"]["value"]) / 100) * (180 / 2) * (Math.PI / 180) * Math.sign(direction);
 
+            setPoints([Math.sin(direction + spread), Math.cos(direction + spread), Math.sin(direction - spread), Math.cos(direction - spread)]);
         }
-    }, [item]);
+    }, []);
 
     const graphicForRarity = (hash: string) => {
         const hashMap = {
@@ -135,7 +129,6 @@ export const ItemInfo = () => {
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["2523465841"]["value"] * 3 }}></div>
                                 <span style={{ marginLeft: 310 - (item["stats"]["stats"]["2523465841"]["value"] * 3) }}>{item["stats"]["stats"]["2523465841"]["value"]}</span>
                             </div>
-                            <p className="">Magazine<span className="ml-2 font-light">{item["stats"]["stats"]["3871231066"]["value"]}</span></p>
                         </div>}
 
                         {item["stats"]["stats"]["2837207746"] && 
@@ -181,8 +174,13 @@ export const ItemInfo = () => {
 
                             <div className="flex flex-row items-center">
                                 <p className="w-[200px]">Recoil Direction<span className="ml-2 mr-2 font-light">{item["stats"]["stats"]["2715839340"]["value"]}</span></p>
-                                <svg className="pl-4" height="30" viewBox="0 0 2 1" style={{ display: "block" }}>
-                                    
+                                <svg className="pl-2" height="12" viewBox="0 0 2 1" style={{ display: "block" }}>
+                                    {
+                                        item["stats"]["stats"]["2715839340"]["value"] === 95 ? 
+                                        <line x1={1 - linePoints[0]} y1={1 + linePoints[1]} x2={1 + linePoints[0]} y2={1 - linePoints[1]} /> :
+                                        <path d={`M1, 1 L${1 + points[0]},${1 - points[1]} A1,1 0 0, ${direction < 0 ? "1" : "0"} ${1 + points[2]}, ${1 - points[3]}`} 
+                                        fill="white"/>
+                                    }
                                 </svg>
                             </div>
                         </div>
