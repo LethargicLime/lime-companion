@@ -334,12 +334,12 @@ export async function EquipItem(characterId: string, itemInfo: any) {
     if(itemInfo["character"] != characterId){
         var result = await TransferItem(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
         if(!result){
-            console.log("Failed to transfer item");
+            console.log("Failed to transfer item to the vault");
             return;
         }
         result = await TransferItem(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
         if(!result){
-            console.log("Failed to transfer item");
+            console.log("Failed to transfer item from the vault");
             return;
         }
         EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
