@@ -17,6 +17,7 @@ export const Navbar = () => {
     const [ thirdOptions, setThirdOptions ] = useState<string[]>(["Loadouts", "Vault", "Lore"]);
     const [ showSecondAccordian, setShowSecondAccordian ] = useState<boolean>(false);
 
+    // i know the naming convention might be wis but this is the third character option and the second is the third header option
     useEffect(() => {
         setThirdOption(third);
     }, [third]);
@@ -114,6 +115,23 @@ export const Navbar = () => {
         setShowSecondAccordian(!showSecondAccordian);
     }
 
+    const handleThirdOption = (option: any) => (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+        let t = [];
+
+        for (let i in thirdOptions) {
+            if (thirdOptions[i] != option) {
+                t.push(thirdOptions[i]);
+            }
+        }
+
+        t.push(third);
+
+        console.log(option);
+
+        setThird(option);
+        setThirdOptions(t);
+    }
+
     return (
         <div className={`top-0 relative z-20 navbar`}>
             <div className={`transition-all duration-1000 ${sidebarOpen ? "pushed": ""}`} style={{ 
@@ -165,9 +183,9 @@ export const Navbar = () => {
                             height: "120px",
                             backgroundColor: "rgb(33, 32, 30)"
                         }}>
-                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white">{thirdOptions[0]}</p>
-                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white">{thirdOptions[1]}</p>
-                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white">{thirdOptions[2]}</p>
+                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white" onClick={handleThirdOption(thirdOptions[0])} >{thirdOptions[0]}</p>
+                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white" onClick={handleThirdOption(thirdOptions[1])} >{thirdOptions[1]}</p>
+                            <p className="z-1 mt-2 width-[300px] text-center font-light text-white" onClick={handleThirdOption(thirdOptions[2])} >{thirdOptions[2]}</p>
                         </div>
                         }
                     </div> 

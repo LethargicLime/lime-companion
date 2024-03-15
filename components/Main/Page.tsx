@@ -7,8 +7,9 @@ import {
 import { CharacterInventory } from './CharacterInventory';
 
 import SidebarContext from '../Providers/SidebarProvider';
-import { ItemInfo } from './ItemInfo';
+import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
+import Vault from './Options/Vault';
 
 export const Page = () => {
     const { sidebarOpen } = useContext(SidebarContext)
@@ -28,6 +29,7 @@ export const Page = () => {
                         <CharacterInventory />
                         <div className="">
                             <ItemInfo />
+                           <Vault /> 
                         </div>
                     </SelectedContext.Provider>
                 </div>

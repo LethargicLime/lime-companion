@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from "react"
-import ChosenCharacterContext from "../Providers/ChosenCharacterProvider"
-import SelectedContext from "../Providers/SelectedProvider";
-import { start } from "repl";
+import ChosenCharacterContext from "../../Providers/ChosenCharacterProvider"
+import SelectedContext from "../../Providers/SelectedProvider";
 
 export const ItemInfo = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
