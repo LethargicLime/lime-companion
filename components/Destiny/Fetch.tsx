@@ -329,3 +329,22 @@ export async function ItemInstance(id: string, item: string) {
         endTime : Math.max(perfStart[ItemInstance.name], endTime);
     return data["Response"]["instance"]["data"];
 }
+
+export async function EquipItem(itemId: string, characterId: string) {
+    const body = {
+        itemId: itemId,
+        characterId: characterId,
+        membershipType: GetMembership()["membershipType"],
+    };
+    console.log(body.toString());
+    const response = await fetch(base["url"] + `/Destiny2/Actions/Items/EquipItem/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+            "x-api-key": base["key"],
+            authorization: `Bearer ${GetData(keyList.token)}`
+        }
+    })
+    var result = await response.json();
+    console.log(result);
+}
