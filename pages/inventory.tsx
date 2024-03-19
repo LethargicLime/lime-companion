@@ -46,12 +46,12 @@ export const HomePage = () => {
             let token = GetData(keyList.token);
             if(token != null){
                 updateToken(token);
-                if(GetData(keyList.memberships) == null){
+                if (GetData(keyList.memberships) == null){
                     await SpecificMemberId(GetBungieId());
                 }
                 updateMemberId(GetMembership()["membershipId"]);
                 setHasToken(true);
-            }else{
+            } else{
                 console.log("No token found");
             }
         }
