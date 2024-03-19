@@ -44,7 +44,7 @@ export const CharacterInventory = () => {
         }
         
         setItem(info);
-        EquipItem(chosenCharacter, info);
+        // EquipItem(chosenCharacter, info);
         console.log(info);
     }
 

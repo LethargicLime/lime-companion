@@ -25,13 +25,18 @@ export const ItemInfo = () => {
         }
     }, []);
 
-    const graphicForRarity = (hash: string) => {
-        const hashMap = {
-            "2673424576": "rgb(206, 174, 51)",
-            "3520001075": "rgb(82, 47, 101)"
+    const graphicForRarity = (id: string) => {
+        const idMap = {
+            "6": "rgb(206, 174, 51)",
+            "5": "rgb(82, 47, 101)",
+            "4": "rgb(80, 118, 163)",
+            "3": "rgb(54, 111, 66)",
+            "2": "rbg(0, 0, 0)",
+            "1": "rgb(54, 111, 66)",
+            "0": "rgb(0, 0, 0)"
         }
 
-        return hashMap[hash] || ""
+        return idMap[id] || ""
     }
 
     useEffect(() => {
@@ -51,7 +56,7 @@ export const ItemInfo = () => {
                         </div>
                         <div className="ml-[120px]">
                             <svg className="opacity-75" width="150px" height="50px">
-                                <polygon points="10,50 60,0 150,0 150,50" fill={`${graphicForRarity(item["summaryItemHash"])}`} />
+                                <polygon points="10,50 60,0 150,0 150,50" fill={`${graphicForRarity(item["inventory"]['tierType'])}`} />
                             </svg>
                         </div>
                     </div>
