@@ -15,7 +15,7 @@ import {
 import { Popup } from './Popup';
 
 import CraftedIcon from "@/public/PatternIcon.jpg";
-import { ItemInfo } from './ItemInfo';
+import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
 import Draggable from 'react-draggable';
 

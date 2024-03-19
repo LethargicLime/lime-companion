@@ -1,3 +1,8 @@
+import { 
+    useState,
+    useEffect
+} from 'react';
+
 import { LhsSidebar } from '@/components/LHS/Sidebar';
 import Page from '@/components/Main/Page';
 import Navbar from '@/components/Navbar/Navbar';
@@ -7,13 +12,8 @@ import { GetCharacterInfo, SpecificMemberId, GetToken, GetVerboseInformation, It
 import ChosenCharacterContext, { ChosenCharacterProps } from '@/components/Providers/ChosenCharacterProvider';
 import VerboseContext from '@/components/Providers/VerboseCharactersProvider';
 import TokenContext from '@/components/Providers/TokenProvider';
-
-import { 
-    useState,
-    useEffect
-} from 'react';
 import { LoadingScreen } from '@/components/Main/LoadingScreen';
-import { ItemInfo } from '@/components/Main/ItemInfo';
+import { ItemInfo } from '@/components/Main/Options/ItemInfo';
 import { GetBungieId, GetMembership, InitStorage, GetData, keyList } from '@/components/Main/Storage';
 import { update } from '@react-spring/web';
 
@@ -23,6 +23,7 @@ export const HomePage = () => {
     const [ chosenCharacter, updateChosenCharacter ] = useState<string>("");
     const [ secondaryCharacter, updateSecondaryCharater ] = useState<string>("");
     const [ thirdOption, updateThirdOption ] = useState<string>("");
+    const [ headerOption, updateHeaderOption ] = useState<string>("");
     
     const [ verbose, updateVerbose ] = useState({});
     const [ inventory, updateInventory ] = useState([]);
@@ -160,7 +161,7 @@ export const HomePage = () => {
             // localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
 
             setInvLoading(false);
-            logPerf();
+            logPerf();  
         }
         if (hasToken) {
             preloadInventory();
@@ -187,15 +188,15 @@ export const HomePage = () => {
                         <ChosenCharacterContext.Provider value={{ chosenCharacter, secondaryCharacter, thirdOption, 
                             setChosenCharacter: updateChosenCharacter, setSecondaryCharacter: updateSecondaryCharater, setThirdOption: updateThirdOption }}>
                             <VerboseContext.Provider value={{ verbose, inventory, equipped, updateVerbose, updateInventory, updateEquipped }}>
-                                {invLoading ? 
-                                    <div>
-                                        <LoadingScreen />
-                                    </div> : <div>
-                                        <Navbar />
-                                        <Page />
-                                        <LhsSidebar />
-                                    </div>
-                                }
+                                    {invLoading ? 
+                                        <div>
+                                            <LoadingScreen />
+                                        </div> : <div>
+                                            <Navbar />
+                                            <Page />
+                                            <LhsSidebar />
+                                        </div>
+                                    }
                             </VerboseContext.Provider>
                         </ChosenCharacterContext.Provider>
                     </CharactersContext.Provider>
