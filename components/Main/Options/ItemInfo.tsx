@@ -76,11 +76,14 @@ export const ItemInfo = () => {
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["4043523819"]["value"] * 3 }}></div>
                                 <span style={{ marginLeft: 310 - (item["stats"]["stats"]["4043523819"]["value"] * 3) }}>{item["stats"]["stats"]["4043523819"]["value"]}</span>
                             </div>
+                            
+                            {item["stats"]["stats"]["155624089"] && // glaives do not have stability **NEED TO ADD OTHER GLAIVE-EXCLUSIVE PROPERTIES**
                             <div className="flex flex-row">
                                 <span className="w-[100px]">Stability</span>
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["155624089"]["value"] * 3 }}></div>
                                 <span style={{ marginLeft: 310 - (item["stats"]["stats"]["155624089"]["value"] * 3) }}>{item["stats"]["stats"]["155624089"]["value"]}</span>
                             </div>
+                            }
                             <div className="flex flex-row">
                                 <span className="w-[100px]">Handling</span>
                                 <div className={`ml-[10px] mt-[7px] stat-bar`} style={{ width: item["stats"]["stats"]["155624089"]["value"] * 3 }}></div>
