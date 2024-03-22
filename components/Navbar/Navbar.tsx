@@ -126,7 +126,7 @@ export const Navbar = () => {
 
         t.push(third);
 
-        console.log(option);
+        // console.log(option);
 
         setThird(option);
         setThirdOptions(t);
