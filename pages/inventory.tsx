@@ -28,6 +28,7 @@ export const HomePage = () => {
     const [ verbose, updateVerbose ] = useState({});
     const [ inventory, updateInventory ] = useState([]);
     const [ equipped, updateEquipped ] = useState([]);
+    const [ vault, updateVault ] = useState([]);
 
     const [ token, updateToken ] = useState<string>("");
     const [ hasToken, setHasToken ] = useState<boolean>(false);
@@ -74,6 +75,7 @@ export const HomePage = () => {
 
         const preloadInventory = async () => {
             const promises = [];
+            const vaultPromises = [];
 
             setInvLoading(true);
 
@@ -82,6 +84,24 @@ export const HomePage = () => {
 
             // console.log(verboseData);
             
+            for (let i in verboseData["Response"]["profileInventory"]["data"]["items"]) {
+                // console.log(verbose["Response"]["profileInventory"]["data"])
+
+                if (typeof verboseData["Response"]["profileInventory"]["data"]["items"][i]["itemInstanceId"] !== "undefined") {
+                    // const promise = ItemInstance(membershipId, verboseData["Response"]["profileInventory"]["data"]["items"][i]).then(k => {
+                    //     vaultPromises.push(k);
+    
+                    //     console.log(k);
+                    // });
+
+                    // promises.push(promise);
+                }
+            }
+
+            await Promise.all(promises);
+
+            
+
             for (let i in verboseData["Response"]["characterInventories"]["data"]) {
                 for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
 
@@ -187,7 +207,7 @@ export const HomePage = () => {
                     <CharactersContext.Provider value={{ characters, updateCharacters }}>
                         <ChosenCharacterContext.Provider value={{ chosenCharacter, secondaryCharacter, thirdOption, 
                             setChosenCharacter: updateChosenCharacter, setSecondaryCharacter: updateSecondaryCharater, setThirdOption: updateThirdOption }}>
-                            <VerboseContext.Provider value={{ verbose, inventory, equipped, updateVerbose, updateInventory, updateEquipped }}>
+                            <VerboseContext.Provider value={{ verbose, inventory, equipped, vault, updateVerbose, updateInventory, updateEquipped, updateVault }}>
                                     {invLoading ? 
                                         <div>
                                             <LoadingScreen />
