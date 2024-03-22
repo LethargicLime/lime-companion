@@ -157,10 +157,10 @@ export async function GetVerboseInformation(id: string) {
         
     }
 
-    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/?components=205,201`, options);
+    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/?components=205,201,102`, options);
     const data = await response.json();
 
-    // console.log(data);
+    console.log(data);
     const endTime = performance.now();
     perfStart[GetVerboseInformation.name] = perfStart[GetVerboseInformation.name] == null ? 
         startTime : Math.min(perfStart[GetVerboseInformation.name], startTime);
