@@ -157,10 +157,10 @@ export async function GetVerboseInformation(id: string) {
         
     }
 
-    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/?components=205,201`, options);
+    const response = await fetch(base["url"] + `/Destiny2/${GetMembership()["membershipType"]}/Profile/${id}/?components=205,201,102`, options);
     const data = await response.json();
 
-    // console.log(data);
+    console.log(data);
     const endTime = performance.now();
     perfStart[GetVerboseInformation.name] = perfStart[GetVerboseInformation.name] == null ? 
         startTime : Math.min(perfStart[GetVerboseInformation.name], startTime);
@@ -328,4 +328,64 @@ export async function ItemInstance(id: string, item: string) {
     perfEnd[ItemInstance.name] = perfEnd[ItemInstance.name] == null ? 
         endTime : Math.max(perfStart[ItemInstance.name], endTime);
     return data["Response"]["instance"]["data"];
+}
+
+export async function EquipItem(characterId: string, itemInfo: any) {
+    if(itemInfo["character"] != characterId){
+        var result = await TransferItem(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
+        if(!result){
+            console.log("Failed to transfer item to the vault");
+            return;
+        }
+        result = await TransferItem(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+        if(!result){
+            console.log("Failed to transfer item from the vault");
+            return;
+        }
+        EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
+    }else{
+        EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
+    }
+}
+
+async function EquipItemFromInventory(itemInstanceId: string, characterId: string) {
+    const body = {
+        itemId: itemInstanceId,
+        characterId: characterId,
+        membershipType: GetMembership()["membershipType"],
+    };
+    console.log(body.toString());
+    const response = await fetch(base["url"] + `/Destiny2/Actions/Items/EquipItem/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+            "x-api-key": base["key"],
+            authorization: `Bearer ${GetData(keyList.token)}`
+        }
+    })
+    var result = await response.json();
+    console.log(result);
+}
+
+export async function TransferItem(itemId: string, itemHash: string, toVault: boolean, characterId: string) {
+    const body = {
+        itemReferenceHash: itemHash,
+        itemId: itemId,
+        characterId: characterId,
+        transferToVault: toVault,
+        stackSize: 1,
+        membershipType: GetMembership()["membershipType"],
+    };
+    console.log(body.toString());
+    const response = await fetch(base["url"] + `/Destiny2/Actions/Items/TransferItem/`, {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+            "x-api-key": base["key"],
+            authorization: `Bearer ${GetData(keyList.token)}`
+        }
+    })
+    var result = await response.json();
+    console.log(result);
+    return response.ok;
 }

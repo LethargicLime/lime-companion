@@ -1,6 +1,6 @@
 import CharactersContext from '../Providers/CharactersProvider'
 import ChosenCharacterContext from '../Providers/ChosenCharacterProvider';
-import { GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destiny/Fetch';
+import { EquipItem, GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destiny/Fetch';
 import VerboseContext from '../Providers/VerboseCharactersProvider';
 import TokenContext from '../Providers/TokenProvider';
 
@@ -44,6 +44,7 @@ export const CharacterInventory = () => {
         }
         
         setItem(info);
+        // EquipItem(chosenCharacter, info);
         console.log(info);
     }
 
