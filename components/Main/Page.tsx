@@ -29,7 +29,7 @@ export const Page = () => {
                         <CharacterInventory />
                         <div className="">
                             <ItemInfo />
-                           <Vault /> 
+                            <Vault /> 
                         </div>
                     </SelectedContext.Provider>
                 </div>
