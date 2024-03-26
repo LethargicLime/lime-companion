@@ -12,7 +12,7 @@ export const Vault = () => {
         let tempPrimary = []
 
         for (let i in vault) {
-            console.log(vault[i])
+            console.log(vault[i]);
             if (vault[i]["bucketHash"] === 1498876634) { 
                 console.log("test")   
             }
@@ -27,7 +27,7 @@ export const Vault = () => {
             {thirdOption === "Vault" &&
                 <div className="ml-[151px]">
                     {Array(Vault.length).fill(0).map((_, i) => (
-                        <div>
+                        <div key={i}>
                             Testing
                         </div>
                     ))}
