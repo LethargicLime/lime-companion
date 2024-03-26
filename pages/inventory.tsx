@@ -85,22 +85,32 @@ export const HomePage = () => {
             // console.log(verboseData);
             
             for (let i in verboseData["Response"]["profileInventory"]["data"]["items"]) {
-                // console.log(verbose["Response"]["profileInventory"]["data"])
 
                 if (typeof verboseData["Response"]["profileInventory"]["data"]["items"][i]["itemInstanceId"] !== "undefined") {
-                    // const promise = ItemInstance(membershipId, verboseData["Response"]["profileInventory"]["data"]["items"][i]).then(k => {
-                    //     vaultPromises.push(k);
-    
-                    //     console.log(k);
-                    // });
+                    // console.log(verboseData["Response"]["profileInventory"]["data"]["items"][i]);
 
-                    // promises.push(promise);
+                    const promise = ItemInstance(membershipId, verboseData["Response"]["profileInventory"]["data"]["items"][i]["itemInstanceId"]).then(k => {
+                        vaultPromises.push(k);
+    
+                        //console.log(k);
+                    });
+                    promises.push(promise);
                 }
             }
 
             await Promise.all(promises);
 
-            
+            for (let i in vaultPromises) {
+                GetItem(vaultPromises[i]["itemHash"]).then(j => {
+                    for (let k in j) {
+                        vaultPromises[i][k] = j[k];
+                    }
+                });
+            }
+
+            console.log(vaultPromises)
+
+            updateVault(vaultPromises);
 
             for (let i in verboseData["Response"]["characterInventories"]["data"]) {
                 for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
