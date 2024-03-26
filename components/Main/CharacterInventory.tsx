@@ -18,6 +18,7 @@ import CraftedIcon from "@/public/PatternIcon.jpg";
 import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
 import Draggable from 'react-draggable';
+import { ItemDisplay } from './ItemDisplay';
 
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
@@ -229,66 +230,11 @@ export const CharacterInventory = () => {
             {CurrentLoadout.length > 0 && CurrentInventory.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div className="h-[232px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
-                            <div onClick={() => handleIconClick(CurrentLoadout[i])} className={CurrentLoadout[i]["state"] == 4 
-                            || CurrentLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
-                                position: "relative"
-                            }}>
-                                <Image 
-                                    src={`https://bungie.net${CurrentLoadout[i]["iconWatermark"]}`}
-                                    width={70}
-                                    height={70}
-                                    className="watermark"
-                                    alt="Watermark"
-                                    style={{ position: "absolute", top: 0, left: 0 }}
-                                />
-                                {CurrentLoadout[i]["overrideStyle"] ? 
-                                <Image
-                                    src={`https://bungie.net${CurrentLoadout[i]["overrideStyle"]["displayProperties"]["icon"]}`}
-                                    width={70}
-                                    height={70}
-                                    alt="Primary"
-                                /> : 
-                                <Image
-                                    src={`https://bungie.net${CurrentLoadout[i]["displayProperties"]["icon"]}`}
-                                    width={70}
-                                    height={70}
-                                    alt="Primary"
-                                />}
-                                {CurrentLoadout[i]["state"] == 8 || CurrentLoadout[i]["state"] == 9 ? 
-                                <div className="" style={{
-                                    marginTop: "-17px", 
-                                    marginLeft: "3px",
-                                    position: "absolute",
-                                }}>
-                                    <Image 
-                                        src={CraftedIcon}
-                                        width={13}
-                                        height={13}
-                                        alt="Crafted Icon"
-                                    />
-                                </div> : ""}
-                            </div>
-                            <div className="" style={{
-                                height: "14px",
-                                fontSize: "10px",
-                                fontWeight: "700",
-                                backgroundColor: "#3d3d3d",
-                                color: "white", 
-                                display: "flex", 
-                                alignItems: "center",
-                                opacity: "",
-                                justifyContent: "center",
-                            }}>
-                                <Image 
-                                    src={`https://bungie.net${CurrentLoadout[i]["damageInformation"]["displayProperties"]["icon"]}`}
-                                    width={11}
-                                    height={11}
-                                    alt="Damage Type"
-                                />
-                                <span className="pl-1">{CurrentLoadout[i]["primaryStat"]["value"]}</span>
-                            </div>
+                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                        <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
+                            <div onClick={() => handleIconClick(CurrentLoadout[i])}>
+                                <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={70} craftIconSize={12}/> 
+                            </div>                                   
                         </div>
 
                         <div style={{ 
@@ -296,66 +242,11 @@ export const CharacterInventory = () => {
                             gridTemplateColumns: "repeat(3, 60px)",
                             gridGap: "5px", 
                             marginLeft: "14px",
-                        }}>
+                        }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
-                                    <div onClick={() => handleIconClick(CurrentInventory[i][j])} className={CurrentInventory[i][j]["state"] == 4 
-                                    || CurrentInventory[i][j]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
-                                        position: "relative"
-                                    }}>
-                                        <Image 
-                                            src={`https://bungie.net${CurrentInventory[i][j]["iconWatermark"]}`}
-                                            width={70}
-                                            height={70}
-                                            className="watermark"
-                                            alt="Watermark"
-                                            style={{ position: "absolute", top: 0, left: 0 }}
-                                        />
-                                        {CurrentInventory[i][j]["overrideStyle"] ? 
-                                        <Image
-                                            src={`https://bungie.net${CurrentInventory[i][j]["overrideStyle"]["displayProperties"]["icon"]}`}
-                                            width={70}
-                                            height={70}
-                                            alt="Primary"
-                                        /> : 
-                                        <Image
-                                            src={`https://bungie.net${CurrentInventory[i][j]["displayProperties"]["icon"]}`}
-                                            width={70}
-                                            height={70}
-                                            alt="Primary"
-                                        />}
-                                        {CurrentInventory[i][j]["state"] == 8 || CurrentInventory[i][j]["state"] == 9 ? 
-                                        <div className="" style={{
-                                            marginTop: "-17px", 
-                                            marginLeft: "3px",
-                                            position: "absolute",
-                                        }}>
-                                            <Image 
-                                                src={CraftedIcon}
-                                                width={12}
-                                                height={12}
-                                                alt="Crafted Icon"
-                                            />
-                                        </div> : ""}
-                                    </div>
-                                    <div style={{ 
-                                        height: "14px",
-                                        fontSize: "10px",
-                                        fontWeight: "700",
-                                        backgroundColor: "#3d3d3d",
-                                        color: "white", 
-                                        display: "flex", 
-                                        alignItems: "center",
-                                        opacity: "",
-                                        justifyContent: "center",
-                                    }}>
-                                        <Image 
-                                            src={`https://bungie.net${CurrentInventory[i][j]["damageInformation"]["displayProperties"]["icon"]}`}
-                                            width={11}
-                                            height={11}
-                                            alt="Damage Type"
-                                        />
-                                        <span className="pl-1">{CurrentInventory[i][j]["primaryStat"]["value"]}</span>
+                                    <div onClick={() => handleIconClick(CurrentInventory[i][j])}>
+                                        <ItemDisplay itemInfo={CurrentInventory[i][j]} iconSize={70} craftIconSize={11}/>
                                     </div>
                                 </div>
                             ))}
@@ -373,65 +264,10 @@ export const CharacterInventory = () => {
             {secondaryCharacter && SecondLoadout && SecondLoadout.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div className="h-[232px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
-                            <div onClick={() => handleIconClick(SecondLoadout[i])} className={SecondLoadout[i]["state"] == 4 
-                            || SecondLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
-                                position: "relative"
-                            }}>
-                                <Image 
-                                    src={`https://bungie.net${SecondLoadout[i]["iconWatermark"]}`}
-                                    width={70}
-                                    height={70}
-                                    className="watermark"
-                                    alt="Watermark"
-                                    style={{ position: 'absolute', top: 0, left: 0 }}
-                                />
-                                {SecondLoadout[i]["overrideStyle"] ? 
-                                <Image
-                                    src={`https://bungie.net${SecondLoadout[i]["overrideStyle"]["displayProperties"]["icon"]}`}
-                                    width={70}
-                                    height={70}
-                                    alt="Primary"
-                                /> : 
-                                <Image
-                                    src={`https://bungie.net${SecondLoadout[i]["displayProperties"]["icon"]}`}
-                                    width={70}
-                                    height={70}
-                                    alt="Primary"
-                                />}
-                                {SecondLoadout[i]["state"] == 8 || SecondLoadout[i]["state"] == 9 ? 
-                                <div className="" style={{
-                                    marginTop: "-17px", 
-                                    marginLeft: "3px",
-                                    position: "absolute",
-                                }}>
-                                    <Image 
-                                        src={CraftedIcon}
-                                        width={13}
-                                        height={13}
-                                        alt="Crafted Icon"
-                                    />
-                                </div> : ""}
-                            </div>
-                            <div className="" style={{
-                                height: "14px",
-                                fontSize: "10px",
-                                fontWeight: "700",
-                                backgroundColor: "#3d3d3d",
-                                color: "white", 
-                                display: "flex", 
-                                alignItems: "center",
-                                opacity: "",
-                                justifyContent: "center",
-                            }}>
-                                <Image 
-                                    src={`https://bungie.net${SecondLoadout[i]["damageInformation"]["displayProperties"]["icon"]}`}
-                                    width={11}
-                                    height={11}
-                                    alt="Damage Type"
-                                />
-                                <span className="pl-1">{SecondLoadout[i]["primaryStat"]["value"]}</span>
+                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                        <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
+                            <div onClick={() => handleIconClick(SecondLoadout[i])}>
+                                <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={70} craftIconSize={13}/>
                             </div>
                         </div>
                         <div style={{ 
@@ -439,66 +275,11 @@ export const CharacterInventory = () => {
                             gridTemplateColumns: "repeat(3, 60px)",
                             gridGap: "5px", 
                             marginLeft: "14px",
-                        }}>
+                        }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
-                                    <div onClick={() => handleIconClick(SecondInventory[i][j])} className={SecondInventory[i][j]["state"] == 4 
-                                    || SecondInventory[i][j]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
-                                        position: "relative"
-                                    }}>
-                                        <Image 
-                                            src={`https://bungie.net${SecondInventory[i][j]["iconWatermark"]}`}
-                                            width={70}
-                                            height={70}
-                                            className="watermark"
-                                            alt="Watermark"
-                                            style={{ position: 'absolute', top: 0, left: 0 }}
-                                        />
-                                        {SecondInventory[i][j]["overrideStyle"] ? 
-                                        <Image
-                                            src={`https://bungie.net${SecondInventory[i][j]["overrideStyle"]["displayProperties"]["icon"]}`}
-                                            width={70}
-                                            height={70}
-                                            alt="Primary"
-                                        /> : 
-                                        <Image
-                                            src={`https://bungie.net${SecondInventory[i][j]["displayProperties"]["icon"]}`}
-                                            width={70}
-                                            height={70}
-                                            alt="Primary"
-                                        />}
-                                        {SecondInventory[i][j]["state"] == 8 || SecondInventory[i][j]["state"] == 9 ? 
-                                        <div className="" style={{
-                                            marginTop: "-17px", 
-                                            marginLeft: "3px",
-                                            position: "absolute",
-                                        }}>
-                                            <Image 
-                                                src={CraftedIcon}
-                                                width={12}
-                                                height={12}
-                                                alt="Crafted Icon"
-                                            />
-                                        </div> : ""}
-                                    </div>
-                                    <div style={{ 
-                                        height: "14px",
-                                        fontSize: "10px",
-                                        fontWeight: "700",
-                                        backgroundColor: "#3d3d3d",
-                                        color: "white", 
-                                        display: "flex", 
-                                        alignItems: "center",
-                                        opacity: "",
-                                        justifyContent: "center",
-                                    }}>
-                                        <Image 
-                                            src={`https://bungie.net${SecondInventory[i][j]["damageInformation"]["displayProperties"]["icon"]}`}
-                                            width={11}
-                                            height={11}
-                                            alt="Damage Type"
-                                        />
-                                        <span className="pl-1">{SecondInventory[i][j]["primaryStat"]["value"]}</span>
+                                    <div onClick={() => handleIconClick(SecondInventory[i][j])}>
+                                        <ItemDisplay itemInfo={SecondInventory[i][j]} iconSize={70} craftIconSize={12}/>
                                     </div>
                                 </div>
                             ))}
@@ -509,4 +290,15 @@ export const CharacterInventory = () => {
         </div>
         </>
     )
+}
+
+function handleDragOver(event){
+    event.preventDefault();
+}
+
+function handleDrop(event){
+    event.preventDefault();
+    var data = event.dataTransfer.getData("item");
+    console.log(JSON.parse(data));
+    console.log("Dropped!")
 }
