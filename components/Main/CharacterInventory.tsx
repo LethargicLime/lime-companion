@@ -231,7 +231,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
+                        <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])}>
                                 <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={70} craftIconSize={12}/> 
                             </div>                                   
@@ -242,7 +242,7 @@ export const CharacterInventory = () => {
                             gridTemplateColumns: "repeat(3, 60px)",
                             gridGap: "5px", 
                             marginLeft: "14px",
-                        }}>
+                        }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(CurrentInventory[i][j])}>
@@ -265,7 +265,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
+                        <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])}>
                                 <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={70} craftIconSize={13}/>
                             </div>
@@ -275,7 +275,7 @@ export const CharacterInventory = () => {
                             gridTemplateColumns: "repeat(3, 60px)",
                             gridGap: "5px", 
                             marginLeft: "14px",
-                        }}>
+                        }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(SecondInventory[i][j])}>
@@ -290,4 +290,15 @@ export const CharacterInventory = () => {
         </div>
         </>
     )
+}
+
+function handleDragOver(event){
+    event.preventDefault();
+}
+
+function handleDrop(event){
+    event.preventDefault();
+    var data = event.dataTransfer.getData("item");
+    console.log(JSON.parse(data));
+    console.log("Dropped!")
 }

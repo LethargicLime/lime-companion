@@ -1,11 +1,14 @@
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 
+function sendInformation(event, itemInfo) {
+    event.dataTransfer.setData("item", JSON.stringify(itemInfo));
+}
+
 export const ItemDisplay = ({itemInfo, iconSize, craftIconSize}) => {
-    console.log(itemInfo);
     return (
         <>
-        <div draggable="true">
+        <div draggable="true" onDragStart={(event) => sendInformation(event, itemInfo)}>
             <div className={itemInfo["state"] == 4 
             || itemInfo["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                 position: "relative",
