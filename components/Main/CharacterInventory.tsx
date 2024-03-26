@@ -230,14 +230,13 @@ export const CharacterInventory = () => {
             {CurrentLoadout.length > 0 && CurrentInventory.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                    <div className="h-[232px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])}>
                                 <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={70} craftIconSize={12}/> 
                             </div>                                   
                         </div>
-
-                        <div style={{ 
+                        <div style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(3, 60px)",
                             gridGap: "5px", 
@@ -264,7 +263,7 @@ export const CharacterInventory = () => {
             {secondaryCharacter && SecondLoadout && SecondLoadout.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                    <div className="h-[232px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleDragOver(event)} onDrop={(event) => handleDrop(event)}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])}>
                                 <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={70} craftIconSize={13}/>
