@@ -229,7 +229,7 @@ export const CharacterInventory = () => {
             {CurrentLoadout.length > 0 && CurrentInventory.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                    <div className="h-[232px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])} className={CurrentLoadout[i]["state"] == 4 
                             || CurrentLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
@@ -373,7 +373,7 @@ export const CharacterInventory = () => {
             {secondaryCharacter && SecondLoadout && SecondLoadout.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                    <div className="h-[232px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
                         <div style={{ display: "inline-block", width: "70px", height: "70px" }}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])} className={SecondLoadout[i]["state"] == 4 
                             || SecondLoadout[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
