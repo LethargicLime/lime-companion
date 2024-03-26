@@ -4,6 +4,7 @@ import VerboseContext from "@/components/Providers/VerboseCharactersProvider";
 
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
+import ItemDisplay from "../ItemDisplay";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
@@ -38,63 +39,10 @@ export const Vault = () => {
                 }}>
                     {Array(primaries.length).fill(0).map((_, i) => (
                         <div key={i}>
-                            <div className={primaries[i]["state"] == 4 
-                            || primaries[i]["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
+                            <div style={{
                                 position: "relative"
                             }}>
-                                <Image 
-                                    src={`https://bungie.net${primaries[i]["iconWatermark"]}`}
-                                    width={50}
-                                    height={50}
-                                    className="watermark"
-                                    alt="Watermark"
-                                    style={{ position: "absolute", top: 0, left: 0 }}
-                                />
-                                {primaries[i]["overrideStyle"] ? 
-                                <Image
-                                    src={`https://bungie.net${primaries[i]["overrideStyle"]["displayProperties"]["icon"]}`}
-                                    width={50}
-                                    height={50}
-                                    alt="Primary"
-                                /> : 
-                                <Image
-                                    src={`https://bungie.net${primaries[i]["displayProperties"]["icon"]}`}
-                                    width={50}
-                                    height={50}
-                                    alt="Primary"
-                                />}
-                                {primaries[i]["state"] == 8 || primaries[i]["state"] == 9 ? 
-                                <div className="" style={{
-                                    marginTop: "-17px", 
-                                    marginLeft: "3px",
-                                    position: "absolute",
-                                }}>
-                                    <Image 
-                                        src={CraftedIcon}
-                                        width={13}
-                                        height={13}
-                                        alt="Crafted Icon"
-                                    />
-                                </div> : ""}
-                            </div>
-                            <div className="" style={{
-                                height: "14px",
-                                fontSize: "10px",
-                                fontWeight: "500",
-                                backgroundColor: "#3d3d3d",
-                                color: "white", 
-                                display: "flex", 
-                                alignItems: "center",
-                                opacity: "",
-                                justifyContent: "center",
-                            }}>
-                                <Image 
-                                    src={`https://bungie.net${primaries[i]["damageInformation"]["displayProperties"]["icon"]}`}
-                                    width={11}
-                                    height={11}
-                                    alt="Damage Type"
-                                />
-                                <span className="pl-1">{primaries[i]["primaryStat"]["value"]}</span>
+                                <ItemDisplay itemInfo={primaries[i]} iconSize={50} craftIconSize={12}/>
                             </div>
                         </div>
                     ))}
