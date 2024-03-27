@@ -9,7 +9,7 @@ export const ItemDisplay = ({itemInfo, iconSize, craftIconSize}) => {
     return (
         <>
         <div draggable="true" onDragStart={(event) => sendInformation(event, itemInfo)}>
-            <div className={itemInfo["state"] == 4 
+            <div className={itemInfo["state"] == 4
             || itemInfo["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                 position: "relative",
             }}>
@@ -70,7 +70,7 @@ export const ItemDisplay = ({itemInfo, iconSize, craftIconSize}) => {
                     style={{pointerEvents: "none"}}
                 />
                 <span className="pl-1">{itemInfo["primaryStat"]["value"]}</span>
-        </div>
+             </div>
         </div>
         </>
         );
