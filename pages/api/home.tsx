@@ -5,8 +5,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import GitIcon from "@/public/GitHub-Mark-64px.png";
 
-// @ts-ignore
-const images = require.context("@/public/HomeScreenImages", true);
+const images = require.context("@/public/HomeScreenImages", true, /./);
 const imageObject = images.keys().map(image => images(image));
 export default function page() {
     const handleAuthorize = () => {
@@ -20,9 +19,7 @@ export default function page() {
     while (keys.length != 4) {
         let key = Math.floor(Math.random() * imageObject.length);
 
-        if (!keys.includes(key)) {
-            keys.push(key);
-        }
+        keys.includes(key) || keys.push(key);
     }
 
     return (
