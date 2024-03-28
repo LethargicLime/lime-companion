@@ -6,10 +6,10 @@ import Image from "next/image";
 import GitIcon from "@/public/GitHub-Mark-64px.png";
 import { update } from "@react-spring/web";
 
-export default function page() {
+export default function Page() {
     const images = require.context("@/public/HomeScreenImages", true, /./);
     const imageObject = images.keys().map(image => images(image));
-    const [ keys, updateKeys ] = useState([]);
+    const [ keys, updateKeys ] = useState<any>([]);
 
     const handleAuthorize = () => {
         if (typeof window !== "undefined") {
