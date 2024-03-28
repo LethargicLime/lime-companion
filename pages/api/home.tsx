@@ -5,9 +5,10 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import GitIcon from "@/public/GitHub-Mark-64px.png";
 
-const images = require.context("@/public/HomeScreenImages", true, /./);
-const imageObject = images.keys().map(image => images(image));
 export default function page() {
+    const images = require.context("@/public/HomeScreenImages", true, /./);
+    const imageObject = images.keys().map(image => images(image));
+
     const handleAuthorize = () => {
         if (typeof window !== "undefined") {
             authorize();
