@@ -5,7 +5,6 @@ import VerboseContext from "@/components/Providers/VerboseCharactersProvider";
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import ItemDisplay from "../ItemDisplay";
-import { ReceiveItem, handleItemDragOver } from "../ItemTransfer";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
@@ -38,19 +37,43 @@ export const Vault = () => {
     return (
         <div className="flex" style={{ paddingTop: "10px" }}>
             {thirdOption === "Vault" &&
-                <div className="pl-[50px] h-[232px]" style={{ 
-                    display: "grid",
-                    gridTemplateColumns: "repeat(15, 50px)",
-                    gridGap: "5px", 
-                    marginLeft: "14px",
-                }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, "Vault")}>
-                    {Array(primaries.length).fill(0).map((_, i) => (
-                        <div key={i}>
-                            <div style={{
-                                position: "relative"
-                            }}>
-                                <ItemDisplay itemInfo={primaries[i]} iconSize={50} craftIconSize={12} characterId={-1} slot={"Vault"}/>
-                            </div>
+                <div>
+                    <div className="h-[200px]">
+                        <div className="pl-[45px] h-[175px]" style={{ 
+                            display: "grid",
+                            gridTemplateColumns: "repeat(15, 50px)",
+                            gridGap: "5px",
+                            marginLeft: "14px",
+                        }}>
+                            {Array(kinetic.length).fill(0).map((_, i) => (
+                                <div key={i}>
+                                    <div style={{
+                                        position: "relative",
+                                        display: "inline-block"
+                                    }}>
+                                        <ItemDisplay itemInfo={kinetic[i]} iconSize={50} craftIconSize={12}/>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="pt-[30px] h-[200px]">
+                        <div className="pl-[45px] h-[175px]" style={{ 
+                            display: "grid",
+                            gridTemplateColumns: "repeat(15, 50px)",
+                            gridGap: "5px",
+                            marginLeft: "14px",
+                        }}>
+                            {Array(energy.length).fill(0).map((_, i) => (
+                                <div key={i}>
+                                    <div style={{
+                                        position: "relative",
+                                        display: "inline-block"
+                                    }}>
+                                        <ItemDisplay itemInfo={energy[i]} iconSize={50} craftIconSize={12}/>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
