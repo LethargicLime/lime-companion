@@ -4,8 +4,6 @@ import { EquipItem, GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destin
 import VerboseContext from '../Providers/VerboseCharactersProvider';
 import TokenContext from '../Providers/TokenProvider';
 
-import Image from 'next/image';
-
 import {
     useState,
     useEffect,
