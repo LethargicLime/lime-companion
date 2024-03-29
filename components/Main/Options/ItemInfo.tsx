@@ -46,7 +46,7 @@ export const ItemInfo = () => {
     return (
         <div className="flex" style={{ paddingTop: "20px" }}>
             {thirdOption === "Verbose Item Info" && item && item["displayProperties"] &&
-                <div className="ml-[151px] font-bold text-white font-semibold text-lg" style={{
+                <div className="ml-[45px] font-bold text-white font-semibold text-lg" style={{
                     width: "440px"
                 }}>
                     <div className={`flex flex-row`} style={{ }}>

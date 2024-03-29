@@ -11,13 +11,12 @@ export const Navbar = () => {
 
     const [ firstOption, setFirstOption ] = useState<string>("none");
     const [ secondOption, setSecondOption ] = useState<string>("");
-    const [ showAccordian, setShowAccordian ] = useState<boolean>(false);
 
     const [ third, setThird ] = useState<string>("Verbose Item Info");
     const [ thirdOptions, setThirdOptions ] = useState<string[]>(["Loadouts", "Vault", "Lore"]);
     const [ showSecondAccordian, setShowSecondAccordian ] = useState<boolean>(false);
 
-    // i know the naming convention might be wis but this is the third character option and the second is the third header option
+    // I know the naming convention might be wis but this is the third character option and the second is the third header option
     useEffect(() => {
         setThirdOption(third);
     }, [third]);
@@ -101,10 +100,6 @@ export const Navbar = () => {
 
     }, [firstOption]);
 
-    const handleAccordianClick = () => {
-        setShowAccordian(!showAccordian);
-    }
-
     const handleOptionClick = () => {
         let t = firstOption;
         setFirstOption(secondOption);
@@ -153,25 +148,17 @@ export const Navbar = () => {
                     {firstOption == "none" ? <div>
                         
                     </div> : 
-                    <div className="z-10 fixed text-center font-[700]" onClick={handleAccordianClick} style={{
+                    <div className="z-10 fixed text-center font-[700]" onClick={handleOptionClick} style={{
                         width: "140px",
+                        transition: 'opacity 0.25s ease-out',
                         color: "#49875e",
                     }}>
                         {firstOption}
-                        {showAccordian === true && 
-
-                        <div className="z-10 pt-2 accordian" style={{ 
-                            height: "50px",
-                            width: "140px",
-                            backgroundColor: "rgb(33, 32, 30)"
-                        }}>
-                            <p className="z-1 mt-2 text-center font-normal text-white" onClick={handleOptionClick}>{secondOption}</p>
-                        </div>}
                     </div>
                     }
                 </div>               
 
-                <div className="z-1 pl-[425px]">
+                <div className="z-1 pl-[240px]">
                     <div className="fixed font-light text-center" onClick={handleThirdClick} style={{
                         width: "200px"
                     }}>

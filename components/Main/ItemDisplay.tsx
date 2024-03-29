@@ -67,7 +67,7 @@ export const ItemDisplay = ({itemInfo, iconSize, craftIconSize, characterId, slo
                     style={{pointerEvents: "none"}}
                 />
                 <span className="pl-1">{itemInfo["primaryStat"]["value"]}</span>
-        </div>
+             </div>
         </div>
         </>
         );

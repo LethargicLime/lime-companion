@@ -11,26 +11,32 @@ export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
     const { vault, updateVault } = useContext(VerboseContext);
 
-    const [ primaries, updatePrimary ] = useState([]);
+    const [ kinetic, updateKinetic ] = useState([]);
+    const [ energy, updateEnergy ] = useState([]);
+    const [ power, updatePower ] = useState([]);
 
     useEffect(() => {
-        let tempPrimary = []
+        let tempKinetic = []
+        let tempEnergy = []
 
         console.log(vault);
 
         for (let i in vault) {
             // console.log(vault[i]);
             if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === 1498876634) { 
-                tempPrimary.push(vault[i]);   
+                tempKinetic.push(vault[i]);   
+            }
+            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === 2465295065) {
+                tempEnergy.push(vault[i]);
             }
         }
 
-        updatePrimary(tempPrimary);
-        console.log(tempPrimary);
+        updateKinetic(tempKinetic);
+        updateEnergy(tempEnergy);
     }, [vault]);
 
     return (
-        <div className="flex" style={{ paddingTop: "20px" }}>
+        <div className="flex" style={{ paddingTop: "10px" }}>
             {thirdOption === "Vault" &&
                 <div className="pl-[50px] h-[232px]" style={{ 
                     display: "grid",
@@ -46,7 +52,7 @@ export const Vault = () => {
                                 <ItemDisplay itemInfo={primaries[i]} iconSize={50} craftIconSize={12} characterId={-1} slot={"Vault"}/>
                             </div>
                         </div>
-                    ))}
+                    </div>
                 </div>
             }
         </div>

@@ -4,8 +4,6 @@ import { EquipItem, GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destin
 import VerboseContext from '../Providers/VerboseCharactersProvider';
 import TokenContext from '../Providers/TokenProvider';
 
-import Image from 'next/image';
-
 import {
     useState,
     useEffect,
@@ -237,11 +235,10 @@ export const CharacterInventory = () => {
                                 <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={70} craftIconSize={12} characterId={characters[chosenCharacter]["characterId"]} slot={"Loadout"}/> 
                             </div>                                   
                         </div>
-
-                        <div style={{ 
+                        <div className={SecondInventory.length < 3 && SecondInventory.length > 6 ? "h-[232px]" : "h-[175px]"} style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(3, 60px)",
-                            gridGap: "5px", 
+                            gridGap: "5px",
+                            gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
                         }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Inventory")}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
@@ -271,10 +268,10 @@ export const CharacterInventory = () => {
                                 <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={70} craftIconSize={13} characterId={characters[secondaryCharacter]["characterId"]} slot={"Loadout"}/>
                             </div>
                         </div>
-                        <div style={{ 
+                        <div className="h-[175px]" style={{ 
                             display: "grid",
-                            gridTemplateColumns: "repeat(3, 60px)",
-                            gridGap: "5px", 
+                            gridGap: "5px",
+                            gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
                         }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], "Inventory")}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
