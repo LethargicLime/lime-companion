@@ -5,6 +5,7 @@ import VerboseContext from "@/components/Providers/VerboseCharactersProvider";
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import ItemDisplay from "../ItemDisplay";
+import { ReceiveItem, handleItemDragOver } from "../ItemTransfer";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
@@ -36,13 +37,13 @@ export const Vault = () => {
                     gridTemplateColumns: "repeat(15, 50px)",
                     gridGap: "5px", 
                     marginLeft: "14px",
-                }}>
+                }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, "Vault")}>
                     {Array(primaries.length).fill(0).map((_, i) => (
                         <div key={i}>
                             <div style={{
                                 position: "relative"
                             }}>
-                                <ItemDisplay itemInfo={primaries[i]} iconSize={50} craftIconSize={12}/>
+                                <ItemDisplay itemInfo={primaries[i]} iconSize={50} craftIconSize={12} characterId={-1} slot={"Vault"}/>
                             </div>
                         </div>
                     ))}
