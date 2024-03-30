@@ -5,6 +5,7 @@ export interface VerboseCharactersProviderProps {
     inventory: any;
     equipped: any;
     vault: any;
+    divHeight: any,
     updateVerbose: (verbose: any) => void;
     updateInventory: (inventory: any) => void;
     updateEquipped: (equipped: any) => void;
@@ -16,6 +17,7 @@ export const VerboseContext = createContext<VerboseCharactersProviderProps>({
     equipped: {},
     inventory: {},
     vault: {},
+    divHeight: {},
     updateVerbose: () => {},
     updateInventory: () => {},
     updateEquipped: () => {},

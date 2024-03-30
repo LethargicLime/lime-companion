@@ -29,6 +29,16 @@ export const HomePage = () => {
     const [ inventory, updateInventory ] = useState([]);
     const [ equipped, updateEquipped ] = useState([]);
     const [ vault, updateVault ] = useState([]);
+    const [ divHeight, updateDivHeight ] = useState({
+        1498876634: 0,      // kinetic
+        2465295065: 0,      // energy
+        953998645: 0,       // power
+        3448274439: 0,      // helment
+        3551918588: 0,      // gauntlets
+        14239492: 0,        // chest
+        20886954: 0,        // legs
+        1585787867: 0,      // class item
+    });
 
     const [ token, updateToken ] = useState<string>("");
     const [ hasToken, setHasToken ] = useState<boolean>(false);
@@ -61,7 +71,7 @@ export const HomePage = () => {
     }, []);
 
     useEffect(() => {
-        if(hasToken){
+        if (hasToken){
             const fetchCharacters = async () => {
                 const charactersData = await GetCharacterInfo(membershipId);
                 updateCharacters(charactersData);
@@ -108,9 +118,26 @@ export const HomePage = () => {
                 });
             }
 
+            updateVault(vaultPromises);
+
+            let vaultHeights = {
+                1498876634: 0,      // kinetic
+                2465295065: 0,      // energy
+                953998645: 0,       // power
+                3448274439: 0,      // helment
+                3551918588: 0,      // gauntlets
+                14239492: 0,        // chest
+                20886954: 0,        // legs
+                1585787867: 0,      // class item
+            }
+
             console.log(vaultPromises)
 
-            updateVault(vaultPromises);
+            for (let i in vaultPromises) {
+                if (vaultPromises[i]["equippingBlock"]) {
+                    vaultHeights[vaultPromises[i]["equippingBlock"]["equipmentSlotTypeHash"]] += 1/40;
+                }
+            }
 
             for (let i in verboseData["Response"]["characterInventories"]["data"]) {
                 for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
@@ -134,11 +161,33 @@ export const HomePage = () => {
                 }
             }
 
+            let inventoryHeights = {
+                1498876634: 0,      // kinetic
+                2465295065: 0,      // energy
+                953998645: 0,       // power
+                3448274439: 0,      // helment
+                3551918588: 0,      // gauntlets
+                14239492: 0,        // chest
+                20886954: 0,        // legs
+                1585787867: 0,      // class item
+            }
+
+            console.log(invPromises);
+
+            for (let i in invPromises) {
+                inventoryHeights[invPromises[i]["equippingBlock"]["equipmentSlotTypeHash"]] += 1/40;
+            }
+
+            for (let i in vaultHeights) {
+                if (vaultHeights[i] < inventoryHeights[i]) {
+                    vaultHeights[i] = inventoryHeights[i];
+                }
+            }
+
             await Promise.all(promises);
 
             for (let i in invPromises) {
                 GetItem(invPromises[i]["itemHash"]).then(j => {
-                    // console.log(j);
                     for (let k in j) {
                         invPromises[i][k] = j[k];
                     }
@@ -174,21 +223,15 @@ export const HomePage = () => {
 
             await Promise.all(promiseEquip);
 
-            // console.log(equipTemp);
+            updateEquipped(equipTemp);
 
             for (let i in equipTemp) {
                 GetItem(equipTemp[i]["itemHash"]).then(j => {
-                    // console.log(equipTemp[i]);
-                    // console.log(j);
                     for (let k in j) {
                         equipTemp[i][k] = j[k];
                     }
                 });
             }
-
-            updateEquipped(equipTemp);
-
-            // localStorage.setItem("masterInfo", JSON.stringify(equipTemp));
 
             setInvLoading(false);
             logPerf();  
@@ -217,7 +260,7 @@ export const HomePage = () => {
                     <CharactersContext.Provider value={{ characters, updateCharacters }}>
                         <ChosenCharacterContext.Provider value={{ chosenCharacter, secondaryCharacter, thirdOption, 
                             setChosenCharacter: updateChosenCharacter, setSecondaryCharacter: updateSecondaryCharater, setThirdOption: updateThirdOption }}>
-                            <VerboseContext.Provider value={{ verbose, inventory, equipped, vault, updateVerbose, updateInventory, updateEquipped, updateVault }}>
+                            <VerboseContext.Provider value={{ verbose, inventory, equipped, vault, divHeight, updateVerbose, updateInventory, updateEquipped, updateVault }}>
                                     {invLoading ? 
                                         <div>
                                             <LoadingScreen />
