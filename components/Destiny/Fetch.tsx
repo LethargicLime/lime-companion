@@ -332,12 +332,12 @@ export async function ItemInstance(id: string, item: string) {
 
 export async function EquipItem(characterId: string, itemInfo: any) {
     if(itemInfo["character"] != characterId){
-        var result = await TransferItem(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
+        var result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
         if(!result){
             console.log("Failed to transfer item to the vault");
             return;
         }
-        result = await TransferItem(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+        result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
         if(!result){
             console.log("Failed to transfer item from the vault");
             return;
@@ -346,6 +346,30 @@ export async function EquipItem(characterId: string, itemInfo: any) {
     }else{
         EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
     }
+}
+
+export async function TransferItem(characterId: string, itemInfo: any, toVault: boolean) {
+    var result = false;
+    if(!toVault){
+        if(itemInfo["character"] != null) {
+            // Move from character to character
+            result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
+            if(result){
+                result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+            }
+        }else{
+             // Move from vault to character
+            result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], toVault, characterId);
+        }
+    }else{
+        // Move From vault
+        result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], toVault, characterId);
+    }
+    if(!result){
+        console.log("Failed to transfer item");
+        return;
+    }
+    
 }
 
 async function EquipItemFromInventory(itemInstanceId: string, characterId: string) {
@@ -367,7 +391,7 @@ async function EquipItemFromInventory(itemInstanceId: string, characterId: strin
     console.log(result);
 }
 
-export async function TransferItem(itemId: string, itemHash: string, toVault: boolean, characterId: string) {
+export async function VaultTransfer(itemId: string, itemHash: string, toVault: boolean, characterId: string) {
     const body = {
         itemReferenceHash: itemHash,
         itemId: itemId,
