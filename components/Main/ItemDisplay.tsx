@@ -6,7 +6,7 @@ export const ItemDisplay = ({itemInfo, iconSize, craftIconSize, characterId, slo
     return (
         <>
         <div draggable="true" onDragStart={(event) => SendItem(event, itemInfo, characterId, slot)}>
-            <div className={itemInfo["state"] == 4 
+            <div className={itemInfo["state"] == 4
             || itemInfo["socketInfo"][0]["itemTypeDisplayName"] == "Enhanced Intrinsic" ? "masterwork-icon" : "gear-icon"} style={{
                 position: "relative",
             }}>
@@ -67,7 +67,7 @@ export const ItemDisplay = ({itemInfo, iconSize, craftIconSize, characterId, slo
                     style={{pointerEvents: "none"}}
                 />
                 <span className="pl-1">{itemInfo["primaryStat"]["value"]}</span>
-        </div>
+             </div>
         </div>
         </>
         );

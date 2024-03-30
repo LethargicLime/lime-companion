@@ -4,8 +4,6 @@ import { EquipItem, GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destin
 import VerboseContext from '../Providers/VerboseCharactersProvider';
 import TokenContext from '../Providers/TokenProvider';
 
-import Image from 'next/image';
-
 import {
     useState,
     useEffect,
@@ -231,23 +229,22 @@ export const CharacterInventory = () => {
             {CurrentLoadout.length > 0 && CurrentInventory.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Loadout")}>
+                    <div className="h-[200px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Loadout")}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])}>
-                                <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={70} craftIconSize={12} characterId={characters[chosenCharacter]["characterId"]} slot={"Loadout"}/> 
+                                <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={60} craftIconSize={12} characterId={characters[chosenCharacter]["characterId"]} slot={"Loadout"}/> 
                             </div>                                   
                         </div>
-
-                        <div style={{ 
+                        <div className={SecondInventory.length < 3 && SecondInventory.length > 6 ? "h-[232px]" : "h-[175px]"} style={{
                             display: "grid",
-                            gridTemplateColumns: "repeat(3, 60px)",
-                            gridGap: "5px", 
+                            gridGap: "5px",
+                            gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
                         }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Inventory")}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(CurrentInventory[i][j])}>
-                                        <ItemDisplay itemInfo={CurrentInventory[i][j]} iconSize={70} craftIconSize={11} characterId={characters[chosenCharacter]["characterId"]} slot={"Inventory"}/>
+                                        <ItemDisplay itemInfo={CurrentInventory[i][j]} iconSize={50} craftIconSize={11} characterId={characters[chosenCharacter]["characterId"]} slot={"Inventory"}/>
                                     </div>
                                 </div>
                             ))}
@@ -265,22 +262,22 @@ export const CharacterInventory = () => {
             {secondaryCharacter && SecondLoadout && SecondLoadout.length > 0 ? 
             <div>
                 {Array(3).fill(0).map((_, i) => (
-                    <div style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "70px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], "Loadout")}>
+                    <div className="h-[200px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
+                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], "Loadout")}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])}>
-                                <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={70} craftIconSize={13} characterId={characters[secondaryCharacter]["characterId"]} slot={"Loadout"}/>
+                                <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={60} craftIconSize={13} characterId={characters[secondaryCharacter]["characterId"]} slot={"Loadout"}/>
                             </div>
                         </div>
-                        <div style={{ 
+                        <div className="h-[175px]" style={{ 
                             display: "grid",
-                            gridTemplateColumns: "repeat(3, 60px)",
-                            gridGap: "5px", 
+                            gridGap: "5px",
+                            gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
                         }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], "Inventory")}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(SecondInventory[i][j])}>
-                                        <ItemDisplay itemInfo={SecondInventory[i][j]} iconSize={70} craftIconSize={12} characterId={characters[secondaryCharacter]["characterId"]} slot={"Inventory"}/>
+                                        <ItemDisplay itemInfo={SecondInventory[i][j]} iconSize={50} craftIconSize={12} characterId={characters[secondaryCharacter]["characterId"]} slot={"Inventory"}/>
                                     </div>
                                 </div>
                             ))}

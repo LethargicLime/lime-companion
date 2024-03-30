@@ -1,29 +1,33 @@
 import { authorize, GetToken } from "@/components/Destiny/Fetch";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Image from "next/image";
 import GitIcon from "@/public/GitHub-Mark-64px.png";
+import { update } from "@react-spring/web";
 
-// @ts-ignore
-const images = require.context("@/public/HomeScreenImages", true);
-const imageObject = images.keys().map(image => images(image));
-export default function page() {
+export default function Page() {
+    const images = require.context("@/public/HomeScreenImages", true, /./);
+    const imageObject = images.keys().map(image => images(image));
+    const [ keys, updateKeys ] = useState<any>([]);
+
     const handleAuthorize = () => {
         if (typeof window !== "undefined") {
             authorize();
         }
     }
 
-    let keys = [];
+    useEffect(() => {
+        let tempKeys = [];
 
-    while (keys.length != 4) {
-        let key = Math.floor(Math.random() * imageObject.length);
-
-        if (!keys.includes(key)) {
-            keys.push(key);
+        while (tempKeys.length != 4) {
+            let key = Math.floor(Math.random() * imageObject.length);
+    
+            tempKeys.includes(key) || tempKeys.push(key);
         }
-    }
+
+        updateKeys(tempKeys);
+    }, []);
 
     return (
         <>

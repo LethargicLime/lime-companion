@@ -18,9 +18,9 @@ export const Page = () => {
 
     return (
         <>
-            <div className={"flex z-0 relative"} style={{
+            <div className={"flex z-0 relative overflow-y-auto"} style={{
                 backgroundColor: "#363636",
-                height: "calc(100vh - 50px)"
+                height: "200vh"
             }}>
                 <div className={`z-0 flex flex-row transistion-all duration-1000 ${sidebarOpen ? "pushed" : ""}`} style={{
                     maxWidth: "100vh"
