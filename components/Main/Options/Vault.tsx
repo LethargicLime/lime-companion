@@ -5,7 +5,7 @@ import VerboseContext from "@/components/Providers/VerboseCharactersProvider";
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import ItemDisplay from "../ItemDisplay";
-import { ReceiveItem, handleItemDragOver } from "../ItemTransfer";
+import { ItemLocation, ReceiveItem, handleItemDragOver } from "../ItemTransfer";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
@@ -45,7 +45,7 @@ export const Vault = () => {
                             gridTemplateColumns: "repeat(15, 50px)",
                             gridGap: "5px",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, "Vault")}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, ItemLocation.VAULT)}>
                             {Array(kinetic.length).fill(0).map((_, i) => (
                                 <div key={i}>
                                     <div style={{
@@ -64,7 +64,7 @@ export const Vault = () => {
                             gridTemplateColumns: "repeat(15, 50px)",
                             gridGap: "5px",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, "Vault")}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, ItemLocation.VAULT)}>
                             {Array(energy.length).fill(0).map((_, i) => (
                                 <div key={i}>
                                     <div style={{

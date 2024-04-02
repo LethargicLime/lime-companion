@@ -1,6 +1,6 @@
 import CharactersContext from '../Providers/CharactersProvider'
 import ChosenCharacterContext from '../Providers/ChosenCharacterProvider';
-import { EquipItem, GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destiny/Fetch';
+import { GetItem, HasIntrinsicUpgrade, ItemInstance } from '../Destiny/Fetch';
 import VerboseContext from '../Providers/VerboseCharactersProvider';
 import TokenContext from '../Providers/TokenProvider';
 
@@ -17,7 +17,7 @@ import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
 import Draggable from 'react-draggable';
 import { ItemDisplay } from './ItemDisplay';
-import { ReceiveItem, handleItemDragOver } from './ItemTransfer';
+import { ItemLocation, ReceiveItem, handleItemDragOver } from './ItemTransfer';
 
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
@@ -230,7 +230,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div className="h-[200px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Loadout")}>
+                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], ItemLocation.EQUIPPED)}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])}>
                                 <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={60} craftIconSize={12} characterId={characters[chosenCharacter]["characterId"]} slot={"Loadout"}/> 
                             </div>                                   
@@ -240,7 +240,7 @@ export const CharacterInventory = () => {
                             gridGap: "5px",
                             gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Inventory")}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], ItemLocation.INVENTORY)}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(CurrentInventory[i][j])}>
@@ -263,7 +263,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div className="h-[200px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], "Loadout")}>
+                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], ItemLocation.EQUIPPED)}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])}>
                                 <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={60} craftIconSize={13} characterId={characters[secondaryCharacter]["characterId"]} slot={"Loadout"}/>
                             </div>
@@ -273,7 +273,7 @@ export const CharacterInventory = () => {
                             gridGap: "5px",
                             gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], "Inventory")}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], ItemLocation.INVENTORY)}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(SecondInventory[i][j])}>

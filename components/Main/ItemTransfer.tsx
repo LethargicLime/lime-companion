@@ -1,4 +1,4 @@
-import { EquipItem, TransferItem, VaultTransfer } from "../Destiny/Fetch";
+import { TransferItem, } from "../Destiny/Fetch";
 
 export function SendItem(event, itemInfo, characterId, slot) {
     event.dataTransfer.setData("item", JSON.stringify(itemInfo));
@@ -13,13 +13,18 @@ export function ReceiveItem(event, characterId, slot){
     var fromSlot = event.dataTransfer.getData("slot");
     console.log(item);
     console.log("Move from " + fromCharacterId + " " + fromSlot + " into " + characterId + " " + slot);
-    if(slot === "Loadout"){
-        EquipItem(characterId, item);
-    }else{
-        TransferItem(characterId, item, slot === "Vault")
-    }
+    TransferItem(characterId, item, slot);
 }
 
 export function handleItemDragOver(event){
     event.preventDefault();
+}
+
+export enum ItemLocation {
+    EQUIPPED = -1,
+    UNKNOWN = 0,
+    INVENTORY = 1,
+    VAULT = 2,
+    VENDOR = 3,
+    POSTMASTER = 4,
 }
