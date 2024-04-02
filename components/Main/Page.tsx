@@ -10,7 +10,6 @@ import SidebarContext from '../Providers/SidebarProvider';
 import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
 import Vault from './Options/Vault';
-import { ReceiveItem } from './ItemTransfer';
 
 export const Page = () => {
     const { sidebarOpen } = useContext(SidebarContext)

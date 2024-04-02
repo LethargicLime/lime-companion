@@ -1,13 +1,8 @@
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
+import { SendItem } from './ItemTransfer';
 
 export const ItemDisplay = ({itemInfo, iconSize, craftIconSize, characterId, slot}) => {
-    const SendItem = (event, itemInfo, characterId, slot) => {
-        event.dataTransfer.setData("item", JSON.stringify(itemInfo));
-        event.dataTransfer.setData("characterId", characterId);
-        event.dataTransfer.setData("slot", slot);
-    }
-
     return (
         <>
         <div draggable="true" onDragStart={(event) => SendItem(event, itemInfo, characterId, slot)}>
