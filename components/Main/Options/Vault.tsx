@@ -9,7 +9,7 @@ import { ItemLocation, ReceiveItem, handleItemDragOver } from "../ItemTransfer";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
-    const { vault, updateVault } = useContext(VerboseContext);
+    const { vault, divHeight, updateVault } = useContext(VerboseContext);
 
     const [ kinetic, updateKinetic ] = useState([]);
     const [ energy, updateEnergy ] = useState([]);
