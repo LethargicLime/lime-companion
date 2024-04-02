@@ -5,7 +5,7 @@ import VerboseContext from "@/components/Providers/VerboseCharactersProvider";
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import ItemDisplay from "../ItemDisplay";
-import { ReceiveItem, handleItemDragOver } from "../ItemTransfer";
+import { ReceiveItem } from "../ItemTransfer";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
@@ -14,6 +14,16 @@ export const Vault = () => {
     const [ kinetic, updateKinetic ] = useState([]);
     const [ energy, updateEnergy ] = useState([]);
     const [ power, updatePower ] = useState([]);
+
+    const handleItemDragOver = (event) => {
+        event.preventDefault();
+    }
+
+    const _ReceiveItem = (event, characterId, slot) => {
+        const transferredItem = ReceiveItem(event, characterId, slot);
+
+        console.log(transferredItem);
+    }
 
     useEffect(() => {
         let tempKinetic = []

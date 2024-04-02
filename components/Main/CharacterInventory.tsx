@@ -17,7 +17,7 @@ import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
 import Draggable from 'react-draggable';
 import { ItemDisplay } from './ItemDisplay';
-import { ReceiveItem, handleItemDragOver } from './ItemTransfer';
+import { ReceiveItem } from './ItemTransfer';
 
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
@@ -35,6 +35,16 @@ export const CharacterInventory = () => {
 
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
+
+    const _ReceiveItem = (event, characterId, slot) => {
+        const transferredItem = ReceiveItem(event, characterId, slot);
+
+        console.log(transferredItem);
+    }
+
+    const handleItemDragOver = (event) => {
+        event.preventDefault();
+    }
 
     const handleIconClick = (info: any) => {
         if (info == item) {
@@ -240,7 +250,7 @@ export const CharacterInventory = () => {
                             gridGap: "5px",
                             gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], "Inventory")}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, characters[chosenCharacter]["characterId"], "Inventory")}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(CurrentInventory[i][j])}>
