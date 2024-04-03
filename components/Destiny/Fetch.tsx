@@ -1,3 +1,4 @@
+import { ItemLocation } from "../Main/ItemTransfer";
 import { RemoveParams } from "../Main/Link";
 import { ChangeUser, GetBungieId, GetMembership, GetData, SetValid, StoreData, keyList, GetGlobalData, StoreGlobalData } from "../Main/Storage";
 
@@ -330,49 +331,78 @@ export async function ItemInstance(id: string, item: string) {
     return data["Response"]["instance"]["data"];
 }
 
-export async function EquipItem(characterId: string, itemInfo: any) {
+export async function TransferItem(characterId: string, itemInfo: any, itemLocation: ItemLocation): Promise<boolean> {
+    // Unnecessary transfer
+    switch(itemLocation){
+        case ItemLocation.EQUIPPED:
+            if(itemInfo["isEquipped"] && itemInfo["character"] === characterId){
+                console.log("Item is already equipped");
+                return false;    
+            }
+            break;
+        case ItemLocation.INVENTORY:
+            if(itemInfo["location"] === ItemLocation.INVENTORY && itemInfo["character"] === characterId){
+                console.log("Item is already in the character inventory");
+                return false;
+            }
+            break;
+        case ItemLocation.VAULT:
+            if(itemInfo["location"] === ItemLocation.VAULT){
+                console.log("Item is already in the vault");
+                return false;
+            }
+            break;
+    }
+    // Handle equipped Item
+    if(itemInfo["isEquipped"]){
+        console.log("Item is equipped, not implemented yet");
+        return false;
+    }
+    // Equipping Item
+    if(itemLocation === ItemLocation.EQUIPPED){
+        return EquipItem(characterId, itemInfo);
+    }else if(itemLocation === ItemLocation.INVENTORY){
+        // Handle inventory Item
+        if(itemInfo["location"] == ItemLocation.INVENTORY) {
+            // Move from character to character
+            // Move to vault first
+            var result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
+            if(result){
+                // Then move to character
+                return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+            }else{
+                console.log("Failed to transfer item to the vault");
+                return false;
+            }
+        }else{
+            // Move from vault to character
+            return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+        }
+    }else{
+        // Move to vault
+        return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, characterId);
+    }
+}
+
+export async function EquipItem(characterId: string, itemInfo: any): Promise<boolean> {
     if(itemInfo["character"] != characterId){
         var result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
         if(!result){
             console.log("Failed to transfer item to the vault");
-            return;
+            return false;
         }
         result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
         if(!result){
             console.log("Failed to transfer item from the vault");
-            return;
+            return false;
         }
-        EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
+        return EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
     }else{
-        EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
+        return EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
     }
 }
 
-export async function TransferItem(characterId: string, itemInfo: any, toVault: boolean) {
-    var result = false;
-    if(!toVault){
-        if(itemInfo["character"] != null) {
-            // Move from character to character
-            result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
-            if(result){
-                result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
-            }
-        }else{
-             // Move from vault to character
-            result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], toVault, characterId);
-        }
-    }else{
-        // Move From vault
-        result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], toVault, characterId);
-    }
-    if(!result){
-        console.log("Failed to transfer item");
-        return;
-    }
-    
-}
-
-async function EquipItemFromInventory(itemInstanceId: string, characterId: string) {
+async function EquipItemFromInventory(itemInstanceId: string, characterId: string): Promise<boolean> {
     const body = {
         itemId: itemInstanceId,
         characterId: characterId,
@@ -389,9 +419,10 @@ async function EquipItemFromInventory(itemInstanceId: string, characterId: strin
     })
     var result = await response.json();
     console.log(result);
+    return result.ok;
 }
 
-export async function VaultTransfer(itemId: string, itemHash: string, toVault: boolean, characterId: string) {
+export async function VaultTransfer(itemId: string, itemHash: string, toVault: boolean, characterId: string): Promise<boolean> {
     const body = {
         itemReferenceHash: itemHash,
         itemId: itemId,
