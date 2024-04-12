@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import { ItemLocation } from "../Main/ItemTransfer";
 import { RemoveParams } from "../Main/Link";
 import { ChangeUser, GetBungieId, GetMembership, GetData, SetValid, StoreData, keyList, GetGlobalData, StoreGlobalData } from "../Main/Storage";
+import VerboseContext from "../Providers/VerboseCharactersProvider";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
@@ -380,7 +382,7 @@ export async function TransferItem(characterId: string, itemInfo: any, itemLocat
         }
     } else {
         // Move to vault
-        return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, characterId);
+        return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
     }
 }
 
