@@ -14,7 +14,7 @@ var perfEnd : { [id: string]: number} = {}
 
 export async function logPerf() {
     for(let key in perfStart){
-        console.log(`${key}:${perfEnd[key] - perfStart[key]}`)
+        // console.log(`${key}:${perfEnd[key] - perfStart[key]}`)
     }
 }
 
@@ -335,13 +335,13 @@ export async function TransferItem(characterId: string, itemInfo: any, itemLocat
     // Unnecessary transfer
     switch(itemLocation){
         case ItemLocation.EQUIPPED:
-            if(itemInfo["isEquipped"] && itemInfo["character"] === characterId){
+            if (itemInfo["isEquipped"] && itemInfo["character"] === characterId){
                 console.log("Item is already equipped");
                 return false;    
             }
             break;
         case ItemLocation.INVENTORY:
-            if(itemInfo["location"] === ItemLocation.INVENTORY && itemInfo["character"] === characterId){
+            if (itemInfo["location"] === ItemLocation.INVENTORY && itemInfo["character"] === characterId){
                 console.log("Item is already in the character inventory");
                 return false;
             }
@@ -354,31 +354,31 @@ export async function TransferItem(characterId: string, itemInfo: any, itemLocat
             break;
     }
     // Handle equipped Item
-    if(itemInfo["isEquipped"]){
+    if (itemInfo["isEquipped"]){
         console.log("Item is equipped, not implemented yet");
         return false;
     }
     // Equipping Item
-    if(itemLocation === ItemLocation.EQUIPPED){
+    if (itemLocation === ItemLocation.EQUIPPED){
         return EquipItem(characterId, itemInfo);
-    }else if(itemLocation === ItemLocation.INVENTORY){
+    } else if (itemLocation === ItemLocation.INVENTORY) {
         // Handle inventory Item
-        if(itemInfo["location"] == ItemLocation.INVENTORY) {
+        if (itemInfo["location"] == ItemLocation.INVENTORY) {
             // Move from character to character
             // Move to vault first
             var result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
-            if(result){
+            if (result) {
                 // Then move to character
                 return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
-            }else{
+            } else {
                 console.log("Failed to transfer item to the vault");
                 return false;
             }
-        }else{
+        } else {
             // Move from vault to character
             return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
         }
-    }else{
+    } else {
         // Move to vault
         return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, characterId);
     }
@@ -408,7 +408,9 @@ async function EquipItemFromInventory(itemInstanceId: string, characterId: strin
         characterId: characterId,
         membershipType: GetMembership()["membershipType"],
     };
+
     console.log(body.toString());
+
     const response = await fetch(base["url"] + `/Destiny2/Actions/Items/EquipItem/`, {
         method: "POST",
         body: JSON.stringify(body),
@@ -431,7 +433,9 @@ export async function VaultTransfer(itemId: string, itemHash: string, toVault: b
         stackSize: 1,
         membershipType: GetMembership()["membershipType"],
     };
+
     console.log(body.toString());
+
     const response = await fetch(base["url"] + `/Destiny2/Actions/Items/TransferItem/`, {
         method: "POST",
         body: JSON.stringify(body),
@@ -440,7 +444,9 @@ export async function VaultTransfer(itemId: string, itemHash: string, toVault: b
             authorization: `Bearer ${GetData(keyList.token)}`
         }
     })
+
     var result = await response.json();
     console.log(result);
-    return response.ok;
+
+    return await response.ok;
 }

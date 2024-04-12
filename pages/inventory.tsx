@@ -184,6 +184,8 @@ export const HomePage = () => {
                 }
             }
 
+            updateDivHeight(vaultHeights);
+
             await Promise.all(promises);
 
             for (let i in invPromises) {
