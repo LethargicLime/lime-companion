@@ -341,7 +341,7 @@ export async function TransferItem(characterId: string, itemInfo: any, itemLocat
             }
             break;
         case ItemLocation.INVENTORY:
-            if (itemInfo["location"] === ItemLocation.INVENTORY && itemInfo["character"] === characterId){
+            if (itemInfo["location"] === ItemLocation.INVENTORY && itemInfo["character"] === characterId && !itemInfo["isEquipped"]){
                 console.log("Item is already in the character inventory");
                 return false;
             }
