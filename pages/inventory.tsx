@@ -131,8 +131,6 @@ export const HomePage = () => {
                 1585787867: 0,      // class item
             }
 
-            console.log(vaultPromises)
-
             for (let i in vaultPromises) {
                 if (vaultPromises[i]["equippingBlock"]) {
                     vaultHeights[vaultPromises[i]["equippingBlock"]["equipmentSlotTypeHash"]] += 1/40;
@@ -171,8 +169,6 @@ export const HomePage = () => {
                 20886954: 0,        // legs
                 1585787867: 0,      // class item
             }
-
-            console.log(invPromises);
 
             for (let i in invPromises) {
                 inventoryHeights[invPromises[i]["equippingBlock"]["equipmentSlotTypeHash"]] += 1/40;

@@ -40,6 +40,9 @@ export const CharacterInventory = () => {
         let t = ReceiveItem(event, characterId, slot);
 
         const tempVault = vault.filter(item => item["hash"] !== t[0]["hash"]);
+        
+        t[0]["bucketHash"] = t[0]["equippingBlock"]["equipmentSlotTypeHash"];
+
         const tempInventory = [...inventory, {...t[0], "character": t[1]}];
 
         updateVault(tempVault);
