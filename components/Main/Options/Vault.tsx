@@ -19,7 +19,7 @@ export const Vault = () => {
         let tempKinetic = []
         let tempEnergy = []
 
-        console.log(vault);
+        // console.log(vault);
 
         for (let i in vault) {
             // console.log(vault[i]);
@@ -35,6 +35,12 @@ export const Vault = () => {
         updateEnergy(tempEnergy);
     }, [vault]);
 
+    const _ReceiveItem = (event, characterId, slot) => {
+        let t = ReceiveItem(event, characterId, slot);
+
+        console.log(t);
+    }
+
     return (
         <div className="flex" style={{ paddingTop: "10px" }}>
             {thirdOption === "Vault" &&
@@ -45,7 +51,7 @@ export const Vault = () => {
                             gridTemplateColumns: "repeat(15, 50px)",
                             gridGap: "5px",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, ItemLocation.VAULT)}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, -1, ItemLocation.VAULT)}>
                             {Array(kinetic.length).fill(0).map((_, i) => (
                                 <div key={i}>
                                     <div style={{

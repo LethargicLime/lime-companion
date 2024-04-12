@@ -11,9 +11,13 @@ export function ReceiveItem(event, characterId, slot){
     var item = JSON.parse(event.dataTransfer.getData("item"));
     var fromCharacterId = event.dataTransfer.getData("characterId");
     var fromSlot = event.dataTransfer.getData("slot");
+
     console.log(item);
     console.log("Move from " + fromCharacterId + " " + fromSlot + " into " + characterId + " " + slot);
-    TransferItem(characterId, item, slot);
+
+    console.log(TransferItem(characterId, item, slot));
+
+    return [item, characterId];
 }
 
 export function handleItemDragOver(event){

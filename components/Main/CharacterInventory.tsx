@@ -22,7 +22,7 @@ import { ItemLocation, ReceiveItem, handleItemDragOver } from './ItemTransfer';
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
     const { characters, updateCharacters } = useContext(CharactersContext);
-    const { verbose, inventory, equipped } = useContext(VerboseContext);
+    const { verbose, inventory, equipped, vault, updateInventory, updateVault } = useContext(VerboseContext);
     const { item, setItem } = useContext(SelectedContext);
     const { token, membershipId } = useContext(TokenContext);
 
@@ -35,6 +35,16 @@ export const CharacterInventory = () => {
 
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
+
+    const _ReceiveItem = (event, characterId, slot) => {
+        let t = ReceiveItem(event, characterId, slot);
+
+        const tempVault = vault.filter(item => item["hash"] !== t[0]["hash"]);
+        const tempInventory = [...inventory, {...t[0], "character": t[1]}];
+
+        updateVault(tempVault);
+        updateInventory(tempInventory);
+    }
 
     const handleIconClick = (info: any) => {
         if (info == item) {
@@ -124,7 +134,7 @@ export const CharacterInventory = () => {
         
         fetchInventoryInfo();
 
-    }, [chosenCharacter]);
+    }, [chosenCharacter, equipped, inventory, vault]);
 
     useEffect(() => {
         const fetchInventoryInfo = async () => {
@@ -177,7 +187,7 @@ export const CharacterInventory = () => {
         if (secondaryCharacter) {
             fetchInventoryInfo()
         }
-    }, [secondaryCharacter])
+    }, [secondaryCharacter, equipped, inventory, vault])
 
     // get item info when items change
     useEffect(() => {
@@ -240,7 +250,7 @@ export const CharacterInventory = () => {
                             gridGap: "5px",
                             gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], ItemLocation.INVENTORY)}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, characters[chosenCharacter]["characterId"], ItemLocation.INVENTORY)}>
                             {Array(CurrentInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(CurrentInventory[i][j])}>
@@ -273,7 +283,7 @@ export const CharacterInventory = () => {
                             gridGap: "5px",
                             gridTemplateColumns: "repeat(3, 50px)",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], ItemLocation.INVENTORY)}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, characters[secondaryCharacter]["characterId"], ItemLocation.INVENTORY)}>
                             {Array(SecondInventory[i].length).fill(0).map((_, j) => (
                                 <div key={j} style={{ display: "inline-block" }}>
                                     <div onClick={() => handleIconClick(SecondInventory[i][j])}>

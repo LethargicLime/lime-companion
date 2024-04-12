@@ -17,7 +17,16 @@ export const VerboseContext = createContext<VerboseCharactersProviderProps>({
     equipped: {},
     inventory: {},
     vault: {},
-    divHeight: {},
+    divHeight: {
+        1498876634: 0,      // kinetic
+        2465295065: 0,      // energy
+        953998645: 0,       // power
+        3448274439: 0,      // helment
+        3551918588: 0,      // gauntlets
+        14239492: 0,        // chest
+        20886954: 0,        // legs
+        1585787867: 0,      // class item
+    },
     updateVerbose: () => {},
     updateInventory: () => {},
     updateEquipped: () => {},
