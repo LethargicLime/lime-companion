@@ -124,6 +124,7 @@ export const LhsSidebar = () => {
         };
 
         if (!dataFetched) {
+            console.log("test")
             fetchCharacterInfo();
         }
     }, [membershipId, verbose, characters, dataFetched]);
