@@ -6,7 +6,7 @@ export function SendItem(event, itemInfo, characterId, slot) {
     event.dataTransfer.setData("slot", slot);
 }
 
-export function ReceiveItem(event, characterId, slot){
+export function ReceiveItem(event, characterId, slot, allItems){
     event.preventDefault();
     var item = JSON.parse(event.dataTransfer.getData("item"));
     var fromCharacterId = event.dataTransfer.getData("characterId");
@@ -15,20 +15,11 @@ export function ReceiveItem(event, characterId, slot){
     console.log(item);
     console.log("Move from " + fromCharacterId + " " + fromSlot + " into " + characterId + " " + slot);
 
-    console.log(TransferItem(characterId, item, slot));
+    console.log(TransferItem(characterId, item, slot, allItems));
 
     return [item, characterId];
 }
 
 export function handleItemDragOver(event){
     event.preventDefault();
-}
-
-export enum ItemLocation {
-    EQUIPPED = -1,
-    UNKNOWN = 0,
-    INVENTORY = 1,
-    VAULT = 2,
-    VENDOR = 3,
-    POSTMASTER = 4,
 }

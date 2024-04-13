@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { ItemLocation } from "../Main/ItemTransfer";
+import { useContext, useEffect, useState } from "react";
+import { ItemLocation, ItemTierType } from "../Main/ItemEnumDefinition";
 import { RemoveParams } from "../Main/Link";
 import { ChangeUser, GetBungieId, GetMembership, GetData, SetValid, StoreData, keyList, GetGlobalData, StoreGlobalData } from "../Main/Storage";
-import VerboseContext from "../Providers/VerboseCharactersProvider";
 
 let base = {
     "url": "https://www.bungie.net/Platform",
@@ -184,9 +183,13 @@ export async function GetItem(id: string) {
             },
         }
         const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyInventoryItemDefinition/${id}/`, options)
-        const item = await response.json();
-        data = item["Response"];
-        StoreGlobalData(keyList.item, id, data);
+        if(response.ok){
+            const item = await response.json();
+            data = item["Response"];
+            StoreGlobalData(keyList.item, id, data);
+        }else{
+            console.log("Cannot retrieve data for " + id);
+        }
     }
 
     const endTime = performance.now();
@@ -333,7 +336,8 @@ export async function ItemInstance(id: string, item: string) {
     return data["Response"]["instance"]["data"];
 }
 
-export async function TransferItem(characterId: string, itemInfo: any, itemLocation: ItemLocation): Promise<boolean> {
+export async function TransferItem(characterId: string, itemInfo: any, itemLocation: ItemLocation, allItems: any): Promise<boolean> {
+    // console.log("Moving " + itemInfo["itemHash"] + " into " + characterId + " " + itemLocation.toString());
     // Unnecessary transfer
     switch(itemLocation){
         case ItemLocation.EQUIPPED:
@@ -355,10 +359,22 @@ export async function TransferItem(characterId: string, itemInfo: any, itemLocat
             }
             break;
     }
-    // Handle equipped Item
+    // Handle equipped Item (Unequip)
     if (itemInfo["isEquipped"]){
-        console.log("Item is equipped, not implemented yet");
-        return false;
+        var availableItem = allItems["inventory"].filter(invItem => invItem["inventory"]["bucketTypeHash"] === itemInfo["inventory"]["bucketTypeHash"] && invItem["inventory"]["tierType"] !== ItemTierType.EXOTIC);
+        if(availableItem.length === 0){
+            availableItem = allItems["vault"].filter(vaultItem => vaultItem["inventory"]["bucketTypeHash"] === itemInfo["inventory"]["bucketTypeHash"] && vaultItem["inventory"]["tierType"] !== ItemTierType.EXOTIC);
+        }
+        if(availableItem.length === 0){
+            console.log("No available item to replace");
+            return false;
+        }
+        var result = await TransferItem(itemInfo["character"], availableItem[0], ItemLocation.EQUIPPED, allItems);
+        console.log(result);
+        if(!result){
+            console.log("Failed to replace");
+            return false;
+        }
     }
     // Equipping Item
     if (itemLocation === ItemLocation.EQUIPPED){
@@ -371,18 +387,18 @@ export async function TransferItem(characterId: string, itemInfo: any, itemLocat
             var result = await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
             if (result) {
                 // Then move to character
-                return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+                return await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
             } else {
                 console.log("Failed to transfer item to the vault");
                 return false;
             }
         } else {
             // Move from vault to character
-            return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
+            return await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], false, characterId);
         }
     } else {
         // Move to vault
-        return VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
+        return await VaultTransfer(itemInfo["itemInstanceId"], itemInfo["itemHash"], true, itemInfo["character"]);
     }
 }
 
@@ -398,9 +414,9 @@ export async function EquipItem(characterId: string, itemInfo: any): Promise<boo
             console.log("Failed to transfer item from the vault");
             return false;
         }
-        return EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
+        return await EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
     }else{
-        return EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
+        return await EquipItemFromInventory(itemInfo["itemInstanceId"], characterId);
     }
 }
 
@@ -422,8 +438,7 @@ async function EquipItemFromInventory(itemInstanceId: string, characterId: strin
         }
     })
     var result = await response.json();
-    console.log(result);
-    return result.ok;
+    return result["ErrorCode"] === 1;
 }
 
 export async function VaultTransfer(itemId: string, itemHash: string, toVault: boolean, characterId: string): Promise<boolean> {
@@ -450,5 +465,5 @@ export async function VaultTransfer(itemId: string, itemHash: string, toVault: b
     var result = await response.json();
     console.log(result);
 
-    return await response.ok;
+    return result["ErrorCode"] === 1;
 }
