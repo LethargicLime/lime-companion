@@ -17,7 +17,8 @@ import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
 import Draggable from 'react-draggable';
 import { ItemDisplay } from './ItemDisplay';
-import { ItemLocation, ReceiveItem, handleItemDragOver } from './ItemTransfer';
+import { ReceiveItem, handleItemDragOver } from './ItemTransfer';
+import { ItemBucketHash, ItemLocation } from './ItemEnumDefinition'
 
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
@@ -37,7 +38,7 @@ export const CharacterInventory = () => {
     const [ opacity, setOpacity ] = useState(1);
 
     const _ReceiveItem = (event, characterId, slot) => {
-        let t = ReceiveItem(event, characterId, slot);
+        let t = ReceiveItem(event, characterId, slot, {equipped, inventory, vault});
 
         const tempVault = vault.filter(item => item["hash"] !== t[0]["hash"]);
         
@@ -95,13 +96,13 @@ export const CharacterInventory = () => {
 
             for (let i in equipped) {
                 if (equipped[i]["character"] === chosenCharacter) {
-                    if (equipped[i]["bucketHash"] === 1498876634) {
+                    if (equipped[i]["bucketHash"] === ItemBucketHash.KINETIC) {
                         tempLoadout[0] = equipped[i];
                     }
-                    if (equipped[i]["bucketHash"] === 2465295065) {
+                    if (equipped[i]["bucketHash"] === ItemBucketHash.ENERGY) {
                         tempLoadout[1] = equipped[i];
                     }
-                    if (equipped[i]["bucketHash"] === 953998645) {
+                    if (equipped[i]["bucketHash"] === ItemBucketHash.POWER) {
                         tempLoadout[2] = equipped[i];
                     }
                 }
@@ -116,13 +117,13 @@ export const CharacterInventory = () => {
             for (let i in inventory) {                
 
                 if (inventory[i]["character"] === chosenCharacter) {
-                    if (inventory[i]["bucketHash"] === 1498876634) {                        
+                    if (inventory[i]["bucketHash"] === ItemBucketHash.KINETIC) {                        
                         kInvTemp.push(inventory[i]);
                     }
-                    if (inventory[i]["bucketHash"] === 2465295065) {                        
+                    if (inventory[i]["bucketHash"] === ItemBucketHash.ENERGY) {                        
                         sInvTemp.push(inventory[i]);
                     }
-                    if (inventory[i]["bucketHash"] === 953998645) {
+                    if (inventory[i]["bucketHash"] === ItemBucketHash.POWER) {
                         hInvTemp.push(inventory[i]);
                     }
                 }
@@ -146,13 +147,13 @@ export const CharacterInventory = () => {
 
             for (let i in equipped) {
                 if (equipped[i]["character"] === secondaryCharacter) {
-                    if (equipped[i]["bucketHash"] === 1498876634) {
+                    if (equipped[i]["bucketHash"] === ItemBucketHash.KINETIC) {
                         tempLoadout[0] = equipped[i];
                     }
-                    if (equipped[i]["bucketHash"] === 2465295065) {
+                    if (equipped[i]["bucketHash"] === ItemBucketHash.ENERGY) {
                         tempLoadout[1] = equipped[i];
                     }
-                    if (equipped[i]["bucketHash"] === 953998645) {
+                    if (equipped[i]["bucketHash"] === ItemBucketHash.POWER) {
                         tempLoadout[2] = equipped[i];
                     }
                 }
@@ -167,13 +168,13 @@ export const CharacterInventory = () => {
             for (let i in inventory) {                
 
                 if (inventory[i]["character"] === secondaryCharacter) {
-                    if (inventory[i]["bucketHash"] === 1498876634) {                        
+                    if (inventory[i]["bucketHash"] === ItemBucketHash.KINETIC) {                        
                         kInvTemp.push(inventory[i]);
                     }
-                    if (inventory[i]["bucketHash"] === 2465295065) {                        
+                    if (inventory[i]["bucketHash"] === ItemBucketHash.ENERGY) {                        
                         sInvTemp.push(inventory[i]);
                     }
-                    if (inventory[i]["bucketHash"] === 953998645) {
+                    if (inventory[i]["bucketHash"] === ItemBucketHash.POWER) {
                         hInvTemp.push(inventory[i]);
                     }
                 }
@@ -243,7 +244,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div className="h-[200px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[chosenCharacter]["characterId"], ItemLocation.EQUIPPED)}>
+                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, characters[chosenCharacter]["characterId"], ItemLocation.EQUIPPED)}>
                             <div onClick={() => handleIconClick(CurrentLoadout[i])}>
                                 <ItemDisplay itemInfo={CurrentLoadout[i]} iconSize={60} craftIconSize={12} characterId={characters[chosenCharacter]["characterId"]} slot={"Loadout"}/> 
                             </div>                                   
@@ -276,7 +277,7 @@ export const CharacterInventory = () => {
             <div>
                 {Array(3).fill(0).map((_, i) => (
                     <div className="h-[200px]" style={{ display: "flex", marginBottom: "30px" }} key={i}>
-                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, characters[secondaryCharacter]["characterId"], ItemLocation.EQUIPPED)}>
+                        <div style={{ display: "inline-block", width: "60px", height: "70px" }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, characters[secondaryCharacter]["characterId"], ItemLocation.EQUIPPED)}>
                             <div onClick={() => handleIconClick(SecondLoadout[i])}>
                                 <ItemDisplay itemInfo={SecondLoadout[i]} iconSize={60} craftIconSize={13} characterId={characters[secondaryCharacter]["characterId"]} slot={"Loadout"}/>
                             </div>

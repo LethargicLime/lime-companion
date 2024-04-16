@@ -5,11 +5,12 @@ import VerboseContext from "@/components/Providers/VerboseCharactersProvider";
 import Image from 'next/image';
 import CraftedIcon from "@/public/PatternIcon.jpg";
 import ItemDisplay from "../ItemDisplay";
-import { ItemLocation, ReceiveItem, handleItemDragOver } from "../ItemTransfer";
+import { ReceiveItem, handleItemDragOver } from "../ItemTransfer";
+import { ItemLocation, ItemBucketHash } from "../ItemEnumDefinition";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
-    const { vault, divHeight, updateVault } = useContext(VerboseContext);
+    const { equipped, inventory, vault, divHeight, updateVault } = useContext(VerboseContext);
 
     const [ kinetic, updateKinetic ] = useState([]);
     const [ energy, updateEnergy ] = useState([]);
@@ -23,10 +24,10 @@ export const Vault = () => {
 
         for (let i in vault) {
             // console.log(vault[i]);
-            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === 1498876634) { 
+            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === ItemBucketHash.KINETIC) { 
                 tempKinetic.push(vault[i]);   
             }
-            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === 2465295065) {
+            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === ItemBucketHash.ENERGY) {
                 tempEnergy.push(vault[i]);
             }
         }
@@ -36,7 +37,7 @@ export const Vault = () => {
     }, [vault]);
 
     const _ReceiveItem = (event, characterId, slot) => {
-        let t = ReceiveItem(event, characterId, slot);
+        let t = ReceiveItem(event, characterId, slot, {equipped, inventory, vault});
 
         console.log(t);
     }
@@ -70,7 +71,7 @@ export const Vault = () => {
                             gridTemplateColumns: "repeat(15, 50px)",
                             gridGap: "5px",
                             marginLeft: "14px",
-                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => ReceiveItem(event, -1, ItemLocation.VAULT)}>
+                        }} onDragOver={(event) => handleItemDragOver(event)} onDrop={(event) => _ReceiveItem(event, -1, ItemLocation.VAULT)}>
                             {Array(energy.length).fill(0).map((_, i) => (
                                 <div key={i}>
                                     <div style={{
