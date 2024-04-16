@@ -5,7 +5,6 @@ export const keyList = {
     refreshToken: "refresh_token",
     id: "bungie_id",
     memberships: "memberships",
-    database: "database",
     item: "item",
     damageType: "damage_type",
 }
@@ -14,20 +13,30 @@ let bungie_id:string = null;
 let membership_index = 0;
 let userList:JSON = null;
 let storage:JSON = null;
-let database:JSON = null;
+let db:IDBDatabase = null;
 
 export function InitStorage(membership_id: string = null){
     // Init user storage if it doesn't exist
     if(!(keyList.userRoot in localStorage)){
         localStorage.setItem(keyList.userRoot, JSON.stringify({}));
     }
-    // Init
-    if(!(keyList.database in localStorage)){
-        localStorage.setItem(keyList.database, JSON.stringify({}));
-    }
+    // Init Database
+    const request = indexedDB.open("DestinyDatabase", 2);
+    request.onupgradeneeded = () => {
+        // Trigger if updated or created
+        db = request.result;
+        db.createObjectStore(keyList.item);
+        db.createObjectStore(keyList.damageType);
+    };
+    request.onerror = () => {
+      console.error("IndexedDB not supported.");
+    };
+    // Setup database transaction and store
+    request.onsuccess = () => {
+        db = request.result;
+    };
     // Get user list 
     userList = JSON.parse(localStorage.getItem(keyList.userRoot));
-    database = JSON.parse(localStorage.getItem(keyList.database));
     // Use previous user as default user if it exists
     if(membership_id == null){
         membership_id =  localStorage.getItem(keyList.lastUser);
@@ -42,13 +51,15 @@ export function InitStorage(membership_id: string = null){
     if(storage == null){
         storage = {} as JSON;
     }
+
     window.onbeforeunload = function(){
         if(bungie_id != null){
             userList[bungie_id] = storage;
         }
         localStorage.setItem(keyList.userRoot, JSON.stringify(userList));
         localStorage.setItem(keyList.lastUser, bungie_id);
-        localStorage.setItem(keyList.database, JSON.stringify(database));
+        // Save database
+        db.close();
     };
 }
 
@@ -100,18 +111,77 @@ export function RemoveData(key: string):void{
     delete storage[key + "_expire"];
 }
 
-export function GetGlobalData(root: string, key: string):any{
-    return database[root] != null ? database[root][key] : null;
+const GetDBResult = (root,key) =>{
+    return new Promise((resolve, reject) => {
+        if(db == null) reject(null);
+        var transaction = db.transaction(root, "readonly");
+        var store = transaction.objectStore(root);
+        let req = store.get(key);
+        req.onsuccess = () =>{
+            transaction.commit();
+            resolve(req.result);
+        }
+        req.onerror = () =>{
+            transaction.abort();
+            console.error(`Failed to get ${key} from ${root}`);
+            reject(null);
+        }
+    });
 }
 
-export function StoreGlobalData(root: string, key: string, value: any):void{
-    if(database[root] == null) database[root] = {} as JSON;
-    database[root][key] = value;
+const SetDBResult = (root,key,value) =>{
+    return new Promise((resolve, reject) => {
+        if(db == null) reject(null);
+        var transaction = db.transaction(root, "readwrite");
+        var store = transaction.objectStore(root);
+        let req = store.put(value, key);
+        req.onsuccess = () =>{
+            transaction.commit();
+            resolve(req.result);
+        }
+        req.onerror = () =>{
+            transaction.abort();
+            console.error(`Failed to get ${key} from ${root}`);
+            reject(null);
+        }
+    });
 }
 
-export function RemoveGlobalData(root: string, key: string):void{
-    if(database[root] == null) return;
-    delete database[root][key];
+
+const RemoveDBResult = (root,key) =>{
+    return new Promise((resolve, reject) => {
+        if(db == null) reject(null);
+        var transaction = db.transaction(root, "readwrite");
+        var store = transaction.objectStore(root);
+        let req = store.delete(key);
+        req.onsuccess = () =>{
+            transaction.commit();
+            resolve(req.result);
+        }
+        req.onerror = () =>{
+            transaction.abort();
+            console.error(`Failed to get ${key} from ${root}`);
+            reject(null);
+        }
+    });
+}
+
+export async function GetGlobalData(root: string, key: string):Promise<any>{
+    if(db == null) return null;
+    var result = await GetDBResult(root, key);
+    return result;
+}
+
+export async function StoreGlobalData(root: string, key: string, value: any):Promise<any>{
+    if(db == null) return null;
+    var result = await SetDBResult(root, key, value);
+    return result;
+}
+
+export function RemoveGlobalData(root: string, key: string):Promise<any>{
+    if(db == null) return null;
+    var result = RemoveDBResult(root, key);
+    return result;
 }
 
 export function PrintExpireTime(key: string):void{
