@@ -3,6 +3,13 @@ import CraftedIcon from "@/public/PatternIcon.jpg";
 import { SendItem } from './ItemTransfer';
 
 export const ItemDisplay = ({itemInfo, iconSize, craftIconSize, characterId, slot}) => {
+    if(itemInfo["displayProperties"] == null){
+        for(let key in itemInfo){
+            console.log(key, itemInfo[key]);
+        }
+        console.log("Item Info Display Properties is null for item: ", itemInfo);
+        return <></>;
+    }
     return (
         <>
         <div draggable="true" onDragStart={(event) => SendItem(event, itemInfo, characterId, slot)}>

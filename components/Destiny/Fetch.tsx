@@ -179,8 +179,9 @@ export async function GetVerboseInformation(id: string) {
 export async function GetItem(id: string) {
     const startTime = performance.now();
 
-    var data = GetGlobalData(keyList.item, id);
+    var data = await GetGlobalData(keyList.item, id);
     if(data == null){
+        console.log("Fetching item " + id);
         const options = {
             method: "GET",
             headers: {
@@ -191,7 +192,8 @@ export async function GetItem(id: string) {
         if(response.ok){
             const item = await response.json();
             data = item["Response"];
-            StoreGlobalData(keyList.item, id, data);
+            // console.log(data);
+            await StoreGlobalData(keyList.item, id, data);
         }else{
             console.log("Cannot retrieve data for " + id);
         }
@@ -233,8 +235,7 @@ export async function SpecificMemberId(id: string) {
 
 export async function GetDamageType(hash: string) {
     const startTime = performance.now();
-
-    var data = GetGlobalData(keyList.damageType, hash);
+    var data = await GetGlobalData(keyList.damageType, hash);
     if(data == null){
         const response = await fetch(base["url"] + `/Destiny2/Manifest/DestinyDamageTypeDefinition/${hash}/`, {
             method: "GET",
@@ -245,7 +246,7 @@ export async function GetDamageType(hash: string) {
         });
         const r = await response.json();
         data = r["Response"];
-        StoreGlobalData(keyList.damageType, hash, data);
+        await StoreGlobalData(keyList.damageType, hash, data);
     }
     
     const endTime = performance.now();
