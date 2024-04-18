@@ -6,7 +6,7 @@ export function SendItem(event, itemInfo, characterId, slot) {
     event.dataTransfer.setData("slot", slot);
 }
 
-export function ReceiveItem(event, characterId, slot, allItems){
+export async function ReceiveItem(event, characterId, slot, allItems){
     event.preventDefault();
     var item = JSON.parse(event.dataTransfer.getData("item"));
     var fromCharacterId = event.dataTransfer.getData("characterId");

@@ -52,17 +52,21 @@ export const HomePage = () => {
 
     useEffect(() => {
         InitStorage();
+
         const getAuthToken = async () => {
             await GetToken();
             let token = GetData(keyList.token);
-            if(token != null){
+            
+            if (token != null) {
                 updateToken(token);
-                if (GetData(keyList.memberships) == null){
+
+                if (GetData(keyList.memberships) == null) {
                     await SpecificMemberId(GetBungieId());
                 }
+
                 updateMemberId(GetMembership()["membershipId"]);
                 setHasToken(true);
-            } else{
+            } else {
                 console.log("No token found");
             }
         }
@@ -76,6 +80,7 @@ export const HomePage = () => {
                 const charactersData = await GetCharacterInfo(membershipId);
                 updateCharacters(charactersData);
             };
+
             fetchCharacters();
         }
     }, [hasToken]);
@@ -172,6 +177,7 @@ export const HomePage = () => {
 
             for (let i in invPromises) {
                 inventoryHeights[invPromises[i]["equippingBlock"]["equipmentSlotTypeHash"]] += 1/40;
+                console.log(inventoryHeights)
             }
 
             for (let i in vaultHeights) {
@@ -234,6 +240,7 @@ export const HomePage = () => {
             setInvLoading(false);
             logPerf();  
         }
+
         if (hasToken) {
             preloadInventory();
         }
@@ -258,7 +265,8 @@ export const HomePage = () => {
                     <CharactersContext.Provider value={{ characters, updateCharacters }}>
                         <ChosenCharacterContext.Provider value={{ chosenCharacter, secondaryCharacter, thirdOption, 
                             setChosenCharacter: updateChosenCharacter, setSecondaryCharacter: updateSecondaryCharater, setThirdOption: updateThirdOption }}>
-                            <VerboseContext.Provider value={{ verbose, inventory, equipped, vault, divHeight, updateVerbose, updateInventory, updateEquipped, updateVault }}>
+                            <VerboseContext.Provider value={{ verbose, inventory, equipped, vault, divHeight, 
+                            updateVerbose, updateInventory, updateEquipped, updateVault, updateDivHeight }}>
                                     {invLoading ? 
                                         <div>
                                             <LoadingScreen />

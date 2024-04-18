@@ -10,6 +10,7 @@ export interface VerboseCharactersProviderProps {
     updateInventory: (inventory: any) => void;
     updateEquipped: (equipped: any) => void;
     updateVault: (vault: any) => void;
+    updateDivHeight: (divHeight: any) => void;
 }
 
 export const VerboseContext = createContext<VerboseCharactersProviderProps>({
@@ -30,7 +31,8 @@ export const VerboseContext = createContext<VerboseCharactersProviderProps>({
     updateVerbose: () => {},
     updateInventory: () => {},
     updateEquipped: () => {},
-    updateVault: () => {}
+    updateVault: () => {},
+    updateDivHeight: () => {},
 });
 
 export default VerboseContext;

@@ -1,7 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { ItemLocation, ItemTierType } from "../Main/ItemEnumDefinition";
-import { RemoveParams } from "../Main/Link";
 import { ChangeUser, GetBungieId, GetMembership, GetData, SetValid, StoreData, keyList, GetGlobalData, StoreGlobalData } from "../Main/Storage";
+
+export async function RemoveParams(arg: string) {
+    let params = new URLSearchParams(location.search);
+    params.delete(arg);
+    history.pushState({}, '', `${location.pathname + (params.size > 0 ? '?' + params.toString() : '')}`);
+}
 
 let base = {
     "url": "https://www.bungie.net/Platform",

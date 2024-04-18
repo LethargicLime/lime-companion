@@ -10,11 +10,17 @@ import { ItemLocation, ItemBucketHash } from "../ItemEnumDefinition";
 
 export const Vault = () => {
     const { thirdOption } = useContext(ChosenCharacterContext);
-    const { equipped, inventory, vault, divHeight, updateVault } = useContext(VerboseContext);
+    const { equipped, inventory, vault, divHeight, updateInventory, updateVault } = useContext(VerboseContext);
 
     const [ kinetic, updateKinetic ] = useState([]);
     const [ energy, updateEnergy ] = useState([]);
     const [ power, updatePower ] = useState([]);
+
+    const handleIconClick = (info: any) => {
+        console.log(info);
+
+        console.log(divHeight);
+    }
 
     useEffect(() => {
         let tempKinetic = []
@@ -23,12 +29,14 @@ export const Vault = () => {
         // console.log(vault);
 
         for (let i in vault) {
-            // console.log(vault[i]);
-            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === ItemBucketHash.KINETIC) { 
-                tempKinetic.push(vault[i]);   
-            }
-            if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === ItemBucketHash.ENERGY) {
-                tempEnergy.push(vault[i]);
+            if (vault[i]["equippingBlock"]) {
+                // console.log(vault[i]);
+                if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === ItemBucketHash.KINETIC) { 
+                    tempKinetic.push(vault[i]);   
+                }
+                if (vault[i]["equippingBlock"]["equipmentSlotTypeHash"] === ItemBucketHash.ENERGY) {
+                    tempEnergy.push(vault[i]);
+                }
             }
         }
 
@@ -36,10 +44,17 @@ export const Vault = () => {
         updateEnergy(tempEnergy);
     }, [vault]);
 
-    const _ReceiveItem = (event, characterId, slot) => {
-        let t = ReceiveItem(event, characterId, slot, {equipped, inventory, vault});
+    const _ReceiveItem = async (event, characterId, slot) => {
+        let t = await ReceiveItem(event, characterId, slot, {equipped, inventory, vault});
 
-        console.log(t);
+        const tempInventory = inventory.filter(item => item["hash"] !== t[0]["hash"]);
+
+        t[0]["bucketHash"] = 138197802;
+
+        const tempVault = [...vault, {...t[0], "character": t[1]}];
+
+        updateVault(tempVault);
+        updateInventory(tempInventory);
     }
 
     return (
@@ -58,7 +73,7 @@ export const Vault = () => {
                                     <div style={{
                                         position: "relative",
                                         display: "inline-block"
-                                    }}>
+                                    }} onClick={() => handleIconClick(kinetic[i])}>
                                         <ItemDisplay itemInfo={kinetic[i]} iconSize={50} craftIconSize={12} characterId={-1} slot={"Vault"}/>
                                     </div>
                                 </div>

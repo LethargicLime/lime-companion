@@ -12,10 +12,7 @@ import {
 
 import { Popup } from './Popup';
 
-import CraftedIcon from "@/public/PatternIcon.jpg";
-import { ItemInfo } from './Options/ItemInfo';
 import SelectedContext from '../Providers/SelectedProvider';
-import Draggable from 'react-draggable';
 import { ItemDisplay } from './ItemDisplay';
 import { ReceiveItem, handleItemDragOver } from './ItemTransfer';
 import { ItemBucketHash, ItemLocation } from './ItemEnumDefinition'
@@ -23,7 +20,7 @@ import { ItemBucketHash, ItemLocation } from './ItemEnumDefinition'
 export const CharacterInventory = () => {
     const { chosenCharacter, secondaryCharacter } = useContext(ChosenCharacterContext);
     const { characters, updateCharacters } = useContext(CharactersContext);
-    const { verbose, inventory, equipped, vault, updateInventory, updateVault } = useContext(VerboseContext);
+    const { verbose, inventory, equipped, vault, divHeight, updateInventory, updateVault, updateDivHeight } = useContext(VerboseContext);
     const { item, setItem } = useContext(SelectedContext);
     const { token, membershipId } = useContext(TokenContext);
 
@@ -37,8 +34,8 @@ export const CharacterInventory = () => {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ opacity, setOpacity ] = useState(1);
 
-    const _ReceiveItem = (event, characterId, slot) => {
-        let t = ReceiveItem(event, characterId, slot, {equipped, inventory, vault});
+    const _ReceiveItem = async (event, characterId, slot) => {
+        let t = await ReceiveItem(event, characterId, slot, {equipped, inventory, vault});
 
         const tempVault = vault.filter(item => item["hash"] !== t[0]["hash"]);
         
@@ -50,6 +47,11 @@ export const CharacterInventory = () => {
         updateInventory(tempInventory);
     }
 
+    const _GiveItem = (event, characterId, slot) => {
+
+    }
+
+    // on icon click -> for showing verbose info
     const handleIconClick = (info: any) => {
         if (info == item) {
             setItem("");
@@ -88,7 +90,7 @@ export const CharacterInventory = () => {
     const [ SecondLoadout, setSecondLoadout ] = useState<any[]>([]);
     const [ SecondInventory, setSecondInventory ] = useState<any[]>([]);
 
-    // handle inventory
+    // sorts items by buckets to display for the first character
     useEffect(() => {
         const fetchInventoryInfo = async () => {
             let tempLoadout = [...CurrentLoadout];
@@ -140,6 +142,7 @@ export const CharacterInventory = () => {
 
     }, [chosenCharacter, equipped, inventory, vault]);
 
+    // kind of shitty, but same as above for the second character
     useEffect(() => {
         const fetchInventoryInfo = async () => {
             let tempLoadout = [...SecondLoadout];
@@ -193,7 +196,7 @@ export const CharacterInventory = () => {
         }
     }, [secondaryCharacter, equipped, inventory, vault])
 
-    // get item info when items change
+    // get item info when items change - in theory this doesn't matter anymore
     useEffect(() => {
         const fetchItems = async () => {
             if (itemHashes.length > 0) {
@@ -212,6 +215,7 @@ export const CharacterInventory = () => {
         fetchItems();
     }, [itemHashes]);
 
+    // return this while no character is selected
     if (isLoading) {
         return <div style={{ 
             paddingLeft: "45px",

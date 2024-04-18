@@ -24,7 +24,7 @@ export const LhsSidebar = () => {
     const { chosenCharacter, setChosenCharacter } = useContext(ChosenCharacterContext);
     const { verbose, inventory, equipped, updateVerbose, updateInventory, updateEquipped } = useContext(VerboseContext);
     const { token, membershipId } = useContext(TokenContext);
-    const [dataFetched, setDataFetched] = useState(false);
+    const [dataFetched, setDataFetched] = useState(true);
 
     const characterInfo = () => {
         GetCharacterInfo(membershipId).then((characters) => {
@@ -41,8 +41,6 @@ export const LhsSidebar = () => {
             const characters = await GetCharacterInfo(membershipId);
             const verboseData = await GetVerboseInformation(membershipId);
 
-            // console.log(verboseData);
-
             for (let i in verboseData["Response"]["characterInventories"]["data"]) {
                 for (let j in verboseData["Response"]["characterInventories"]["data"][i]["items"]) {
 
@@ -51,7 +49,6 @@ export const LhsSidebar = () => {
                             k["character"] = i;
 
                             for (let l in verboseData["Response"]["characterInventories"]["data"][i]["items"][j]) {
-                                // console.log(verboseData["Response"]["characterInventories"]["data"][i]["items"][j]);
                                 k[l] = verboseData["Response"]["characterInventories"]["data"][i]["items"][j][l];
                             }
 
@@ -103,8 +100,6 @@ export const LhsSidebar = () => {
 
             await Promise.all(promiseEquip);
 
-            // console.log(equipTemp);
-
             for (let i in equipTemp) {
                 GetItem(equipTemp[i]["itemHash"]).then(j => {
                     // console.log(equipTemp[i]);
@@ -124,7 +119,7 @@ export const LhsSidebar = () => {
         };
 
         if (!dataFetched) {
-            console.log("test")
+            // console.log("test")
             fetchCharacterInfo();
         }
     }, [membershipId, verbose, characters, dataFetched]);
