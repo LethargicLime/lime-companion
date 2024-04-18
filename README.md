@@ -1,6 +1,6 @@
 **LIME COMPANION (TBD)**
 
-Currently this is simply a frontend framework that uses the Bungie API to retrieve account information from a Destiny 2 profile. At the moment - and given the ultimate goal of automation it will likely remain this way - it is hard coded to work with PC only.
+Currently this is simply a frontend framework that uses the Bungie API to retrieve account information from a Destiny 2 profile.
 
 The reason I started this was because I was stuck maybe an hour and a half API call at my job, got bored. But really I wanted something that would run alongside the game and automate the loadout process. Conveniently, Destiny has this in the game at the moment, but also conveniently for me as a developer, it sucks. DIM has this to an extent, but my dumbass will forget to actually apply it in game and halfway through my Trials match I'll realize I'm on 3 shot golden gun Celestial Nighthawk, and I wanted to provide a solution. I don't know how to do that, but I had a little bit of frontend experience and figured I'd start with what I know, maybe try and make a nice UI/UX that DIM isn't lacking, but isn't really present either.
 
