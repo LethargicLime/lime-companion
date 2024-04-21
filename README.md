@@ -30,7 +30,7 @@ This will work if you purely want to make contributions to the landing page, but
 
 > npm install -g local-ssl-proxy
 
-This isn't quite enough, since we need a trusted certificate. The package conveniently gives instructions for another certificate software, mkcert. On Windows you can use Chocolately or Scoop to install this, on mac Brew (or something idk don't have a Mac, and Linxu uses gl). I used Scoop:
+This isn't quite enough, since we need a trusted certificate. The package conveniently gives instructions for another certificate software, mkcert. On Windows you can use Chocolately or Scoop to install this, on mac Brew (or something idk don't have a Mac, and Linux users gl). I used Scoop:
 
 in Powershell
 
@@ -55,7 +55,7 @@ and in Powershell (I like to split my terminal in VSCode between command line an
 
 > npx local-ssl-proxy \ --key localhost-key.pem \ --cert localhost.pem \ --source 3001 \ --target 3000
 
-Then on your browser of choice
+Then on your browser of choice (because of webkit use I'd strongly recommend Chrome)
 
 [https://localhost:3001/lime-companion]
 
@@ -91,13 +91,9 @@ I try and provide information to a component on a need-to-know basis to keep com
 
 **ISSUES**
 
-> My API key is exposed. This isn't a particular issue, but I also expose my secret key. In theory, this also technically doesn't really matter, but I shouldn't do that. :D
-
-> The loading screen doesn't properly wait for all the API calls to finish. If you load into the site and immediately select a character you might get an error. I haven't ever had to work with asynchronous stuff so I genuinely don't know what to do.
-
 > Sometimes the inventory doesn't display, just what you have equipped. I can't figure this one out.
 
-> Information should stay on the cache and a backened should have the manifest so that way the loading time isn't horrendous. DIM (as far as I know) has it set so that all of your information is stored in your browsers cache. When you move something around, rather than calling the API it just moves it on it's backend data structure. That's why when you refresh the API it duplicates some information. Currently to figure out if a crafted item should have the masterwork appearence I call the API ~16 times, retrieving each perk and then seeing if the first one is an Enhanced Intrinsic. Naturally for this use case alone I only need to do it once, but if wanted to display perk information, there's no way around that except having the manifest on the backend instead of using the API.
+> Our current solution for storing information will only work on some browsers, while I'm fine having this be only for Chromium, it's definately possible to encrypt our data so that way it can be stored in the localstorage (currently we are going over the 5mb limit).
 
 **USING THE API**
 
