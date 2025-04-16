@@ -26,6 +26,8 @@ export default function Page() {
             tempKeys.includes(key) || tempKeys.push(key);
         }
 
+        console.log(imageObject);
+
         updateKeys(tempKeys);
     }, []);
 
